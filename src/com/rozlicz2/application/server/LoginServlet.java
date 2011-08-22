@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.users.User;
-
-import com.google.appengine.api.users.UserServiceFactory;
 import com.rozlicz2.application.server.UserService.UserInformations;
 import com.visural.common.StringUtil;
 
