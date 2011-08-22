@@ -10,13 +10,17 @@
 	String redirect_url = request.getParameter("redirect_url");
 	
 	if (redirect_url == null || redirect_url.isEmpty()) {
-		redirect_url = "/Rozlicz2Application.html";
+		redirect_url = "/loginPage.jsp";
 	}
 	
 	if (userInformations != null)
 	{
-		response.sendRedirect(redirect_url);
-		
+		%>
+		<b> you are logged as: <%= userInformations.email %></b>
+		 
+		//response.sendRedirect(redirect_url);
+		 
+		 <%
 	} else {
 		String googleUrl = userService.createGoogleLoginURL(redirect_url);
 		String facebookUrl = userService.createFacebookLoginURL(redirect_url);
