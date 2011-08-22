@@ -5,11 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rozlicz2.application.server.UserService.UserInformations;
+import com.rozlicz2.application.server.Rozlicz2UserService.UserInformations;
 import com.visural.common.StringUtil;
 
 
@@ -22,15 +23,6 @@ public class LoginServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-//        UserService userService = UserServiceFactory.getUserService();
-//        User user = userService.getCurrentUser();
-//
-//        if (user != null) {
-//            resp.setContentType("text/plain");
-//            resp.getWriter().println("Hello, " + user.getNickname());
-//        } else {
-//            resp.sendRedirect(userService.createLoginURL(req.getRequestURI()));
-//        }
 		
         String code = req.getParameter("code");
         if (StringUtil.isNotBlankStr(code)) {
@@ -55,7 +47,7 @@ public class LoginServlet extends HttpServlet {
                     }
                 }
                 if (accessToken != null && expires != null) {
-                    UserService us = UserService.get();
+                    Rozlicz2UserService us = Rozlicz2UserService.get();
                     UserInformations authFacebookLogin = us.authFacebookLogin(accessToken, expires);
                     resp.getWriter().println("Hello, " + authFacebookLogin.email);
                 } else {
