@@ -1,4 +1,5 @@
 *~
+.DS_Store
 war/rozlicz2application/
 war/WEB-INF/deploy/
 war/WEB-INF/appengine-generated/**
