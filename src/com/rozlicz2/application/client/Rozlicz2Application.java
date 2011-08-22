@@ -1,5 +1,8 @@
 package com.rozlicz2.application.client;
 
+import com.rozlicz2.application.client.resources.ApplicationConstants;
+import com.rozlicz2.application.client.resources.ApplicationResources;
+import com.rozlicz2.application.client.resources.NormalMessages;
 import com.rozlicz2.application.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -8,6 +11,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -39,9 +43,10 @@ public class Rozlicz2Application implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		ApplicationResources.INSTANCE.css().ensureInjected();
 		final Button sendButton = new Button("Send");
 		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
+		nameField.setText(ApplicationConstants.constants.gwtUser());
 		final Label errorLabel = new Label();
 
 		// We can add style names to widgets
@@ -59,18 +64,20 @@ public class Rozlicz2Application implements EntryPoint {
 
 		// Create the popup dialog box
 		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
+		dialogBox.setText(ApplicationConstants.constants.remoteProceduralCall());
 		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
+		final Button closeButton = new Button(ApplicationConstants.constants.close());
 		// We can set the id of a widget by accessing its Element
 		closeButton.getElement().setId("closeButton");
 		final Label textToServerLabel = new Label();
 		final HTML serverResponseLabel = new HTML();
 		VerticalPanel dialogVPanel = new VerticalPanel();
 		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
+		dialogVPanel.add(new HTML(ApplicationConstants.constants.sendingTheNameToServer()));
 		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
+		SafeHtmlBuilder builder = new SafeHtmlBuilder();
+		builder.appendEscaped("krowa");
+		dialogVPanel.add(new HTML(NormalMessages.messages.serverReplies(builder.toSafeHtml())));
 		dialogVPanel.add(serverResponseLabel);
 		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
 		dialogVPanel.add(closeButton);
@@ -136,7 +143,7 @@ public class Rozlicz2Application implements EntryPoint {
 								dialogBox.setText("Remote Procedure Call");
 								serverResponseLabel
 										.removeStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(result);
+								serverResponseLabel.setHTML(NormalMessages.messages.sayHello(result));
 								dialogBox.center();
 								closeButton.setFocus(true);
 							}
