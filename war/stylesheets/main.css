@@ -3,6 +3,7 @@ body {
 	margin: 0px;
 	font-family: Sans-serif;
 }
+
 #loading {
 	position: absolute;
 	left: 0px;
@@ -11,12 +12,14 @@ body {
 	bottom: 0px;
 	background: #ffffff url('../images/loading.gif') no-repeat center center;
 }
+
 #h1h1 {
 	height: 35px;
 	background: #000000;
 	padding: 0px;
 	margin: 0px;
 }
+
 #h1h2 {
 	margin: 0px auto 0px auto;
 	color: #ffffff;
@@ -26,16 +29,19 @@ body {
 	height: 35px;
 	line-height: 35px;
 }
+
 #h1h2 a {
 	text-decoration: none;
 	color: #ffffff;
 	font-size: 14px;
 }
+
 #h2h1 {
 	background: #f0f0f0;
 	height: 90px;
 	border-bottom: 1px solid #E4E4E4;
 }
+
 #h2h2 {
 	margin: 0px auto 0px auto;
 	padding: 10px 0px 10px 0px;
@@ -43,11 +49,26 @@ body {
 	height: 70px;
 	font-weight: normal;
 }
+
 #content {
-	margin: 50px auto 10px auto;
 	background: #ffffff;
-	width: 750px;
+	position: absolute;
+	top: 126px;
+	left: 50%;
+	width: 750px
+	bottom: 0px;
 }
+
+#body {
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+	left: -375px;
+	width: 750px;
+	top: 0px;
+	bottom: 0px;
+}
+
 #content-right {
 	text-align: right;
 	float: left;
@@ -57,10 +78,12 @@ body {
 	padding: 5px 0px 0px 0px;
 	font-size: 24px;
 }
+
 #content-right span {
 	display: block;
 	font-size: 14px;
 }
+
 #logo {
 	font-size: 56px;
 	color: #d73828;
@@ -68,31 +91,37 @@ body {
 	width: 350px;
 	height: 70px;
 }
+
 #body {
 	clear: both;
 	width: 750px;
 	padding: 20px 0px 0px 0px;
 }
+
 #logo .two {
 	font-size: 45px;
-	}
+}
+
 #logo .green {
 	color: #019138;
-	}
+}
+
 .start {
 	margin: 30px 0px 30px 0px;
 	display: block;
-	width:750px;
+	width: 750px;
 	font-size: 48px;
 	color: #d73828;
 	font-weight: 500;
 	height: 50px;
 }
+
 .left {
 	float: left;
 	height: 50px;
 	width: 400px;
 }
+
 .right {
 	float: left;
 	height: 50px;
