@@ -4,21 +4,39 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.rozlicz2.application.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/rozlicz2application/greet</url-pattern>
-  </servlet-mapping>
-  
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>Rozlicz2Application.html</welcome-file>
-  </welcome-file-list>
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>greetServlet</servlet-name>
+		<servlet-class>com.rozlicz2.application.server.GreetingServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>greetServlet</servlet-name>
+		<url-pattern>/rozlicz2application/greet</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FacebookLoginServlet</servlet-name>
+		<servlet-class>com.rozlicz2.application.server.FacebookLoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FacebookLoginServlet</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>logoutServlet</servlet-name>
+		<servlet-class>com.rozlicz2.application.server.LogoutServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>logoutServlet</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Rozlicz2Application.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>
