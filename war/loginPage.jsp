@@ -1,11 +1,11 @@
 <%@page import="java.net.URLEncoder"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.rozlicz2.application.server.Rozlicz2UserService.UserInformations" %>
+<%@ page import="com.rozlicz2.application.server.Rozlicz2UserService.UserInfo" %>
 <%@ page import="com.rozlicz2.application.server.Rozlicz2UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%
 	Rozlicz2UserService userService = Rozlicz2UserService.get();
-	UserInformations userInformations = userService.getCurrentUser(request);
+	UserInfo userInformations = userService.getCurrentUserInfo(request);
 	
 	String redirect_url = request.getParameter("redirect_url");
 	
@@ -15,7 +15,7 @@
 	
 	if (userInformations != null)
 	{
-		%>
+%>
 		 you are logged as: <b><%= userInformations.email %></b>
 		 <p>and of course you can logout here</p>
 		 <a href="<%= userService.createLogoutURL(redirect_url) %>">sign out</a>.

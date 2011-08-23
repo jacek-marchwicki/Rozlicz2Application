@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rozlicz2.application.server.Rozlicz2UserService.UserInformations;
+import com.rozlicz2.application.server.Rozlicz2UserService.UserInfo;
 import com.visural.common.StringUtil;
 
 
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
                 }
                 if (accessToken != null && expires != null) {
                     Rozlicz2UserService us = Rozlicz2UserService.get();
-                    UserInformations authFacebookLogin = us.authFacebookLogin(accessToken, expires);
+                    UserInfo authFacebookLogin = us.authFacebookLogin(accessToken, expires);
                     resp.getWriter().println("Hello, " + authFacebookLogin.email);
                 } else {
                     throw new RuntimeException("Access token and expires not found");

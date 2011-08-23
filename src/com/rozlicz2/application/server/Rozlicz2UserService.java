@@ -3,7 +3,6 @@ package com.rozlicz2.application.server;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +13,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.User;
@@ -25,14 +25,15 @@ import com.visural.common.IOUtil;
 public class Rozlicz2UserService {
 
 	private UserService googleUserService;
+
 	private DatastoreService datastore;
-	private static Random random = new Random();
 
 	public Rozlicz2UserService() {
 		datastore = DatastoreServiceFactory.getDatastoreService();
 		googleUserService = UserServiceFactory.getUserService();
 	}
-	static public class UserInformations {
+
+	static public class UserInfo {
 		public String nickname;
 		public String email;
 	}
@@ -42,28 +43,29 @@ public class Rozlicz2UserService {
 		return (String) session.getAttribute("user_id");
 	}
 
-	public void setSessionId(HttpServletRequest request) {
+	public void setSessionId(HttpServletRequest request, String id) {
 		HttpSession session = request.getSession();
-		session.setAttribute("user_id", Long.toString(random.nextLong()));
+		session.setAttribute("user_id", id);
 	}
 
-	public UserInformations getCurrentUser(HttpServletRequest request) {
+	public UserInfo getCurrentUserInfo(HttpServletRequest request) {
 		String sessionId = getSessionId(request);
+
 		if (sessionId != null) {
-			Query sessionQuerry = new Query("Session");
-			sessionQuerry.addFilter("id", Query.FilterOperator.EQUAL, sessionId);
-			PreparedQuery preparedSessionQuerry = datastore.prepare(sessionQuerry);
-			Entity sessionEntity = preparedSessionQuerry.asSingleEntity();
-
 			try {
-				if (sessionEntity != null) {
-					Entity userEntity = datastore.get((Key) sessionEntity.getProperty("userKey"));
-					return getUserInformationsFromEntity(userEntity);
+				Key sessionKey = KeyFactory.stringToKey(sessionId);
 
-				}
-			} catch (EntityNotFoundException e) {
-				// not found
-			}		
+				Entity sessionEntity;
+
+				sessionEntity = datastore.get(sessionKey);
+
+				Entity userEntity = datastore.get((Key) sessionEntity.getProperty("userKey"));
+				return getUserInformationsFromEntity(userEntity);
+			} catch (EntityNotFoundException e1) {
+				// session timeout
+			} catch (java.lang.IllegalArgumentException e2) {
+				// wrong session format
+			}
 		}
 
 		User googleUser = googleUserService.getCurrentUser();
@@ -87,25 +89,23 @@ public class Rozlicz2UserService {
 				datastore.put(user);
 			}
 
-			setSessionId(request);
-
 			Entity session = new Entity("Session");
-			session.setProperty("id", getSessionId(request));
 			session.setProperty("userKey", user.getKey());
 			datastore.put(session);
 
-			UserInformations userInformations = getUserInformationsFromEntity(user);
+			setSessionId(request, KeyFactory.keyToString(session.getKey()));
+
+			UserInfo userInformations = getUserInformationsFromEntity(user);
 
 			return userInformations;
 		}
 		// TODO if received information via facebook
 
-
 		return null;
 	}
 
-	private UserInformations getUserInformationsFromEntity(Entity user) {
-		UserInformations userInformations = new UserInformations();
+	private UserInfo getUserInformationsFromEntity(Entity user) {
+		UserInfo userInformations = new UserInfo();
 		userInformations.email = (String) user.getProperty("email");
 		userInformations.nickname = (String) user.getProperty("nickname");
 		return userInformations;
@@ -132,15 +132,14 @@ public class Rozlicz2UserService {
 
 	public void logoutUser(HttpServletRequest request, HttpServletResponse response, String redirect_url) throws IOException {
 		String sessionId = getSessionId(request);
-		Query sessionQuerry = new Query("Session");
-		sessionQuerry.addFilter("id", Query.FilterOperator.EQUAL, sessionId);
-		PreparedQuery preparedSessionQuerry = datastore.prepare(sessionQuerry);
-		Entity sessionEntity = preparedSessionQuerry.asSingleEntity();
+		try {
+			Key sessionKey = KeyFactory.stringToKey(sessionId);
 
-		if (sessionEntity != null) {
-			datastore.delete(sessionEntity.getKey());	
+			datastore.delete(sessionKey);
+		} catch (java.lang.IllegalArgumentException e2) {
+			// wrong session format
 		}
-
+		
 		User googleUser = googleUserService.getCurrentUser();
 
 		if (googleUser != null) {
@@ -155,11 +154,11 @@ public class Rozlicz2UserService {
 	}
 	// ....
 
-	public UserInformations authFacebookLogin(String accessToken, int expires) {
+	public UserInfo authFacebookLogin(String accessToken, int expires) {
 		try {
 			JSONObject resp = new JSONObject(
 					IOUtil.urlToString(new URL("https://graph.facebook.com/me?access_token=" + URLEncoder.encode(accessToken, "utf-8"))));
-			UserInformations userInformations = new UserInformations();
+			UserInfo userInformations = new UserInfo();
 			//            userInformations.id = resp.getString("id");
 			//            userInformations.firstName = resp.getString("first_name");
 			//            userInformations.lastName = resp.getString("last_name");
