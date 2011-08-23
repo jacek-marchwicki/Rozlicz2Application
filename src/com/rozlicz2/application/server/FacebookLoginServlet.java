@@ -9,11 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rozlicz2.application.server.Rozlicz2UserService.UserInfo;
 import com.visural.common.StringUtil;
 
 
-public class LoginServlet extends HttpServlet {
+public class FacebookLoginServlet extends HttpServlet {
 
 	/**
 	 * 
@@ -22,10 +21,10 @@ public class LoginServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		
+		String redirect_url = req.getParameter("redirect_url");
         String code = req.getParameter("code");
         if (StringUtil.isNotBlankStr(code)) {
-            String authURL = Facebook.getAuthURL(code);
+            String authURL = Rozlicz2UserService.getFacebookAuthURL(code,redirect_url);
             URL url = new URL(authURL);
             try {
                 String result = readURL(url);
@@ -47,8 +46,8 @@ public class LoginServlet extends HttpServlet {
                 }
                 if (accessToken != null && expires != null) {
                     Rozlicz2UserService us = Rozlicz2UserService.get();
-                    UserInfo authFacebookLogin = us.authFacebookLogin(accessToken, expires);
-                    resp.getWriter().println("Hello, " + authFacebookLogin.email);
+                    us.authFacebookLogin(accessToken, expires, req);
+                    resp.sendRedirect(redirect_url);
                 } else {
                     throw new RuntimeException("Access token and expires not found");
                 }
@@ -56,7 +55,7 @@ public class LoginServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         } else {
-        	resp.sendRedirect(Facebook.getLoginRedirectURL());
+        	resp.sendError(404);
         }
     }
 

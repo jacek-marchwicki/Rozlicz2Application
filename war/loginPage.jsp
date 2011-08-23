@@ -29,6 +29,7 @@
 		String facebookUrl = userService.createFacebookLoginURL(redirect_url);
 %>
 		<html>
+			
 			<a href="<%= facebookUrl%>">Login via facebook</a>
 			<a href="<%= googleUrl%>">Login via GoogleAccount</a>
 		</html>

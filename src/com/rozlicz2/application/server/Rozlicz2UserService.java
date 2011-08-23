@@ -1,6 +1,7 @@
 package com.rozlicz2.application.server;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -21,8 +22,22 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.repackaged.org.json.JSONObject;
 import com.visural.common.IOUtil;
+import com.visural.common.StringUtil;
 
 public class Rozlicz2UserService {
+
+	// ....
+	
+
+	// set this to your servlet URL for the authentication servlet/filter
+	private static final String facebook_redirect_url = "http://localhost:8888/login";
+
+	private static final String facebook_client_id = "249870555046124";
+
+	/// set this to the list of extended permissions you want
+	private static final String[] facebook_perms = new String[] {"email"};
+
+	private static final String facebook_secret = "307bba0282982ea7459bc2689a6039c3";
 
 	private UserService googleUserService;
 
@@ -80,11 +95,17 @@ public class Rozlicz2UserService {
 			if (user == null) { 			
 				// Create user's entity in database
 
-				user = new Entity("User");
+				userQuerry = new Query("User");
+				userQuerry.addFilter("email", Query.FilterOperator.EQUAL, googleUser.getEmail());
+				pq = datastore.prepare(userQuerry);
+				user = pq.asSingleEntity();
+
+				if (user == null) {
+					user = new Entity("User");
+					user.setProperty("email", googleUser.getEmail());
+					user.setProperty("nickname", googleUser.getNickname());
+				}
 				user.setProperty("googleId", googleUser.getUserId());
-				user.setProperty("facebookId", null);
-				user.setProperty("email", googleUser.getEmail());
-				user.setProperty("nickname", googleUser.getNickname());
 
 				datastore.put(user);
 			}
@@ -116,13 +137,22 @@ public class Rozlicz2UserService {
 
 	}
 
+
 	public String createFacebookLoginURL(String redirectUrl) {
-		// TODO merge current_url with servlet url
 
-		// TODO return facebook url
-
-		// TODO in servlet redirect to property site
-		return null;
+    	String redirect2_url_safe;
+		try {
+			redirect2_url_safe = URLEncoder.encode(redirectUrl, "utf-8");
+			String redirect_url_safe = URLEncoder.encode(facebook_redirect_url + "?redirect_url=" + redirect2_url_safe, "utf-8");
+	        return "https://graph.facebook.com/oauth/authorize?client_id=" +
+	        facebook_client_id + "&display=page&redirect_uri=" +
+	            redirect_url_safe+"&scope="+StringUtil.delimitObjectsToString(",", facebook_perms);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "";
 	}
 
 	public String createLogoutURL(String redirectUrl) {
@@ -139,7 +169,7 @@ public class Rozlicz2UserService {
 		} catch (java.lang.IllegalArgumentException e2) {
 			// wrong session format
 		}
-		
+
 		User googleUser = googleUserService.getCurrentUser();
 
 		if (googleUser != null) {
@@ -152,22 +182,61 @@ public class Rozlicz2UserService {
 
 
 	}
-	// ....
 
-	public UserInfo authFacebookLogin(String accessToken, int expires) {
+
+
+    public static String getFacebookAuthURL(String authCode, String redirect2_url) throws UnsupportedEncodingException {
+
+		String redirect2_url_safe = URLEncoder.encode(redirect2_url, "utf-8");
+		String redirect_url_safe = URLEncoder.encode(facebook_redirect_url + "?redirect_url=" + redirect2_url_safe, "utf-8");
+        return "https://graph.facebook.com/oauth/access_token?client_id=" +
+            facebook_client_id+"&redirect_uri=" +
+            redirect_url_safe+"&client_secret="+facebook_secret+"&code="+URLEncoder.encode(authCode,"utf-8");
+    }
+	
+	public void authFacebookLogin(String accessToken, int expires, HttpServletRequest request) {
 		try {
 			JSONObject resp = new JSONObject(
 					IOUtil.urlToString(new URL("https://graph.facebook.com/me?access_token=" + URLEncoder.encode(accessToken, "utf-8"))));
-			UserInfo userInformations = new UserInfo();
-			//            userInformations.id = resp.getString("id");
-			//            userInformations.firstName = resp.getString("first_name");
-			//            userInformations.lastName = resp.getString("last_name");
-			userInformations.email = resp.getString("email");
 
-			// ...
-			// create and authorise the user in your current system w/ data above
-			// ...
-			return userInformations;
+			String email = resp.getString("email");
+			String nickname = resp.getString("username");
+			if (nickname == null || nickname.isEmpty())  {
+				nickname = resp.getString("name");
+			}
+
+			String facebookId = resp.getString("id");
+
+			// check if it is stored in database
+			Query userQuerry = new Query("User");
+			userQuerry.addFilter("facebookId", Query.FilterOperator.EQUAL, facebookId);
+			PreparedQuery pq = datastore.prepare(userQuerry);
+			Entity user = pq.asSingleEntity();
+			if (user == null) { 			
+				// Create user's entity in database
+				
+				userQuerry = new Query("User");
+				userQuerry.addFilter("email", Query.FilterOperator.EQUAL, email);
+				pq = datastore.prepare(userQuerry);
+				user = pq.asSingleEntity();
+				
+				if (user == null) { 
+					user = new Entity("User");
+					user.setProperty("email", email);
+					user.setProperty("nickname", nickname);
+				}
+				user.setProperty("facebookId", facebookId);
+				
+
+				datastore.put(user);
+			}
+
+			Entity session = new Entity("Session");
+			session.setProperty("userKey", user.getKey());
+			datastore.put(session);
+
+			setSessionId(request, KeyFactory.keyToString(session.getKey()));
+
 
 		} catch (Throwable ex) {
 			throw new RuntimeException("failed login", ex);

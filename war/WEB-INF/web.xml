@@ -17,11 +17,11 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>loginServlet</servlet-name>
-		<servlet-class>com.rozlicz2.application.server.LoginServlet</servlet-class>
+		<servlet-name>FacebookLoginServlet</servlet-name>
+		<servlet-class>com.rozlicz2.application.server.FacebookLoginServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>loginServlet</servlet-name>
+		<servlet-name>FacebookLoginServlet</servlet-name>
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
 	
