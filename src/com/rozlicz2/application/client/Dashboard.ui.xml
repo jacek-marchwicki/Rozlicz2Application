@@ -6,15 +6,26 @@
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:RootLayoutPanel width="" height="">
-		<g:layer left="66px" top="0px" height="60px" right="0px">
-			<g:Label text="Your Name"/>
-		</g:layer>
-		<g:layer left="0px" width="60px" top="0px" height="60px">
-			<g:Image/>
-		</g:layer>
-		<g:layer left="0px" right="0px" top="65px" bottom="0px">
-			<a:ProjectsWidget></a:ProjectsWidget>
-		</g:layer>
-	</g:RootLayoutPanel>
+	<g:HTMLPanel>
+		<div id="h1h1">
+			<div id="h1h2">
+				<a href="login">Zaloguj się</a>
+			</div>
+		</div>
+		<div id="h2h1">
+			<h1 id="h2h2">
+				<div id="logo">rozlicz<span class="green"><span class="two">2</span>.pl</span></div>
+				<div id="content-right">
+					rozliczaj się ze wszystkiego*
+					<span>*za darmo</span>
+				</div>
+			</h1>
+		</div>
+		<div id="content">
+			<div id="body">
+				<a:ProjectsWidget></a:ProjectsWidget>
+			</div>
+		</div>
+	</g:HTMLPanel>
+			
 </ui:UiBinder> 

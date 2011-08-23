@@ -3,6 +3,14 @@ body {
 	margin: 0px;
 	font-family: Sans-serif;
 }
+#loading {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	background: #ffffff url('../images/loading.gif') no-repeat center center;
+}
 #h1h1 {
 	height: 35px;
 	background: #000000;
