@@ -16,11 +16,14 @@
 	if (userInformations != null)
 	{
 		%>
-		<b> you are logged as: <%= userInformations.email %></b>
-		 
-		//response.sendRedirect(redirect_url);
+		 you are logged as: <b><%= userInformations.email %></b>
+		 <p>and of course you can logout here</p>
+		 <a href="<%= userService.createLogoutURL(redirect_url) %>">sign out</a>.
+		 <p> session id: <b><%= userService.getSessionId(request) %></b></p>
+		
 		 
 		 <%
+		//response.sendRedirect(redirect_url);
 	} else {
 		String googleUrl = userService.createGoogleLoginURL(redirect_url);
 		String facebookUrl = userService.createFacebookLoginURL(redirect_url);
