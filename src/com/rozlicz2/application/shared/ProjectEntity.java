@@ -1,4 +1,6 @@
-package com.rozlicz2.application.client.dao;
+package com.rozlicz2.application.shared;
+
+import com.rozlicz2.application.client.dao.BaseEntity;
 
 public class ProjectEntity extends BaseEntity {
 	private String name;

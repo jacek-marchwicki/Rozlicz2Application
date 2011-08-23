@@ -1,22 +1,13 @@
 package com.rozlicz2.application.client.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectsDAO {
-	private ArrayList<ProjectEntity> all =
-		new ArrayList<ProjectEntity>();
-	
-	public ProjectsDAO() {
-		all.add(new ProjectEntity("Tesco Shopping"));
-		all.add(new ProjectEntity("Travel to Brussel"));
-	}
+import com.rozlicz2.application.shared.ProjectEntity;
 
-	public int getCount() {
-		return all.size();
-	}
+public interface ProjectsDAO {
 
-	public List<ProjectEntity> getAll() {
-		return all;
-	}
+	int getCount();
+
+	List<ProjectEntity> getAll();
+
 }
