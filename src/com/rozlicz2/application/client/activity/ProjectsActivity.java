@@ -21,6 +21,7 @@ public class ProjectsActivity extends AbstractActivity implements ProjectsView.P
 		ProjectsView projectsView = clientFactory.getProjectsView();
         projectsView.setPresenter(this);
         projectsView.setProjectsList(clientFactory.getProjectsDAO().getAll());
+        projectsView.setProjectsNumber(clientFactory.getProjectsDAO().getCount());
         panel.setWidget(projectsView.asWidget());
 
 	}

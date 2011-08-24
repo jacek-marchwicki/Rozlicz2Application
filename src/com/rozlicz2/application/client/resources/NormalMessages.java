@@ -18,4 +18,7 @@ public interface NormalMessages extends Messages {
 
 	@DefaultMessage("<b>Server replies:</b> {0}")
 	SafeHtml serverReplies(SafeHtml serverResponseLabel);
+
+	@DefaultMessage("Number of projects is {0}")
+	String numberOfProjects(int numberOfProjects);
 }

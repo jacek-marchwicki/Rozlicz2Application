@@ -12,10 +12,12 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.rozlicz2.application.client.EntityProvidesKey;
+import com.rozlicz2.application.client.resources.NormalMessages;
 import com.rozlicz2.application.shared.ProjectEntity;
 
 public class ProjectsViewImpl extends Composite implements ProjectsView{
@@ -33,6 +35,9 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 
 	@UiField
 	CellList<ProjectEntity> cellList;
+	
+	@UiField
+	Label projectsNumberLabel;
 
 	public static class ProductCell extends AbstractCell<ProjectEntity> {
 		interface Template extends SafeHtmlTemplates {
@@ -89,6 +94,11 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 		cellList.setRowCount(projectsDetails.size(), true);
 		cellList.setRowData(0, projectsDetails);
 		cellList.redraw();
+	}
+
+	@Override
+	public void setProjectsNumber(int numberOfProjects) {
+		projectsNumberLabel.setText(NormalMessages.messages.numberOfProjects(numberOfProjects));
 	}
 
 }
