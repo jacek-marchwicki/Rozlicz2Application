@@ -9,5 +9,9 @@ public interface ProjectView extends IsWidget {
 	void setProjectName(String projectName);
 	void setExpenses(List<ExpenseShort> expenses);
 	// TODO setSummary
+	public interface Presenter {
+		void changeProjectNameTextBox();
+	}
+	void setPresenter(Presenter presenter);
 	
 }

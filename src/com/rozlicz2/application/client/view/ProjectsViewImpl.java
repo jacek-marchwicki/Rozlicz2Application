@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.rozlicz2.application.client.EntityProvidesKey;
-import com.rozlicz2.application.client.resources.NormalMessages;
+import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.shared.ProjectEntity;
 
 public class ProjectsViewImpl extends Composite implements ProjectsView{
@@ -106,7 +106,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 
 	@Override
 	public void setProjectsNumber(int numberOfProjects) {
-		projectsNumberLabel.setText(NormalMessages.messages.numberOfProjects(numberOfProjects));
+		projectsNumberLabel.setText(LocalizedMessages.messages.numberOfProjects(numberOfProjects));
 	}
 
 }

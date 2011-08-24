@@ -7,7 +7,10 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		New project
+		<p style="font-weight: bold; font-size: 2em;">Creating new project</p>
+		<!-- TODO header with localization -->
 		<g:Label ui:field="projectNameLabel"></g:Label>
+		<g:Label ui:field="projectNameErrorLabel"></g:Label>
+		<g:TextBox ui:field="projectNameTextBox"></g:TextBox>
 	</g:HTMLPanel>
 </ui:UiBinder> 

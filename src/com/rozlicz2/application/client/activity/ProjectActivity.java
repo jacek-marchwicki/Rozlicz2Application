@@ -11,7 +11,7 @@ import com.rozlicz2.application.client.dao.Project;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.view.ProjectView;
 
-public class ProjectActivity extends AbstractActivity {
+public class ProjectActivity extends AbstractActivity implements ProjectView.Presenter {
 
 	private ClientFactory clientFactory;
 	private final ProjectPlace place;
@@ -31,4 +31,11 @@ public class ProjectActivity extends AbstractActivity {
         panel.setWidget(projectView.asWidget());
 	}
 
+	@Override
+	public void changeProjectNameTextBox() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

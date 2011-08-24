@@ -10,4 +10,5 @@ public interface ApplicationConstants extends Constants {
 	String remoteProceduralCall();
 	String sendingTheNameToServer();
 	String close();
+	String nameLabel();
 }

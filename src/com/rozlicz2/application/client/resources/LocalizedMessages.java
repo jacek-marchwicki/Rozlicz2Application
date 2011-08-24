@@ -10,8 +10,8 @@ import com.google.gwt.safehtml.shared.SafeHtml;
  * @author Jacek Marchwicki
  *
  */
-public interface NormalMessages extends Messages {
-	static NormalMessages messages = GWT.create(NormalMessages.class);
+public interface LocalizedMessages extends Messages {
+	static LocalizedMessages messages = GWT.create(LocalizedMessages.class);
 	
 	@DefaultMessage("Hello: {0}")
 	String sayHello(String name);

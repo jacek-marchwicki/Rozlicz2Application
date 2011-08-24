@@ -5,4 +5,7 @@ import com.google.gwt.i18n.client.Messages;
 
 public interface ErrorMessages extends Messages {
 	static ErrorMessages messages = GWT.create(ErrorMessages.class);
+
+	@DefaultMessage("{0} is to short.")
+	String toShort(String text);
 }
