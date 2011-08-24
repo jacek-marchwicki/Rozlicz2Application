@@ -4,12 +4,14 @@ import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -23,7 +25,7 @@ import com.rozlicz2.application.shared.ProjectEntity;
 public class ProjectsViewImpl extends Composite implements ProjectsView{
 
 	private static ProjectsViewImplUiBinder uiBinder = GWT
-	.create(ProjectsViewImplUiBinder.class);
+			.create(ProjectsViewImplUiBinder.class);
 
 	interface ProjectsViewImplUiBinder extends UiBinder<Widget, ProjectsViewImpl> {
 	}
@@ -35,9 +37,11 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 
 	@UiField
 	CellList<ProjectEntity> cellList;
-	
+
 	@UiField
 	Label projectsNumberLabel;
+
+	private ProjectsView.Presenter presenter;
 
 	public static class ProductCell extends AbstractCell<ProjectEntity> {
 		interface Template extends SafeHtmlTemplates {
@@ -78,6 +82,11 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 		return cellList;
 	}
 
+	@UiHandler("createButton")
+	void handleCreateButtonClick(ClickEvent e) {
+		presenter.createProject();
+	}
+
 	@Override
 	public void setUserName(String userName) {
 		// TODO Auto-generated method stub
@@ -85,8 +94,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 
 	@Override
 	public void setPresenter(Presenter presenter) {
-		// TODO Auto-generated method stub
-
+		this.presenter = presenter;
 	}
 
 	@Override

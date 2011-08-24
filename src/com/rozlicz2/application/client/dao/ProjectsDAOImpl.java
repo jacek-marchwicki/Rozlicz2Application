@@ -10,7 +10,9 @@ public class ProjectsDAOImpl implements ProjectsDAO {
 		new ArrayList<ProjectEntity>();
 	
 	public ProjectsDAOImpl() {
-		all.add(new ProjectEntity("Tesco Shopping"));
+		ProjectEntity projectEntity = new ProjectEntity("Tesco Shopping");
+		projectEntity.setId((long) 123456);
+		all.add(projectEntity);
 		all.add(new ProjectEntity("Travel to Brussel"));
 	}
 
