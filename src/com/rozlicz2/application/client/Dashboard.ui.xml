@@ -1,0 +1,31 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:a="urn:import:com.rozlicz2.application.client">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<div id="h1h1">
+			<div id="h1h2">
+				<a href="login">Zaloguj się</a>
+			</div>
+		</div>
+		<div id="h2h1">
+			<h1 id="h2h2">
+				<div id="logo">rozlicz<span class="green"><span class="two">2</span>.pl</span></div>
+				<div id="content-right">
+					rozliczaj się ze wszystkiego*
+					<span>*za darmo</span>
+				</div>
+			</h1>
+		</div>
+		<div id="content">
+			<div id="body">
+				<g:SimplePanel ui:field="appWidget"></g:SimplePanel>
+			</div>
+		</div>
+	</g:HTMLPanel>
+			
+</ui:UiBinder> 

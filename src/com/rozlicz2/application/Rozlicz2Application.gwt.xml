@@ -9,6 +9,9 @@
 	<inherits name='com.google.gwt.user.theme.clean.Clean' />
 	<inherits name="com.google.gwt.resources.Resources" />
 	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.activity.Activity" />
+	<inherits name="com.google.gwt.place.Place" />
+
 	<!-- Dynamically loading locales -->
 	<!-- <inherits name="com.google.gwt.i18n.client.impl.CldrImpl" /> -->
 
@@ -21,6 +24,10 @@
 	<!-- Specify the app entry point class. -->
 	<entry-point class='com.rozlicz2.application.client.Rozlicz2Application' />
 
+	<replace-with class="com.rozlicz2.application.client.ClientFactoryImpl">
+		<when-type-is class="com.rozlicz2.application.client.ClientFactory" />
+	</replace-with>
+
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />
 	<source path='shared' />
@@ -30,8 +37,8 @@
 
 	<!-- Polish language -->
 	<extend-property name="locale" values="pl" />
-	
+
 	<!-- Default language -->
-	<set-property-fallback name="locale" value="en"/>
+	<set-property-fallback name="locale" value="en" />
 
 </module>
