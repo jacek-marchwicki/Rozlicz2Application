@@ -1,7 +1,7 @@
 package com.rozlicz2.application.client;
 
 import com.google.gwt.view.client.ProvidesKey;
-import com.rozlicz2.application.client.dao.BaseEntity;
+import com.rozlicz2.application.client.entity.BaseEntity;
 
 public class EntityProvidesKey<T extends BaseEntity> implements ProvidesKey<T> {
 

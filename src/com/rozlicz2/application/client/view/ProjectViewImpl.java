@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.rozlicz2.application.client.Validator;
 import com.rozlicz2.application.client.Validator.ValidatorException;
-import com.rozlicz2.application.client.dao.ExpenseShort;
+import com.rozlicz2.application.client.entity.ExpenseShortEntity;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 
 public class ProjectViewImpl extends CompositeExtender implements ProjectView {
@@ -69,7 +69,7 @@ public class ProjectViewImpl extends CompositeExtender implements ProjectView {
 	}
 
 	@Override
-	public void setExpenses(List<ExpenseShort> expenses) {
+	public void setExpenses(List<ExpenseShortEntity> expenses) {
 		// TODO Auto-generated method stub
 
 	}

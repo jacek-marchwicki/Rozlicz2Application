@@ -1,26 +1,21 @@
 package com.rozlicz2.application.client.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-import com.rozlicz2.application.shared.ProjectEntity;
+import com.rozlicz2.application.client.entity.ProjectEntity;
 
-public class ProjectsDAOImpl implements ProjectsDAO {
-	private ArrayList<ProjectEntity> all =
-		new ArrayList<ProjectEntity>();
+public class ProjectsDAOImpl implements ProjectsDAO{
+	private HashMap<Long , ProjectEntity> projects = new HashMap<Long, ProjectEntity>();
 	
-	public ProjectsDAOImpl() {
-		ProjectEntity projectEntity = new ProjectEntity("Tesco Shopping");
-		projectEntity.setId((long) 123456);
-		all.add(projectEntity);
-		all.add(new ProjectEntity("Travel to Brussel"));
+	public ProjectEntity getProject(long projectId) {
+		return projects.get(new Long(projectId));
 	}
-
-	public int getCount() {
-		return all.size();
+	@Override
+	public void addProject(ProjectEntity project) {
+		projects.put(new Long(project.getId()), project);
 	}
-
-	public List<ProjectEntity> getAll() {
-		return all;
+	@Override
+	public void removeProject(ProjectEntity project) {
+		projects.remove(new Long(project.getId()));
 	}
 }

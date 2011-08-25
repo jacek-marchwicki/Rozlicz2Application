@@ -8,7 +8,8 @@ import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.client.view.ProjectsView;
 
-public class ProjectsActivity extends AbstractActivity implements ProjectsView.Presenter {
+public class ProjectsActivity extends AbstractActivity implements
+		ProjectsView.Presenter {
 
 	private final ClientFactory clientFactory;
 
@@ -19,10 +20,11 @@ public class ProjectsActivity extends AbstractActivity implements ProjectsView.P
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		ProjectsView projectsView = clientFactory.getProjectsView();
-        projectsView.setPresenter(this);
-        projectsView.setProjectsList(clientFactory.getProjectsDAO().getAll());
-        projectsView.setProjectsNumber(clientFactory.getProjectsDAO().getCount());
-        panel.setWidget(projectsView.asWidget());
+		projectsView.setPresenter(this);
+		projectsView.setProjectsList(clientFactory.getProjectsDAO().getAll());
+		projectsView.setProjectsNumber(clientFactory.getProjectsDAO()
+				.getCount());
+		panel.setWidget(projectsView.asWidget());
 
 	}
 

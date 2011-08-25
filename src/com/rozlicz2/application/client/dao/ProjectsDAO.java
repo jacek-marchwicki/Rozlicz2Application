@@ -1,13 +1,9 @@
 package com.rozlicz2.application.client.dao;
 
-import java.util.List;
-
-import com.rozlicz2.application.shared.ProjectEntity;
+import com.rozlicz2.application.client.entity.ProjectEntity;
 
 public interface ProjectsDAO {
-
-	int getCount();
-
-	List<ProjectEntity> getAll();
-
+	public ProjectEntity getProject(long projectId) ;
+	public void addProject(ProjectEntity project);
+	public void removeProject(ProjectEntity project);
 }

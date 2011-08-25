@@ -19,8 +19,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.rozlicz2.application.client.EntityProvidesKey;
+import com.rozlicz2.application.client.entity.ProjectShortEntity;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
-import com.rozlicz2.application.shared.ProjectEntity;
 
 public class ProjectsViewImpl extends Composite implements ProjectsView{
 
@@ -36,14 +36,14 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 	}
 
 	@UiField
-	CellList<ProjectEntity> cellList;
+	CellList<ProjectShortEntity> cellList;
 
 	@UiField
 	Label projectsNumberLabel;
 
 	private ProjectsView.Presenter presenter;
 
-	public static class ProductCell extends AbstractCell<ProjectEntity> {
+	public static class ProductCell extends AbstractCell<ProjectShortEntity> {
 		interface Template extends SafeHtmlTemplates {
 			@Template("<div>{0}</div><div>{1}</div>")
 			SafeHtml productCellTemplate(String name,String price);
@@ -58,25 +58,25 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 		}
 
 		@Override
-		public void render(Context context, ProjectEntity value, SafeHtmlBuilder sb) {
+		public void render(Context context, ProjectShortEntity value, SafeHtmlBuilder sb) {
 			if (value != null) {
 				sb.append(template.productCellTemplate(value.getName(),"123,zł"));
 			}
 		}
 	}
 
-	@UiFactory CellList<ProjectEntity> makeCellList() {
-		EntityProvidesKey<ProjectEntity> keyProvider = new EntityProvidesKey<ProjectEntity>();
+	@UiFactory CellList<ProjectShortEntity> makeCellList() {
+		EntityProvidesKey<ProjectShortEntity> keyProvider = new EntityProvidesKey<ProjectShortEntity>();
 
 		// Create a CellList using the keyProvider.
-		CellList<ProjectEntity> cellList = new CellList<ProjectEntity>(new ProductCell(),
+		CellList<ProjectShortEntity> cellList = new CellList<ProjectShortEntity>(new ProductCell(),
 				keyProvider);
 
 		// Push data into the CellList.
 
 
 		// Add a selection model using the same keyProvider.
-		SelectionModel<ProjectEntity> selectionModel = new SingleSelectionModel<ProjectEntity>(
+		SelectionModel<ProjectShortEntity> selectionModel = new SingleSelectionModel<ProjectShortEntity>(
 				keyProvider);
 		cellList.setSelectionModel(selectionModel);
 		return cellList;
@@ -98,7 +98,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 	}
 
 	@Override
-	public void setProjectsList(List<ProjectEntity> projectsDetails) {
+	public void setProjectsList(List<ProjectShortEntity> projectsDetails) {
 		cellList.setRowCount(projectsDetails.size(), true);
 		cellList.setRowData(0, projectsDetails);
 		cellList.redraw();

@@ -6,8 +6,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.rozlicz2.application.client.ClientFactory;
-import com.rozlicz2.application.client.dao.ExpenseShort;
-import com.rozlicz2.application.client.dao.Project;
+import com.rozlicz2.application.client.entity.ExpenseShortEntity;
+import com.rozlicz2.application.client.entity.ProjectEntity;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.view.ProjectView;
 
@@ -24,8 +24,8 @@ public class ProjectActivity extends AbstractActivity implements ProjectView.Pre
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		ProjectView projectView = clientFactory.getProjectView();
-		Project project = clientFactory.getProjectDAO().getProject(place.getProjectId());
-		List<ExpenseShort> expenses= project.getExpensesShort();
+		ProjectEntity project = clientFactory.getProjectDAO().getProject(place.getProjectId());
+		List<ExpenseShortEntity> expenses= project.getExpensesShort();
         projectView.setExpenses(expenses);
         projectView.setProjectName(project.getName());
         panel.setWidget(projectView.asWidget());

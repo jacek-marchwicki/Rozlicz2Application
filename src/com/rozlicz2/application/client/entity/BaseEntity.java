@@ -1,4 +1,4 @@
-package com.rozlicz2.application.client.dao;
+package com.rozlicz2.application.client.entity;
 
 import java.util.Random;
 
