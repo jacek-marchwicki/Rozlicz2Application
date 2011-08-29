@@ -4,6 +4,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.rozlicz2.application.client.ClientFactory;
+import com.rozlicz2.application.client.entity.ProjectEntity;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.client.view.ProjectsView;
@@ -21,8 +22,8 @@ public class ProjectsActivity extends AbstractActivity implements
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
 		ProjectsView projectsView = clientFactory.getProjectsView();
 		projectsView.setPresenter(this);
-		projectsView.setProjectsList(clientFactory.getProjectsDAO().getAll());
-		projectsView.setProjectsNumber(clientFactory.getProjectsDAO()
+		projectsView.setProjectsList(clientFactory.getProjectsShortDAO().getAll());
+		projectsView.setProjectsNumber(clientFactory.getProjectsShortDAO()
 				.getCount());
 		panel.setWidget(projectsView.asWidget());
 
@@ -30,7 +31,18 @@ public class ProjectsActivity extends AbstractActivity implements
 
 	@Override
 	public void createProject() {
-		ProjectPlace place = new ProjectPlace(123456);
+		ProjectEntity projectEntity = new ProjectEntity();
+		
+		clientFactory.getProjectsDAO().addProject(projectEntity);
+		clientFactory.getProjectsShortDAO().addProject(projectEntity);
+		
+		ProjectPlace place = new ProjectPlace(projectEntity.getId());
+		clientFactory.getPlaceController().goTo(place);
+	}
+
+	@Override
+	public void editProject(Long id) {
+		ProjectPlace place = new ProjectPlace(id);
 		clientFactory.getPlaceController().goTo(place);
 	}
 

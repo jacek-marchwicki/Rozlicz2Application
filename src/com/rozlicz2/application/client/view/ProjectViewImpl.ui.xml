@@ -1,16 +1,16 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:v="urn:import:com.rozlicz2.application.client.view"
+	xmlns:p1="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style>
 		.important {
 			font-weight: bold;
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<p style="font-weight: bold; font-size: 2em;">Creating new project</p>
-		<!-- TODO header with localization -->
-		<g:Label ui:field="projectNameLabel"></g:Label>
-		<g:Label ui:field="projectNameErrorLabel"></g:Label>
-		<g:TextBox ui:field="projectNameTextBox"></g:TextBox>
+		<v:EditableLabelWidget ui:field="projectNameWidget"></v:EditableLabelWidget>
+		<p>Expenditures:</p>
+		<p1:CellList ui:field="expensesList"></p1:CellList>
+		<g:Button ui:field="createExpenseButton" text="Create Expense"></g:Button>
 	</g:HTMLPanel>
 </ui:UiBinder> 

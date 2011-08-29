@@ -3,3 +3,8 @@ body {
 	margin: 0px;
 	font-family: Sans-serif;
 }
+.errorClass {
+	background-color: #ff0000;
+	text: #ffffff;
+}
+	

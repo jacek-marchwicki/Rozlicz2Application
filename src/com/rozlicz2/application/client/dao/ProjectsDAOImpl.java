@@ -18,4 +18,9 @@ public class ProjectsDAOImpl implements ProjectsDAO{
 	public void removeProject(ProjectEntity project) {
 		projects.remove(new Long(project.getId()));
 	}
+	@Override
+	public void save(ProjectEntity project) {
+		removeProject(project);
+		addProject(project);
+	}
 }

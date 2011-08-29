@@ -11,4 +11,6 @@ public interface ApplicationConstants extends Constants {
 	String sendingTheNameToServer();
 	String close();
 	String nameLabel();
+	String emptyProject();
+	String emptyExpenditure();
 }

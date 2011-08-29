@@ -6,4 +6,5 @@ public interface ProjectsDAO {
 	public ProjectEntity getProject(long projectId) ;
 	public void addProject(ProjectEntity project);
 	public void removeProject(ProjectEntity project);
+	public void save(ProjectEntity project);
 }

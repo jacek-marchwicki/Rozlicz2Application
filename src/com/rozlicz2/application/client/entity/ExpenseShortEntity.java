@@ -2,7 +2,7 @@ package com.rozlicz2.application.client.entity;
 
 public class ExpenseShortEntity extends BaseEntity{
 	private String name;
-	private Long projectName;
+	private Long projectId;
 
 	public void setName(String name) {
 		this.name = name;
@@ -12,11 +12,11 @@ public class ExpenseShortEntity extends BaseEntity{
 		return name;
 	}
 
-	public void setProjectName(Long projectName) {
-		this.projectName = projectName;
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 
-	public Long getProjectName() {
-		return projectName;
+	public Long getProjectId() {
+		return projectId;
 	}
 }

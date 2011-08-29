@@ -10,5 +10,6 @@ public interface ProjectsShortDAO {
 	public void addProject(ProjectShortEntity project);
 	public void removeProject(ProjectShortEntity project);
 	public int getCount();
+	public void save(ProjectShortEntity project);
 
 }

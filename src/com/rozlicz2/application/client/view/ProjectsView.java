@@ -11,6 +11,7 @@ public interface ProjectsView extends IsWidget {
 	void setProjectsList(List<ProjectShortEntity> projectsDetails);
 	public interface Presenter {
 		void createProject();
+		void editProject(Long id);
 	}
 	void setPresenter(Presenter presenter);
 }

@@ -34,4 +34,10 @@ public class ProjectsShortDAOImpl implements ProjectsShortDAO {
 	public int getCount() {
 		return getAll().size();
 	}
+
+	@Override
+	public void save(ProjectShortEntity project) {
+		removeProject(project);
+		addProject(project);
+	}
 }

@@ -16,7 +16,8 @@ import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.rozlicz2.application.client.EntityProvidesKey;
 import com.rozlicz2.application.client.entity.ProjectShortEntity;
@@ -76,10 +77,25 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 
 
 		// Add a selection model using the same keyProvider.
-		SelectionModel<ProjectShortEntity> selectionModel = new SingleSelectionModel<ProjectShortEntity>(
+		final SingleSelectionModel<ProjectShortEntity> selectionModel = new SingleSelectionModel<ProjectShortEntity>(
 				keyProvider);
 		cellList.setSelectionModel(selectionModel);
+		selectionModel.addSelectionChangeHandler(new Handler() {
+			
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				ProjectShortEntity selectedObject = selectionModel.getSelectedObject();
+				if (selectedObject == null) 
+					return;
+				selectionModel.setSelected(selectedObject, false);
+				onSelectedObject(selectedObject);
+			}
+		});
 		return cellList;
+	}
+
+	protected void onSelectedObject(ProjectShortEntity selectedObject) {
+		presenter.editProject(selectedObject.getId());
 	}
 
 	@UiHandler("createButton")

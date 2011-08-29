@@ -23,4 +23,10 @@ public class ExpensesDAOImpl implements ExpensesDAO {
 		all.remove(new Long(entity.getId()));
 	}
 
+	@Override
+	public void save(ExpenseEntity expense) {
+		removeExpense(expense);
+		addExpense(expense);
+	}
+
 }

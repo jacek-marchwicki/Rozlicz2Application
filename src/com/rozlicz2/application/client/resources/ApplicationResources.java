@@ -7,9 +7,13 @@ import com.google.gwt.resources.client.TextResource;
 
 public interface ApplicationResources extends ClientBundle {
 	public static final ApplicationResources INSTANCE =  GWT.create(ApplicationResources.class);
+	
+	interface ApplicationCss extends CssResource {
+		String errorClass();
+	}
 
 	@Source("application.css")
-	public CssResource css();
+	public ApplicationCss css();
 
 	@Source("default.txt")
 	public TextResource defaultText();
