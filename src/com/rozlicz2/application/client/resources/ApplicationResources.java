@@ -10,6 +10,7 @@ public interface ApplicationResources extends ClientBundle {
 	
 	interface ApplicationCss extends CssResource {
 		String errorClass();
+		String hideClass();
 	}
 
 	@Source("application.css")

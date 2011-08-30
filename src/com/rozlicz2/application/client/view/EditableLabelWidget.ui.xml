@@ -7,6 +7,9 @@
 			font-size: 1.5em;
 			float: left;
 		}
+		.labelContainer{
+			min-height: 2em;
+		}
 		.edit {
 			font-size: 0.8em;
 			margin-left: 6px;
@@ -18,19 +21,36 @@
 			background: green;	
 			font-weight: bold;
 			border: 0px;
+			float: left;
 		}
 		.cancelButton {
 			color: white;
 			background: red;	
-			border: 0px;		
+			border: 0px;
+			float: left;		
 		}
+		
+		.errorLabel {
+			clear: both;
+			font-size: 0.8em;
+			-moz-transition-property: opacity;
+  			-moz-transition-duration: 3s, 5s;
+		}
+		
+		.textBox {
+			float: left;
+			font-size: 1em;
+			width: 40%;
+		}
+		
 	</ui:style>
-	<g:HTMLPanel>
+	<g:HTMLPanel styleName="{style.labelContainer}">
 		<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
 		<g:Anchor ui:field="editAnchor" styleName="{style.edit}" text="[edit]"></g:Anchor>
-		<g:TextBox ui:field="textBox"></g:TextBox>
-		<g:Label ui:field="errorLabel"></g:Label>
+		<g:TextBox ui:field="textBox" styleName="{style.textBox}"></g:TextBox>
 		<g:Button ui:field="saveButton" text="Save" styleName="{style.saveButton}"></g:Button>
 		<g:Button ui:field="cancelButton" text="Cancel" styleName="{style.cancelButton}"></g:Button>
+		<g:Label ui:field="errorLabel" styleName="{style.errorLabel}"></g:Label>
+		<div style="clear: both"></div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

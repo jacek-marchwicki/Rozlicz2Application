@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.rozlicz2.application.client.Validator;
 import com.rozlicz2.application.client.Validator.ValidatorException;
+import com.rozlicz2.application.client.resources.ApplicationResources;
 
 public class EditableLabelWidget extends Composite implements HasText,
 		HasValueChangeHandlers<String> {
@@ -144,11 +145,12 @@ public class EditableLabelWidget extends Composite implements HasText,
 		try {
 			isValid();
 			saveButton.setEnabled(true);
-			errorLabel.setText("");
+			errorLabel.addStyleName(ApplicationResources.INSTANCE.css().hideClass());
 			textBox.removeStyleName(this.style.errorClass());
 		} catch (ValidatorException e) {
 			saveButton.setEnabled(false);
 			errorLabel.setText(e.getMessage());
+			errorLabel.removeStyleName(ApplicationResources.INSTANCE.css().hideClass());
 			textBox.addStyleName(this.style.errorClass());
 		}
 	}

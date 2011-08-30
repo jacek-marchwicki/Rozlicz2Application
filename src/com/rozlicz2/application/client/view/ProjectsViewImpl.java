@@ -61,7 +61,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 		@Override
 		public void render(Context context, ProjectShortEntity value, SafeHtmlBuilder sb) {
 			if (value != null) {
-				sb.append(template.productCellTemplate(value.getName(),"123,zł"));
+				sb.append(template.productCellTemplate(value.getName(),"123,13 PLN"));
 			}
 		}
 	}

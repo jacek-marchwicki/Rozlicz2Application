@@ -11,3 +11,6 @@ body {
 h1,h2,h3 {
 	clear: both;
 }
+.hideClass {
+	opacity: 0;
+}

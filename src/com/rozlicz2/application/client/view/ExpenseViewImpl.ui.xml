@@ -2,6 +2,9 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:v="urn:import:com.rozlicz2.application.client.view"
 	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	
+	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
+	
 	<ui:style>
 		.important {
 			font-weight: bold;
@@ -10,10 +13,10 @@
 	<g:HTMLPanel>
 		<v:EditableLabelWidget ui:field="expenseNameWidget"></v:EditableLabelWidget>
 		
-		<h2>Expense paid by</h2>
+		<h2><ui:text from="{i18n.expencePaidBy}"></ui:text>:</h2>
 		<c:CellList ui:field="paymentsCellList"></c:CellList>
 		
-		<h2>Users charged</h2>
+		<h2><ui:text from="{i18n.expenceParticipants}"></ui:text>:</h2>
 		<c:CellList ui:field="consumersCellList"></c:CellList>
 	</g:HTMLPanel>
 </ui:UiBinder> 

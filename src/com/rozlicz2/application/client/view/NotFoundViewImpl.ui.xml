@@ -7,6 +7,6 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<p styleName="style.important">Site you are trying request is not found <a href="#">Go to main site</a></p>
+		<p styleName="style.important">Ooops.. the site you are trying to open is not here :( <a href="#">Go to main site</a></p>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -7,7 +7,7 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:HTMLPanel>
+	<g:HTMLPanel>	
 		<g:Button ui:field="createButton" text="Create project">
 			<ui:attribute name='text' description='Information about creating project' />
 		</g:Button>

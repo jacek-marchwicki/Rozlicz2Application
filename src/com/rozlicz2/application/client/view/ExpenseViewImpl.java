@@ -61,7 +61,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
 				ExpensePayment value, SafeHtmlBuilder sb) {
-			sb.append(template.productCellTemplate(value.name, "123,zł"));
+			sb.append(template.productCellTemplate(value.name, "123,43 PLN"));
 		}
 	}
 
@@ -82,7 +82,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
 				ExpenseConsumer value, SafeHtmlBuilder sb) {
-			sb.append(template.productCellTemplate(value.name, "123,zł"));
+			sb.append(template.productCellTemplate(value.name, "123,45 PLN"));
 		}
 	}
 

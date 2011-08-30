@@ -21,7 +21,7 @@ public class ExpenseEntity extends ExpenseShortEntity {
 	private HashMap<Long, Consumer> consumers = new HashMap<Long, ExpenseEntity.Consumer>();
 	
 	public ExpenseEntity(Long projectId) {
-		this.setName(ApplicationConstants.constants.emptyExpenditure());
+		this.setName(ApplicationConstants.constants.emptyExpense());
 		this.setProjectId(projectId);
 	}
 	
