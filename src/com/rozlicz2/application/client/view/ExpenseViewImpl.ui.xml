@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:v="urn:import:com.rozlicz2.application.client.view">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:v="urn:import:com.rozlicz2.application.client.view"
+	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style>
 		.important {
 			font-weight: bold;
@@ -8,5 +9,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<v:EditableLabelWidget ui:field="expenseNameWidget"></v:EditableLabelWidget>
+		<c:CellList ui:field="paymentsCellList"></c:CellList>
+		<c:CellList ui:field="consumersCellList"></c:CellList>
 	</g:HTMLPanel>
 </ui:UiBinder> 
