@@ -9,7 +9,11 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<v:EditableLabelWidget ui:field="expenseNameWidget"></v:EditableLabelWidget>
+		
+		<h2>Expense paid by</h2>
 		<c:CellList ui:field="paymentsCellList"></c:CellList>
+		
+		<h2>Users charged</h2>
 		<c:CellList ui:field="consumersCellList"></c:CellList>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -4,24 +4,33 @@
 	<ui:style>
 		.label {
 			font-weight: bold;
-			font-size: 20px;
+			font-size: 1.5em;
+			float: left;
 		}
 		.edit {
-			font-size: 8px;
+			font-size: 0.8em;
+			margin-left: 6px;
+			float: left;
+			
 		}
 		.saveButton {
-			display: inline-block;
+			color: white;
+			background: green;	
+			font-weight: bold;
+			border: 0px;
 		}
 		.cancelButton {
-			display: inline-block;
+			color: white;
+			background: red;	
+			border: 0px;		
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<g:Label ui:field="textLabel" styleName="style.important"></g:Label>
-		<g:Anchor ui:field="editAnchor" styleName="style.edit" text="[edit]"></g:Anchor>
+		<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
+		<g:Anchor ui:field="editAnchor" styleName="{style.edit}" text="[edit]"></g:Anchor>
 		<g:TextBox ui:field="textBox"></g:TextBox>
 		<g:Label ui:field="errorLabel"></g:Label>
-		<g:Button ui:field="saveButton" text="Save" styleName="saveButton"></g:Button>
-		<g:Button ui:field="cancelButton" text="Cancel" styleName="cancelButton"></g:Button>
+		<g:Button ui:field="saveButton" text="Save" styleName="{style.saveButton}"></g:Button>
+		<g:Button ui:field="cancelButton" text="Cancel" styleName="{style.cancelButton}"></g:Button>
 	</g:HTMLPanel>
 </ui:UiBinder> 
