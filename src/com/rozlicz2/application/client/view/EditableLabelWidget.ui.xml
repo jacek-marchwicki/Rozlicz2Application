@@ -9,13 +9,19 @@
 		.edit {
 			font-size: 8px;
 		}
+		.saveButton {
+			display: inline-block;
+		}
+		.cancelButton {
+			display: inline-block;
+		}
 	</ui:style>
 	<g:HTMLPanel>
 		<g:Label ui:field="textLabel" styleName="style.important"></g:Label>
 		<g:Anchor ui:field="editAnchor" styleName="style.edit" text="[edit]"></g:Anchor>
 		<g:TextBox ui:field="textBox"></g:TextBox>
 		<g:Label ui:field="errorLabel"></g:Label>
-		<g:Button ui:field="saveButton" text="Save"></g:Button>
-		<g:Button ui:field="cancelButton" text="Cancel"></g:Button>
+		<g:Button ui:field="saveButton" text="Save" styleName="saveButton"></g:Button>
+		<g:Button ui:field="cancelButton" text="Cancel" styleName="cancelButton"></g:Button>
 	</g:HTMLPanel>
 </ui:UiBinder> 
