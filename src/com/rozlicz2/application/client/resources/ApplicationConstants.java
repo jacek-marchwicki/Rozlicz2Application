@@ -13,4 +13,8 @@ public interface ApplicationConstants extends Constants {
 	String nameLabel();
 	String emptyProject();
 	String emptyExpenditure();
+	String inviteFriends();
+	String cancel();
+	String save();
+	String allowFriendsEdit();
 }

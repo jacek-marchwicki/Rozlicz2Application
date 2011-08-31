@@ -10,6 +10,8 @@ public interface ApplicationResources extends ClientBundle {
 	
 	interface ApplicationCss extends CssResource {
 		String errorClass();
+		String grayBackgroundClass();
+		String fullScreenClass();
 	}
 
 	@Source("application.css")

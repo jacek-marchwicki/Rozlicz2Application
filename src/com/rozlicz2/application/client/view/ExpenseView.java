@@ -27,7 +27,7 @@ public interface ExpenseView extends IsWidget {
 		void consumerSet(Long userId, boolean isConsumer);
 		void consumerSetProportional(Long userId, boolean isProportional);
 		void consumerSetValue(Long userId, double value);
-		void addParticipant();
 		void setExpenseName(String value);
+		void addParticipants();
 	}
 }

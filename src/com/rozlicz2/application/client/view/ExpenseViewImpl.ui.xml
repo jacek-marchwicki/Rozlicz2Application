@@ -7,9 +7,11 @@
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:HTMLPanel>
+	<g:HTMLPanel ui:field="htmlPanel">
 		<v:EditableLabelWidget ui:field="expenseNameWidget"></v:EditableLabelWidget>
 		<c:CellList ui:field="paymentsCellList"></c:CellList>
+		<g:Button ui:field="addParticipantButton" text="Add participant"><ui:attribute name="text"></ui:attribute>
+		</g:Button>
 		<c:CellList ui:field="consumersCellList"></c:CellList>
 	</g:HTMLPanel>
 </ui:UiBinder> 
