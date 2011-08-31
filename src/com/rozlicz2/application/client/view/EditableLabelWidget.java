@@ -17,6 +17,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -37,24 +38,25 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	public interface Resources extends ClientBundle {
 		@Source(Style.DEFAULT_CSS)
-	    Style widgetStyle();
+		Style widgetStyle();
 	}
 
 	@ImportedWithPrefix("gwt-CellList")
 	public interface Style extends CssResource {
 		String DEFAULT_CSS = "com/rozlicz2/application/client/view/EditableLabelWidget.css";
-		
+
 		String errorClass();
 	}
-	
+
 	private final Style style;
 	private static Resources DEFAULT_RESOURCES;
+
 	private static Resources getDefaultResources() {
-	    if (DEFAULT_RESOURCES == null) {
-	      DEFAULT_RESOURCES = GWT.create(Resources.class);
-	    }
-	    return DEFAULT_RESOURCES;
-	  }
+		if (DEFAULT_RESOURCES == null) {
+			DEFAULT_RESOURCES = GWT.create(Resources.class);
+		}
+		return DEFAULT_RESOURCES;
+	}
 
 	@UiField
 	Button saveButton;
@@ -66,10 +68,14 @@ public class EditableLabelWidget extends Composite implements HasText,
 	Label errorLabel;
 
 	@UiField
+	HTMLPanel labelContainer;
+	@UiField
+	Label captionLabel;
+	@UiField
 	Label textLabel;
 	@UiField
 	Anchor editAnchor;
-	
+
 	private void doEditable(boolean editable) {
 		saveButton.setVisible(editable);
 		cancelButton.setVisible(editable);
@@ -78,19 +84,34 @@ public class EditableLabelWidget extends Composite implements HasText,
 		textLabel.setVisible(!editable);
 		editAnchor.setVisible(!editable);
 	}
-	
+
 	public EditableLabelWidget() {
 		this("");
 	}
-	
+
 	public EditableLabelWidget(String text) {
 		this(getDefaultResources(), text);
 	}
+
 	public EditableLabelWidget(Resources resources, String text) {
 		this.style = resources.widgetStyle();
 		this.style.ensureInjected();
 		initWidget(uiBinder.createAndBindUi(this));
 		setText(text);
+	}
+
+	public EditableLabelWidget(Resources resources, String text, String caption) {
+		this(resources, text);
+		setCaption(caption);
+	}
+
+	public void setCaption(String caption) {
+		if (caption.isEmpty()) {
+			captionLabel.setVisible(false);
+			return;
+		}
+		captionLabel.setText(caption);
+		captionLabel.setVisible(true);
 	}
 
 	@UiHandler("editAnchor")
@@ -145,12 +166,14 @@ public class EditableLabelWidget extends Composite implements HasText,
 		try {
 			isValid();
 			saveButton.setEnabled(true);
-			errorLabel.addStyleName(ApplicationResources.INSTANCE.css().hideClass());
+			errorLabel.addStyleName(ApplicationResources.INSTANCE.css()
+					.hideClass());
 			textBox.removeStyleName(this.style.errorClass());
 		} catch (ValidatorException e) {
 			saveButton.setEnabled(false);
 			errorLabel.setText(e.getMessage());
-			errorLabel.removeStyleName(ApplicationResources.INSTANCE.css().hideClass());
+			errorLabel.removeStyleName(ApplicationResources.INSTANCE.css()
+					.hideClass());
 			textBox.addStyleName(this.style.errorClass());
 		}
 	}

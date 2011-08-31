@@ -11,7 +11,9 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<v:EditableLabelWidget ui:field="projectNameWidget"></v:EditableLabelWidget>
+		<v:EditableLabelWidget caption="{i18n.projectName}" ui:field="projectNameWidget"></v:EditableLabelWidget>
+		<h2><ui:text from="{i18n.expensesList}"></ui:text></h2> 
+		
 		<p1:CellList ui:field="expensesList"></p1:CellList>
 		<g:Button ui:field="createExpenseButton" text="{i18n.newExpense}"></g:Button>
 	</g:HTMLPanel>

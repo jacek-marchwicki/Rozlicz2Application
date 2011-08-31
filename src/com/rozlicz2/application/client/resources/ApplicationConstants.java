@@ -15,6 +15,10 @@ public interface ApplicationConstants extends Constants {
 	String emptyExpense();
 	String expense();
 	String newExpense();
-	String expenceParticipants();
-	String expencePaidBy();
+	String expenseParticipants();
+	String expensePaidBy();
+	String newProject();
+	String expensesList();
+	String expenseName();
+	String projectName();
 }

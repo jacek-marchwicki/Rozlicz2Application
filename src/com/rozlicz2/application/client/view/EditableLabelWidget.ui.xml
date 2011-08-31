@@ -33,8 +33,9 @@
 		.errorLabel {
 			clear: both;
 			font-size: 0.8em;
-			-moz-transition-property: opacity;
-  			-moz-transition-duration: 3s, 5s;
+			-webkit-transition-property: opacity;
+  			-webkit-transition-duration: 0.5s, 1s;
+  			min-height: 0.8em;
 		}
 		
 		.textBox {
@@ -43,13 +44,24 @@
 			width: 40%;
 		}
 		
+		.captionLabel {
+			clear: both;
+			font-family: Gill Sans, Verdana;
+			font-size: 0.9em;
+			line-height: 1em;
+			text-transform: uppercase;
+			letter-spacing: 0.2em;
+			margin-left: 10px;
+		}
+		
 	</ui:style>
-	<g:HTMLPanel styleName="{style.labelContainer}">
+	<g:HTMLPanel ui:field="labelContainer" styleName="{style.labelContainer}">
 		<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
 		<g:Anchor ui:field="editAnchor" styleName="{style.edit}" text="[edit]"></g:Anchor>
 		<g:TextBox ui:field="textBox" styleName="{style.textBox}"></g:TextBox>
 		<g:Button ui:field="saveButton" text="Save" styleName="{style.saveButton}"></g:Button>
 		<g:Button ui:field="cancelButton" text="Cancel" styleName="{style.cancelButton}"></g:Button>
+		<g:Label visible="false" ui:field="captionLabel" styleName="{style.captionLabel}"></g:Label>
 		<g:Label ui:field="errorLabel" styleName="{style.errorLabel}"></g:Label>
 		<div style="clear: both"></div>
 	</g:HTMLPanel>

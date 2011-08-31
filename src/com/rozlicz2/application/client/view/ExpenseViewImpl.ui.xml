@@ -11,12 +11,12 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<v:EditableLabelWidget ui:field="expenseNameWidget"></v:EditableLabelWidget>
+		<v:EditableLabelWidget caption="{i18n.expenseName}" ui:field="expenseNameWidget"></v:EditableLabelWidget>
 		
-		<h2><ui:text from="{i18n.expencePaidBy}"></ui:text>:</h2>
+		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
 		<c:CellList ui:field="paymentsCellList"></c:CellList>
 		
-		<h2><ui:text from="{i18n.expenceParticipants}"></ui:text>:</h2>
+		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
 		<c:CellList ui:field="consumersCellList"></c:CellList>
 	</g:HTMLPanel>
 </ui:UiBinder> 
