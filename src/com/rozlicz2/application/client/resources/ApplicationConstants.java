@@ -30,4 +30,5 @@ public interface ApplicationConstants extends Constants {
 	String value();
 	String getConsumer();
 	String proportional();
+	String removeUser();
 }

@@ -3,6 +3,7 @@ package com.rozlicz2.application.client.resources;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
 
 public interface ApplicationResources extends ClientBundle {
@@ -21,4 +22,10 @@ public interface ApplicationResources extends ClientBundle {
 
 	@Source("default.txt")
 	public TextResource defaultText();
+	
+	@Source("images/facebook.png")
+	public ImageResource facebook();
+	
+	@Source("images/remove_user.png")
+	public ImageResource removeUser();
 }
