@@ -30,3 +30,9 @@ h1,h2,h3 {
 	left: 0px;
 	right: 0px;
 }
+
+.labelClass {
+	font-size: 1.3em;
+	margin-top: 6px;
+
+}
