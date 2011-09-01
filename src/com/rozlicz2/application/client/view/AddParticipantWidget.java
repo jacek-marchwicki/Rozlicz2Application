@@ -73,7 +73,7 @@ public class AddParticipantWidget extends Composite implements ClickHandler, Add
 	Button cancelButton;
 	
 	@UiFactory
-	public SuggestBox createSuggestBox() {
+	public SuggestBox makeSuggestBox() {
 		oracle = new MultiWordSuggestOracle();
 		SuggestBox suggestBox = new SuggestBox(oracle);
 		return suggestBox;
@@ -171,6 +171,7 @@ public class AddParticipantWidget extends Composite implements ClickHandler, Add
 		positionTop -= mainPanel.getOffsetHeight();
 		positionTop /= 2;
 		mainPanel.setPopupPosition(positionLeft, positionTop);
+		suggestBox.setFocus(true);
 	}
 
 }
