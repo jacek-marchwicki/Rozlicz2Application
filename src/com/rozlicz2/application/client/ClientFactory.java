@@ -5,6 +5,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.rozlicz2.application.client.dao.ExpensesDAO;
 import com.rozlicz2.application.client.dao.ProjectsDAO;
 import com.rozlicz2.application.client.dao.ProjectsShortDAO;
+import com.rozlicz2.application.client.view.AddParticipantView;
 import com.rozlicz2.application.client.view.ExpenseView;
 import com.rozlicz2.application.client.view.NotFoundView;
 import com.rozlicz2.application.client.view.ProjectView;
@@ -17,6 +18,7 @@ public interface ClientFactory {
     ProjectsShortDAO getProjectsShortDAO();
 	ProjectView getProjectView();
 	ProjectsDAO getProjectsDAO();
+	AddParticipantView getAddParticipantView();
 	ExpensesDAO getExpensesDAO();
 	NotFoundView  getNotFoundView();
 	ExpenseView getExpenseView();

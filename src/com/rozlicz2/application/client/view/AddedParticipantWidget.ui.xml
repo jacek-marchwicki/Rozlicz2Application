@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+		
+		.label {
+			float: left;
+		}
+		.removeButton {
+			float: left;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<g:Label styleName="{style.label}" ui:field="userLabel"></g:Label>
+		<g:Button styleName="{style.removeButton}" ui:field="removeButton" text="Remove">
+		<ui:attribute name="text" description="Remove user"></ui:attribute>
+		</g:Button>
+	</g:HTMLPanel>
+</ui:UiBinder> 

@@ -9,6 +9,8 @@ import com.rozlicz2.application.client.dao.ProjectsDAO;
 import com.rozlicz2.application.client.dao.ProjectsDAOImpl;
 import com.rozlicz2.application.client.dao.ProjectsShortDAO;
 import com.rozlicz2.application.client.dao.ProjectsShortDAOImpl;
+import com.rozlicz2.application.client.view.AddParticipantView;
+import com.rozlicz2.application.client.view.AddParticipantWidget;
 import com.rozlicz2.application.client.view.ExpenseView;
 import com.rozlicz2.application.client.view.ExpenseViewImpl;
 import com.rozlicz2.application.client.view.NotFoundView;
@@ -28,6 +30,7 @@ public class ClientFactoryImpl implements ClientFactory {
 	private ExpensesDAO expensesDAO = new ExpensesDAOImpl();
 	private NotFoundView notFoundView = new NotFoundViewImpl();
 	private ExpenseView expenseView = new ExpenseViewImpl();
+	private AddParticipantView participanView = new AddParticipantWidget();
     
 	@Override
 	public EventBus getEventBus() {
@@ -72,6 +75,11 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public ExpenseView getExpenseView() {
 		return expenseView;
+	}
+
+	@Override
+	public AddParticipantView getAddParticipantView() {
+		return participanView ;
 	}
 
 }

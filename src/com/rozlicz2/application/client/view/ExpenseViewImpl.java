@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -13,6 +14,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -32,6 +34,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		paymentsCellList = makePaymentsCellList();
 		initWidget(uiBinder.createAndBindUi(this));
 	}
+	
+	@UiField
+	HTMLPanel htmlPanel;
 
 	@UiField
 	EditableLabelWidget expenseNameWidget;
@@ -158,6 +163,11 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	@UiHandler("expenseNameWidget")
 	public void onExpenseNameChange(ValueChangeEvent<String> e) {
 		presenter.setExpenseName(e.getValue());
+	}
+	
+	@UiHandler("addParticipantButton")
+	public void onAddParticipant(ClickEvent e) {
+		this.presenter.addParticipants();
 	}
 
 	@Override

@@ -21,4 +21,9 @@ public interface ApplicationConstants extends Constants {
 	String expensesList();
 	String expenseName();
 	String projectName();
+	String cancel();
+	String save();
+	String allowFriendsEdit();
+	String inviteFriends();
+	String addParticipant();
 }

@@ -11,6 +11,8 @@ public interface ApplicationResources extends ClientBundle {
 	interface ApplicationCss extends CssResource {
 		String errorClass();
 		String hideClass();
+		String grayBackgroundClass();
+		String fullScreenClass();
 	}
 
 	@Source("application.css")
