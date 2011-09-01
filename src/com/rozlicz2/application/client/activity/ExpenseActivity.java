@@ -173,7 +173,7 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	private List<String> getUsers() {
 		ArrayList<String> users = new ArrayList<String>();
-		// TODO take data from some source
+		// TODO generate autocomplete
 		return users;
 	}
 
@@ -188,8 +188,11 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Override
 	public void addedUsers(Collection<String> users) {
-		// TODO Auto-generated method stub
+		for (String userName : users) {
+			project.addParticipant(userName);
+		}
 		RootPanel.get().remove(participantView);
+		refreshView();
 	}
 
 	@Override

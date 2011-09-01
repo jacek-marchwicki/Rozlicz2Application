@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ProjectEntity extends ProjectShortEntity {
 	private List<ExpenseShortEntity> expensesShort = new ArrayList<ExpenseShortEntity>();
-	private List<UserShortEntitiy> perticipants = new ArrayList<UserShortEntitiy>();
+	private List<UserShortEntitiy> participants = new ArrayList<UserShortEntitiy>();
 
 	public List<ExpenseShortEntity> getExpensesShort() {
 		return expensesShort;
@@ -31,7 +31,11 @@ public class ProjectEntity extends ProjectShortEntity {
 	}
 	
 	public List<UserShortEntitiy> getPerticipants() {
-		return perticipants ;
-		
+		return participants ;
+	}
+	public void addParticipant(String name) {
+		UserShortEntitiy userShortEntitiy = new UserShortEntitiy();
+		userShortEntitiy.setName(name);
+		participants.add(userShortEntitiy);
 	}
 }
