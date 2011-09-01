@@ -4,6 +4,7 @@
 	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	
 	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
+		<ui:with type="com.rozlicz2.application.client.resources.ApplicationResources" field="res"></ui:with>
 	
 	<ui:style>
 		.important {
@@ -12,11 +13,14 @@
 	</ui:style>
 	<g:HTMLPanel ui:field="htmlPanel">
 		<v:EditableLabelWidget caption="{i18n.expenseName}" ui:field="expenseNameWidget"></v:EditableLabelWidget>
-		
-		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
+		<g:Label styleName="{res.css.labelClass}" text="{i18n.expensePaidBy}"></g:Label>
 		<c:CellList ui:field="paymentsCellList"></c:CellList>
 		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>
-		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
+		<g:VerticalPanel>
+			<g:Label styleName="{res.css.labelClass}" text="{i18n.expenseParticipants}"></g:Label>
+			<g:RadioButton name="participant" ui:field="radioButtonAll">Everybody</g:RadioButton>
+			<g:RadioButton name="participant" ui:field="radioButtonSelected">Selected users</g:RadioButton>
+		</g:VerticalPanel> 
 		<c:CellList ui:field="consumersCellList"></c:CellList>
 	</g:HTMLPanel>
 </ui:UiBinder> 

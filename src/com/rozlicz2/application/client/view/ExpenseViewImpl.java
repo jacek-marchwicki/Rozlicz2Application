@@ -15,6 +15,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -33,8 +34,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		consumersCellList = makeConsumersCellList();
 		paymentsCellList = makePaymentsCellList();
 		initWidget(uiBinder.createAndBindUi(this));
+		radioButtonAll.setValue(true);
 	}
-	
+
 	@UiField
 	HTMLPanel htmlPanel;
 
@@ -46,6 +48,12 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@UiField(provided=true)
 	CellList<ExpensePayment> paymentsCellList;
+	
+	@UiField
+	RadioButton radioButtonAll;
+	
+	@UiField
+	RadioButton radioButtonSelected;
 	
 	private Presenter presenter;
 
@@ -152,6 +160,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 				// TODO do something with object
 			}
 		});
+		cellList.setVisible(false);
 		return cellList;
 	}
 
@@ -169,7 +178,12 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	public void onAddParticipant(ClickEvent e) {
 		this.presenter.addParticipants();
 	}
-
+	
+	@UiHandler({"radioButtonSelected", "radioButtonAll"})
+	void onChangeParticipants(ValueChangeEvent<Boolean> e) {
+		consumersCellList.setVisible(radioButtonAll.getValue() ? false : true);
+}
+	
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;

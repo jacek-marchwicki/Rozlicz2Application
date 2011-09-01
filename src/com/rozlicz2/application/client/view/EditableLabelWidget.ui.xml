@@ -49,7 +49,6 @@
 			font-family: Gill Sans, Verdana;
 			font-size: 0.9em;
 			line-height: 1em;
-			text-transform: uppercase;
 			letter-spacing: 0.2em;
 			margin-left: 10px;
 		}
