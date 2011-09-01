@@ -3,6 +3,9 @@ package com.rozlicz2.application.client.view;
 import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -12,14 +15,16 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SingleSelectionModel;
+import com.rozlicz2.application.client.resources.ApplicationConstants;
 
 public class ExpenseViewImpl extends Composite implements ExpenseView {
 
@@ -30,23 +35,23 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	}
 
 	public ExpenseViewImpl() {
-		consumersCellList = makeConsumersCellList();
-		paymentsCellList = makePaymentsCellList();
+		consumersCellTable = makeConsumersCellTable();
+		paymentsCellTable = makePaymentsCellTable();
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-	
+
 	@UiField
 	HTMLPanel htmlPanel;
 
 	@UiField
 	EditableLabelWidget expenseNameWidget;
 
-	@UiField(provided=true)
-	CellList<ExpenseConsumer> consumersCellList;
+	@UiField(provided = true)
+	CellTable<ExpenseConsumer> consumersCellTable;
 
-	@UiField(provided=true)
-	CellList<ExpensePayment> paymentsCellList;
-	
+	@UiField(provided = true)
+	CellTable<ExpensePayment> paymentsCellTable;
+
 	private Presenter presenter;
 
 	public static class PaymentCell extends AbstractCell<ExpensePayment> {
@@ -91,8 +96,8 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		}
 	}
 
-	CellList<ExpensePayment> makePaymentsCellList() {
-		ProvidesKey<ExpensePayment> keyProvider = new ProvidesKey<ExpensePayment>() {
+	private CellTable<ExpensePayment> makePaymentsCellTable() {
+		final ProvidesKey<ExpensePayment> keyProvider = new ProvidesKey<ExpensePayment>() {
 
 			@Override
 			public Object getKey(ExpensePayment item) {
@@ -102,28 +107,49 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 			}
 		};
 
-		CellList<ExpensePayment> cellList = new CellList<ExpensePayment>(
-				new PaymentCell(), keyProvider);
-
-		final SingleSelectionModel<ExpensePayment> selectionModel = new SingleSelectionModel<ExpensePayment>(
+		final CellTable<ExpensePayment> table = new CellTable<ExpenseView.ExpensePayment>(
 				keyProvider);
-		cellList.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new Handler() {
+		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+		TextColumn<ExpensePayment> nameColumn = new TextColumn<ExpensePayment>() {
 
 			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				ExpensePayment selectedObject = selectionModel
-						.getSelectedObject();
-				if (selectedObject == null)
-					return;
-				selectionModel.setSelected(selectedObject, false);
-				// TODO do something with object
+			public String getValue(ExpensePayment object) {
+				return object.name;
 			}
-		});
-		return cellList;
+		};
+		table.addColumn(nameColumn, ApplicationConstants.constants.userName());
+		final TextInputCell valueCell = new TextInputCell();
+		Column<ExpensePayment, String> valueColumn = new Column<ExpensePayment, String>(
+				valueCell) {
+			@Override
+			public String getValue(ExpensePayment object) {
+				return Double.toString(object.value);
+			}
+		};
+		valueColumn
+				.setFieldUpdater(new FieldUpdater<ExpenseView.ExpensePayment, String>() {
+
+					@Override
+					public void update(int index, ExpensePayment object,
+							String value) {
+						try {
+							double doubleValue = Double.parseDouble(value);
+							object.value = doubleValue;
+							table.redraw();
+
+						} catch (NumberFormatException e) {
+							Window.alert("wrong double format");
+							valueCell.clearViewData(keyProvider.getKey(object));
+							table.redraw();
+							return;
+						}
+					}
+				});
+		table.addColumn(valueColumn, ApplicationConstants.constants.value());
+		return table;
 	}
-	
-	CellList<ExpenseConsumer> makeConsumersCellList() {
+
+	private CellTable<ExpenseConsumer> makeConsumersCellTable() {
 		ProvidesKey<ExpenseConsumer> keyProvider = new ProvidesKey<ExpenseConsumer>() {
 
 			@Override
@@ -133,26 +159,55 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 				return item.userId;
 			}
 		};
-
-		CellList<ExpenseConsumer> cellList = new CellList<ExpenseConsumer>(
-				new ConsumerCell(), keyProvider);
-
-		final SingleSelectionModel<ExpenseConsumer> selectionModel = new SingleSelectionModel<ExpenseConsumer>(
+		final CellTable<ExpenseConsumer> table = new CellTable<ExpenseConsumer>(
 				keyProvider);
-		cellList.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new Handler() {
+		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+
+		CheckboxCell isConsumerCell = new CheckboxCell();
+		Column<ExpenseConsumer, Boolean> isConsumerColumn = new Column<ExpenseView.ExpenseConsumer, Boolean>(
+				isConsumerCell) {
 
 			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				ExpenseConsumer selectedObject = selectionModel
-						.getSelectedObject();
-				if (selectedObject == null)
-					return;
-				selectionModel.setSelected(selectedObject, false);
-				// TODO do something with object
+			public Boolean getValue(ExpenseConsumer object) {
+				return object.isConsumer;
 			}
-		});
-		return cellList;
+		};
+		table.addColumn(isConsumerColumn,
+				ApplicationConstants.constants.getConsumer());
+
+		TextColumn<ExpenseConsumer> userNameColumn = new TextColumn<ExpenseView.ExpenseConsumer>() {
+
+			@Override
+			public String getValue(ExpenseConsumer object) {
+				return object.name;
+			}
+		};
+		table.addColumn(userNameColumn,
+				ApplicationConstants.constants.userName());
+
+		CheckboxCell isProportionalCell = new CheckboxCell();
+		Column<ExpenseConsumer, Boolean> isProportionalColumn = new Column<ExpenseView.ExpenseConsumer, Boolean>(
+				isProportionalCell) {
+
+			@Override
+			public Boolean getValue(ExpenseConsumer object) {
+				return object.isProportional;
+			}
+		};
+		table.addColumn(isProportionalColumn,
+				ApplicationConstants.constants.proportional());
+
+		final TextInputCell valueCell = new TextInputCell();
+		Column<ExpenseConsumer, String> valueColumn = new Column<ExpenseView.ExpenseConsumer, String>(
+				valueCell) {
+
+			@Override
+			public String getValue(ExpenseConsumer object) {
+				return Double.toString(object.value);
+			}
+		};
+		table.addColumn(valueColumn, ApplicationConstants.constants.value());
+		return table;
 	}
 
 	@Override
@@ -164,7 +219,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	public void onExpenseNameChange(ValueChangeEvent<String> e) {
 		presenter.setExpenseName(e.getValue());
 	}
-	
+
 	@UiHandler("addParticipantButton")
 	public void onAddParticipant(ClickEvent e) {
 		this.presenter.addParticipants();
@@ -177,9 +232,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@Override
 	public void setPayments(List<ExpensePayment> payments) {
-		paymentsCellList.setRowCount(payments.size(), true);
-		paymentsCellList.setRowData(payments);
-		paymentsCellList.redraw();
+		paymentsCellTable.setRowCount(payments.size(), true);
+		paymentsCellTable.setRowData(payments);
+		paymentsCellTable.redraw();
 	}
 
 	@Override
@@ -190,9 +245,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@Override
 	public void setConsumers(List<ExpenseConsumer> consumers) {
-		consumersCellList.setRowCount(consumers.size(),true);
-		consumersCellList.setRowData(consumers);
-		consumersCellList.redraw();
+		consumersCellTable.setRowCount(consumers.size(), true);
+		consumersCellTable.setRowData(consumers);
+		consumersCellTable.redraw();
 	}
 
 }

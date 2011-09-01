@@ -14,9 +14,9 @@
 		<v:EditableLabelWidget caption="{i18n.expenseName}" ui:field="expenseNameWidget"></v:EditableLabelWidget>
 		
 		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
-		<c:CellList ui:field="paymentsCellList"></c:CellList>
+		<c:CellTable ui:field="paymentsCellTable"></c:CellTable>
 		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>
 		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
-		<c:CellList ui:field="consumersCellList"></c:CellList>
+		<c:CellTable ui:field="consumersCellTable"></c:CellTable>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -26,4 +26,8 @@ public interface ApplicationConstants extends Constants {
 	String allowFriendsEdit();
 	String inviteFriends();
 	String addParticipant();
+	String userName();
+	String value();
+	String getConsumer();
+	String proportional();
 }
