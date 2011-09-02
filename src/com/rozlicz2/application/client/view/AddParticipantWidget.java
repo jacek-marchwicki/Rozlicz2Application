@@ -267,12 +267,17 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 		positionTop -= mainPanel.getOffsetHeight();
 		positionTop /= 2;
 		mainPanel.setPopupPosition(positionLeft, positionTop);
-
+	}
+	
+	@Override
+	protected void onAttach() {
+		setVisibility();
+		suggestBox.setFocus(true);
+		super.onAttach();
 	}
 
 	@Override
 	public Widget asWidget() {
-		suggestBox.setFocus(true);
 		for (int i = 0; i < flowPanel.getWidgetCount();) {
 			Widget widget = flowPanel.getWidget(i);
 			if (widget instanceof AddedParticipantWidget) {
@@ -282,7 +287,6 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 			}
 		}
 		users.clear();
-		setVisibility();
 		return super.asWidget();
 	}
 
