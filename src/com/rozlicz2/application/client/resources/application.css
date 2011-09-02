@@ -4,8 +4,8 @@ body {
 	font-family: Sans-serif;
 }
 .errorClass {
-	background-color: #ff0000;
-	text: #ffffff;
+	background-color: #D73828;
+	color: #ffffff;
 }
 h1,h2,h3 {
 	clear: both;

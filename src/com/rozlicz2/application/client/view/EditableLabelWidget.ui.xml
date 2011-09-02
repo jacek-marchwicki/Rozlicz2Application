@@ -17,17 +17,27 @@
 			
 		}
 		.saveButton {
-			color: white;
-			background: green;	
+			color: #ffffff;
+			background: #019138;	
 			font-weight: bold;
-			border: 0px;
+			border: 1px solid #E4E4E4;
 			float: left;
+			padding: 1px 10px 1px 10px;
+			margin-left: 15px;
+			border-radius: 4px;
+			-webkit-transition: background 0.3s ease-in-out;	
+		}
+		.saveButton[disabled] {
+			background: #E4E4E4;
 		}
 		.cancelButton {
-			color: white;
-			background: red;	
-			border: 0px;
-			float: left;		
+			color: #ffffff;
+			background: #D73828;	
+			border: 1px solid #E4E4E4;
+			float: left;
+			padding: 1px 10px 1px 10px;
+			margin-left: 0px;
+			border-radius: 4px;
 		}
 		
 		.errorLabel {
@@ -36,12 +46,16 @@
 			-webkit-transition-property: opacity;
   			-webkit-transition-duration: 0.5s, 1s;
   			min-height: 0.8em;
+  			color: #D73828;
 		}
 		
 		.textBox {
 			float: left;
 			font-size: 1em;
 			width: 40%;
+			border: 1px solid #E4E4E4;
+			border-radius: 4px;
+			-webkit-transition: color, background 0.3s ease-in-out;
 		}
 		
 		.captionLabel {

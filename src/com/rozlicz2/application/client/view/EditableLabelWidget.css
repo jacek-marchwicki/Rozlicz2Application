@@ -1,4 +1,5 @@
 @CHARSET "UTF-8";
 .errorClass {
-	background-color: #ff0000;
+	background-color: #D73828;
+	color: #ffffff;
 }
