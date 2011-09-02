@@ -24,6 +24,10 @@
 			display: inline-block;
 			padding: 0px 10px;
 			margin: 2px 2px;
+			background: #F0F0F0;
+			background: -o-linear-gradient(top,#F0F0F0,#E4E4E4);
+			background: -moz-linear-gradient(top,#F0F0F0,#E4E4E4);
+			background: -webkit-gradient(linear,left top,left bottom,from(#F0F0F0),to(#E4E4E4));
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="{style.htmlPanel}">

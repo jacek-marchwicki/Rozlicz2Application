@@ -21,11 +21,16 @@
 			outline: 0;
 		}
 		.focusPanel {
-			border: 1px solid #000;
+			border: 1px solid #F0F0F0;
 			cursor: text;
+			margin-bottom: 15px;
 		}
 		.flowPanel {
 			display: inline-block;
+		}
+		.buttons {
+			float: right;
+			margin-left: 5px;
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="{res.css.fullScreenClass}">
@@ -38,8 +43,9 @@
 			</g:FocusPanel>
 			<g:CheckBox ui:field="inviteCheckBox" text="{i18n.inviteFriends}"></g:CheckBox>
 			<g:CheckBox ui:field="allowEditCheckBox" text="{i18n.allowFriendsEdit}"></g:CheckBox>
-			<g:Button ui:field="saveButton" text="{i18n.save}"></g:Button>
-			<g:Button ui:field="cancelButton" text="{i18n.cancel}"></g:Button>
+			
+			<g:Button ui:field="cancelButton" text="{i18n.cancel}" styleName="{style.buttons}"></g:Button>
+			<g:Button ui:field="saveButton" text="{i18n.save}" styleName="{style.buttons}"></g:Button>
 		</g:HTMLPanel></g:PopupPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 
