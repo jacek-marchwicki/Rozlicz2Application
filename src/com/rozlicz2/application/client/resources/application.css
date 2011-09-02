@@ -2,7 +2,11 @@ body {
 	padding: 0px;
 	margin: 0px;
 	font-family: Sans-serif;
+	 
 }
+/* @sprite body {
+	gwt-image: 'facebook';
+} */
 .errorClass {
 	background-color: #D73828;
 	color: #ffffff;
