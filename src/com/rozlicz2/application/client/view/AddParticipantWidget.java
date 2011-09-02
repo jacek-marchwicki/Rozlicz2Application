@@ -137,18 +137,41 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 		addUser(user);
 		suggestBox.setValue("");
 	}
+	
+	private char enterCharCode = 0;
+	
+	/**
+	 * Check when key is enter char code, eliminating twice char codes for enter
+	 * @param key
+	 * @return
+	 */
+	private boolean isEnterCharCode(char key) {
+		if (key != '\r' && key != '\n')
+			return false;
+		if (enterCharCode == 0) {
+			enterCharCode = key;
+			return true;
+		}
+		if (enterCharCode == key)
+			return true;
+		return false;
+	}
 
 	@UiHandler("suggestBox")
 	public void onKeyPress(KeyPressEvent e) {
+		if (++hackKeyUp % 2 == 0)
+			return;
 		char key = e.getCharCode();
-		if (key != '\r' && key != '\n' && key != ',')
+		if ((! isEnterCharCode(key)) && key != ',')
 			return;
 		String user = suggestBox.getValue();
 		addUser(user);
 		suggestBox.setValue("");
 		e.preventDefault();
 
-		if (key != '\r' && key != '\n')
+		if (!isEnterCharCode(key))
+			return;
+		if (!user.isEmpty())
 			return;
 		submitUsers();
 	}
