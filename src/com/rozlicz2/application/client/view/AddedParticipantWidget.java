@@ -8,7 +8,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
@@ -26,14 +25,11 @@ public class AddedParticipantWidget extends Composite implements HasText, HasCli
 	public AddedParticipantWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-
-	@UiField
-	Button removeButton;
 	
 	@UiField
 	Label userLabel;
 
-	@UiHandler("removeButton")
+	@UiHandler("removeImage")
 	void onClick(ClickEvent e) {
 		ClickEvent.fireNativeEvent(e.getNativeEvent(), this);
 	}

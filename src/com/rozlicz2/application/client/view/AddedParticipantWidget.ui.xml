@@ -10,18 +10,25 @@
 		}
 		
 		.label {
-			float: left;
+			display: inline-block;
 		}
-		.removeButton {
-			float: left;
+		.removeImage {
+			display: inline-block;
+			vertical-align: middle;
+			cursor: pointer;
+			cursor: hand;
+		}
+		.htmlPanel {
+			border: 1px solid #E4E4E4;
+			border-radius: 4px;
+			display: inline-block;
+			padding: 0px 10px;
+			margin: 2px 2px;
 		}
 	</ui:style>
-	<g:HTMLPanel>
+	<g:HTMLPanel styleName="{style.htmlPanel}">
 		<g:Label styleName="{style.label}" ui:field="userLabel"></g:Label>
-		<g:Button styleName="{style.removeButton}" ui:field="removeButton" text="{i18n.removeUser}">
-		
-		</g:Button>
-		<g:Image resource="{res.removeUser}"></g:Image>
-		
+		<g:Image ui:field="removeImage" styleName="{style.removeImage}" altText="{i18n.removeUser}" resource="{res.removeUser}"></g:Image>
+		<div class="{res.css.clearClass}"></div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -15,6 +15,7 @@ public interface ApplicationResources extends ClientBundle {
 		String grayBackgroundClass();
 		String fullScreenClass();
 		String labelClass();
+		String clearClass();
 	}
 
 	@Source("application.css")

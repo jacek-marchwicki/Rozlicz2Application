@@ -9,18 +9,33 @@
 			background: #ffffff;
 			border: 1px solid #CCC;
 			padding: 10px;
+			width: 500px;
 			-moz-box-shadow: 0 1px 5px #ccc;
 			-ms-filter: "progid: DXImageTransform.Microsoft.Shadow(Strength=3, Direction=180, Color='#ccc')";
 			-o-box-shadow: 0 1px 5px #ccc;
 			-webkit-box-shadow: 0 1px 5px #ccc;
 		}
+		.suggestBox {
+			display: inline-block;
+			border: 0;
+			outline: 0;
+		}
+		.focusPanel {
+			border: 1px solid #000;
+			cursor: text;
+		}
+		.flowPanel {
+			display: inline-block;
+		}
 	</ui:style>
 	<g:HTMLPanel styleName="{res.css.fullScreenClass}">
 		<g:HTMLPanel ui:field="shadowPanel" styleName="{res.css.grayBackgroundClass}"></g:HTMLPanel>
 		<g:PopupPanel ui:field="mainPanel" styleName="{style.popup}"><g:HTMLPanel>
-			<g:FlowPanel ui:field="flowPanel">
-				<g:SuggestBox ui:field="suggestBox"></g:SuggestBox>
-			</g:FlowPanel>
+			<g:FocusPanel ui:field="focusPanel" styleName="{style.focusPanel}">
+				<g:FlowPanel ui:field="flowPanel" styleName="{style.flowPanel}">
+					<g:SuggestBox ui:field="suggestBox" styleName="{style.suggestBox}"></g:SuggestBox>
+				</g:FlowPanel>	
+			</g:FocusPanel>
 			<g:CheckBox ui:field="inviteCheckBox" text="{i18n.inviteFriends}"></g:CheckBox>
 			<g:CheckBox ui:field="allowEditCheckBox" text="{i18n.allowFriendsEdit}"></g:CheckBox>
 			<g:Button ui:field="saveButton" text="{i18n.save}"></g:Button>
