@@ -1,6 +1,7 @@
 package com.rozlicz2.application.client.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class SyncQuery implements java.io.Serializable {
@@ -50,6 +51,10 @@ public class SyncQuery implements java.io.Serializable {
 	public void addFilter(String propertyName, FilterOperator operator, Object value) {
 		Filter filter = new Filter(propertyName, operator, value);
 		filters.add(filter);
+	}
+	
+	public Collection<Filter> getFilters() {
+		return filters;
 	}
 
 	public String getKind() {

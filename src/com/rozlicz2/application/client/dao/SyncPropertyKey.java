@@ -9,23 +9,44 @@ public class SyncPropertyKey implements java.io.Serializable, java.lang.Comparab
 	private final String kind;
 	private final String propertyName;
 	private final String value;
-	private final long id;
+	private final Long id;
 	transient private Integer hash;
 	
-	public SyncPropertyKey(String kind, long id, String propertyName, Object value) {
+	public SyncPropertyKey(String kind, String propertyName, Object value, long id) {
 		this.kind = kind;
 		this.propertyName = propertyName;
-		this.id = id;
 		this.value = objectToString(value);
+		this.id = id;
 	}
 	
 	public SyncPropertyKey(SyncKey key, String propertyName, Object value) {
-		kind = key.getKind();
-		id = key.getId();
+		this.kind = key.getKind();
 		this.propertyName = propertyName;
 		this.value = objectToString(value);
+		this.id = key.getId();
 	}
 	
+
+	public SyncPropertyKey(String kind) {
+		this.kind = kind;
+		this.propertyName = null;
+		this.value = null;
+		this.id = null;
+	}
+	
+	public SyncPropertyKey(String kind, String propertyName) {
+		this.kind = kind;
+		this.propertyName = propertyName;
+		this.value = null;
+		this.id = null;
+	}
+
+	public SyncPropertyKey(String kind, String propertyName, Object value) {
+		this.kind = kind;
+		this.propertyName = propertyName;
+		this.value = objectToString(value);
+		this.id = null;
+	}
 
 	private static String objectToString(Object value) {
 		if (value == null)
@@ -46,23 +67,40 @@ public class SyncPropertyKey implements java.io.Serializable, java.lang.Comparab
 		} 
 		return value.toString();
 	}
+	
+	private int compareStringWithNulls(String arg1, String arg2) {
+		if (arg1 == null) {
+			if (arg2 == null)
+				return 0;
+			return -1;
+		}
+		if (arg2 == null)
+			return 1;
+		return arg1.compareTo(arg2);
+	}
+	private int compareLongWithNulls(Long arg1, Long arg2) {
+		if (arg1 == null) {
+			if (arg2 == null)
+				return 0;
+			return -1;
+		}
+		if (arg2 == null)
+			return 1;
+		return arg1.compareTo(arg2);
+	}
 
 	@Override
 	public int compareTo(SyncPropertyKey arg0) {
 		int compare = kind.compareTo(arg0.kind);
 		if (compare != 0)
 			return compare;
-		compare = propertyName.compareTo(arg0.propertyName);
+		compare = compareStringWithNulls(propertyName, arg0.propertyName);
 		if (compare != 0)
 			return compare;
-		compare = propertyName.compareTo(arg0.value);
+		compare = compareStringWithNulls(value, arg0.value);
 		if (compare != 0)
 			return compare;
-		if (id < arg0.id)
-			return -1;
-		if (id > arg0.id)
-			return 1;
-		return 0;
+		return compareLongWithNulls(id, arg0.id);
 	}
 	
 	@Override
@@ -76,12 +114,21 @@ public class SyncPropertyKey implements java.io.Serializable, java.lang.Comparab
 	
 	@Override
 	public String toString() {
-		return kind + "|" + propertyName + "|" + value +"|" + Long.toString(id);
+		if (id != null) {
+			return kind + "|" + propertyName + "|" + value +"|" + Long.toString(id) + "|";
+		}
+		if (value != null) {
+			return kind + "|" + propertyName + "|" + value +"|";
+		}
+		if (propertyName != null) {
+			return kind + "|" + propertyName + "|";
+		}
+		return kind + "|";
 	}
 	
 	@Override
 	public SyncPropertyKey clone() {
-		return new SyncPropertyKey(kind, id, propertyName, value);
+		return new SyncPropertyKey(kind, propertyName, value, id);
 	}
 
 }
