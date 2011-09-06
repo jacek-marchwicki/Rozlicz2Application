@@ -60,6 +60,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	@UiField
 	RadioButton radioButtonSelected;
 	
+	@UiField
+	RadioButton radioButtonMe;
+	
 	private Presenter presenter;
 
 	public static class PaymentCell extends AbstractCell<ExpensePayment> {
@@ -233,9 +236,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		this.presenter.addParticipants();
 	}
 	
-	@UiHandler({"radioButtonSelected", "radioButtonAll"})
+	@UiHandler({"radioButtonSelected", "radioButtonAll", "radioButtonMe"})
 	void onChangeParticipants(ValueChangeEvent<Boolean> e) {
-		consumersCellTable.setVisible(radioButtonAll.getValue() ? false : true);
+		consumersCellTable.setVisible(radioButtonSelected.getValue() ? true : false);
 }
 	
 	@Override
