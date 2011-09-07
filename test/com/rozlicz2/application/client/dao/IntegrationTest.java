@@ -161,6 +161,7 @@ public class IntegrationTest {
 			String property = (String) result
 					.getProperty(FIRST_NAME_PARAMETER_NAME);
 			assertEquals(EXAMPLE_FIRST_NAME2, property);
+			counter++;
 		}
 		assertEquals(1, counter);
 	}

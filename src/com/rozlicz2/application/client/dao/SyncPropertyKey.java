@@ -88,6 +88,35 @@ public class SyncPropertyKey implements java.io.Serializable, java.lang.Comparab
 			return 1;
 		return arg1.compareTo(arg2);
 	}
+	
+	/**
+	 * Chech whetherver arg1 contain arg2
+	 * @param arg1
+	 * @param arg2
+	 * @return -1, 0, 1 - arg1 is smaller then arg2, arg1 contain arg2, arg1 is greater than arg2
+	 */
+	private int containsStringWithNulls(String arg1, String arg2) {
+		if (arg1 == null) {
+			return 0;
+		}
+		if (arg2 == null)
+			return 1;
+		return arg1.compareTo(arg2);
+	}
+	/**
+	 * Chech whetherver arg1 contain arg2
+	 * @param arg1
+	 * @param arg2
+	 * @return -1, 0, 1 - arg1 is smaller then arg2, arg1 contain arg2, arg1 is greater than arg2
+	 */
+	private int containsLongWithNulls(Long arg1, Long arg2) {
+		if (arg1 == null) {
+			return 0;
+		}
+		if (arg2 == null)
+			return 1;
+		return arg1.compareTo(arg2);
+	}
 
 	@Override
 	public int compareTo(SyncPropertyKey arg0) {
@@ -129,6 +158,19 @@ public class SyncPropertyKey implements java.io.Serializable, java.lang.Comparab
 	@Override
 	public SyncPropertyKey clone() {
 		return new SyncPropertyKey(kind, propertyName, value, id);
+	}
+
+	public int contains(SyncPropertyKey arg0) {
+		int compare = kind.compareTo(arg0.kind);
+		if (compare != 0)
+			return compare;
+		compare = containsStringWithNulls(propertyName, arg0.propertyName);
+		if (compare != 0)
+			return compare;
+		compare = containsStringWithNulls(value, arg0.value);
+		if (compare != 0)
+			return compare;
+		return containsLongWithNulls(id, arg0.id);
 	}
 
 }

@@ -33,12 +33,15 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 			createStartKey();
 			isValidNextKey();
 		}
+		
+		private SyncPropertyKey validator;
 
 		private void createStartKey() {
 			Collection<SyncQuery.Filter> filters = this.query.getFilters();
 			SyncPropertyKey propertyKey;
 			if (filters.size() == 0) {
 				propertyKey = new SyncPropertyKey(kind);
+				validator = propertyKey;
 
 			} else if (filters.size() == 1) {
 				Iterator<SyncQuery.Filter> iterator = filters.iterator();
@@ -46,18 +49,21 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 				SyncQuery.FilterOperator operator = filter.getOperator();
 				if (!operator.equals(SyncQuery.FilterOperator.EQUAL)) {
 					throw new RuntimeException("Not implemented");
+					// TODO
 				}
 				String propertyName = filter.getPropertyName();
 				Object value = filter.getValue();
 				propertyKey = new SyncPropertyKey(kind, propertyName, value);
+				validator = propertyKey;
 			} else {
 				throw new RuntimeException("Not implemented");
+				// TODO
 			}
 			nextKey = properties.ceilingEntry(propertyKey);
 		}
 
 		private void calculateNextKey() {
-			nextKey = properties.lowerEntry(nextKey.getKey());
+			nextKey = properties.higherEntry(nextKey.getKey());
 		}
 
 		private void isValidNextKey() {
@@ -66,8 +72,12 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 				hasNextItem = false;
 				return;
 			}
-			// TODO
-			hasNextItem = true;
+			if (validator == null) {
+				throw new RuntimeException("Not implemented");
+				// TODO
+			}
+			boolean contains = validator.contains(nextKey.getKey()) == 0 ? true : false;
+			hasNextItem = contains;
 		}
 		
 		@Override
@@ -84,15 +94,15 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 			SyncKey key = nextKey.getValue();
 			assert (key != null);
 
-			calculateNextKey();
-			isValidNextKey();
-
 			StoreEntity storeEntity = entities.get(key);
 			assert (storeEntity != null);
 
 			SyncEntity entity = storeEntity.getEntity();
 			assert (entity != null);
 
+			calculateNextKey();
+			isValidNextKey();
+			
 			return entity.clone();
 		}
 
