@@ -13,7 +13,8 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class AddedParticipantWidget extends Composite implements HasText, HasClickHandlers {
+public class AddedParticipantWidget extends Composite implements HasText,
+		HasClickHandlers {
 
 	private static AddedParticipantWidgetUiBinder uiBinder = GWT
 			.create(AddedParticipantWidgetUiBinder.class);
@@ -25,7 +26,7 @@ public class AddedParticipantWidget extends Composite implements HasText, HasCli
 	public AddedParticipantWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
-	
+
 	@UiField
 	Label userLabel;
 

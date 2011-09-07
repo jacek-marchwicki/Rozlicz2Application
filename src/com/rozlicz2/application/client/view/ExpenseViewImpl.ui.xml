@@ -14,7 +14,7 @@
 	<g:HTMLPanel ui:field="htmlPanel">
 		<v:EditableLabelWidget caption="{i18n.expenseName}" ui:field="expenseNameWidget"></v:EditableLabelWidget>
 		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
-		<c:CellTable ui:field="paymentsCellTable"></c:CellTable>
+		<v:PaymentsTableWidgetImpl ui:field="paymentsTable"></v:PaymentsTableWidgetImpl>
 		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>
 		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
 		<g:VerticalPanel>

@@ -9,6 +9,7 @@ public interface ExpenseView extends IsWidget {
 		public Long userId;
 		public String name;
 		public double value;
+		public String formattedCurrency;
 	}
 	public static class ExpenseConsumer {
 		public Long userId;

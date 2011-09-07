@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,7 +18,6 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -37,7 +35,6 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	public ExpenseViewImpl() {
 		consumersCellTable = makeConsumersCellTable();
-		paymentsCellTable = makePaymentsCellTable();
 		initWidget(uiBinder.createAndBindUi(this));
 		radioButtonAll.setValue(true);
 	}
@@ -48,11 +45,11 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	@UiField
 	EditableLabelWidget expenseNameWidget;
 
+	@UiField
+	PaymentsTableWidget paymentsTable;
+	
 	@UiField(provided = true)
 	CellTable<ExpenseConsumer> consumersCellTable;
-
-	@UiField(provided = true)
-	CellTable<ExpensePayment> paymentsCellTable;
 	
 	@UiField
 	RadioButton radioButtonAll;
@@ -107,59 +104,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		}
 	}
 
-	private CellTable<ExpensePayment> makePaymentsCellTable() {
-		final ProvidesKey<ExpensePayment> keyProvider = new ProvidesKey<ExpensePayment>() {
-
-			@Override
-			public Object getKey(ExpensePayment item) {
-				if (item == null)
-					return null;
-				return item.userId;
-			}
-		};
-
-		final CellTable<ExpensePayment> table = new CellTable<ExpenseView.ExpensePayment>(
-				keyProvider);
-		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		TextColumn<ExpensePayment> nameColumn = new TextColumn<ExpensePayment>() {
-
-			@Override
-			public String getValue(ExpensePayment object) {
-				return object.name;
-			}
-		};
-		table.addColumn(nameColumn, ApplicationConstants.constants.userName());
-		final TextInputCell valueCell = new TextInputCell();
-		Column<ExpensePayment, String> valueColumn = new Column<ExpensePayment, String>(
-				valueCell) {
-			@Override
-			public String getValue(ExpensePayment object) {
-				return Double.toString(object.value);
-			}
-		};
-		valueColumn
-				.setFieldUpdater(new FieldUpdater<ExpenseView.ExpensePayment, String>() {
-
-					@Override
-					public void update(int index, ExpensePayment object,
-							String value) {
-						try {
-							double doubleValue = Double.parseDouble(value);
-							object.value = doubleValue;
-							table.redraw();
-
-						} catch (NumberFormatException e) {
-							Window.alert("wrong double format");
-							valueCell.clearViewData(keyProvider.getKey(object));
-							table.redraw();
-							return;
-						}
-					}
-				});
-		table.addColumn(valueColumn, ApplicationConstants.constants.value());
-		return table;
-	}
-
+	
 	private CellTable<ExpenseConsumer> makeConsumersCellTable() {
 		ProvidesKey<ExpenseConsumer> keyProvider = new ProvidesKey<ExpenseConsumer>() {
 
@@ -225,7 +170,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	public void setExpenseName(String name) {
 		expenseNameWidget.setText(name);
 	}
-
+	
 	@UiHandler("expenseNameWidget")
 	public void onExpenseNameChange(ValueChangeEvent<String> e) {
 		presenter.setExpenseName(e.getValue());
@@ -238,21 +183,19 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	
 	@UiHandler({"radioButtonSelected", "radioButtonAll", "radioButtonMe"})
 	void onChangeParticipants(ValueChangeEvent<Boolean> e) {
-		consumersCellTable.setVisible(radioButtonSelected.getValue() ? true : false);
+		consumersCellTable.setVisible(radioButtonSelected.getValue());
 }
 	
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 	}
-
+	
 	@Override
 	public void setPayments(List<ExpensePayment> payments) {
-		paymentsCellTable.setRowCount(payments.size(), true);
-		paymentsCellTable.setRowData(payments);
-		paymentsCellTable.redraw();
+		paymentsTable.setPayments(payments);
 	}
-
+	
 	@Override
 	public void setPaymentsSum(double value) {
 		// TODO Auto-generated method stub

@@ -7,10 +7,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface AddParticipantView extends IsWidget {
 	public void setUsersList(List<String> users);
+
 	public void setPresenter(Presenter presenter);
+
 	public void center();
+
 	public static interface Presenter {
 		void addedUsers(Collection<String> users);
+
 		void cancel();
 	}
 }
