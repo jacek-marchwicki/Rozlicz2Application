@@ -4,6 +4,6 @@ public interface SyncDatastoreService {
 	public void put(SyncEntity entity);
 	public SyncEntity get(SyncKey entity);
 	public void delete(SyncKey... entity);
-	public SyncPreparedQuery perepare(SyncQuery query);
+	public SyncPreparedQuery prepare(SyncQuery query);
 	public void clean();
 }
