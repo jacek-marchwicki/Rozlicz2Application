@@ -29,9 +29,6 @@ import com.rozlicz2.application.client.resources.ApplicationResources;
 public class EditableLabelWidget extends Composite implements HasText,
 		HasValueChangeHandlers<String> {
 
-	private static EditableLabelWidgetUiBinder uiBinder = GWT
-			.create(EditableLabelWidgetUiBinder.class);
-
 	interface EditableLabelWidgetUiBinder extends
 			UiBinder<Widget, EditableLabelWidget> {
 	}
@@ -48,8 +45,10 @@ public class EditableLabelWidget extends Composite implements HasText,
 		String errorClass();
 	}
 
-	private final Style style;
 	private static Resources DEFAULT_RESOURCES;
+
+	private static EditableLabelWidgetUiBinder uiBinder = GWT
+			.create(EditableLabelWidgetUiBinder.class);
 
 	private static Resources getDefaultResources() {
 		if (DEFAULT_RESOURCES == null) {
@@ -59,38 +58,27 @@ public class EditableLabelWidget extends Composite implements HasText,
 	}
 
 	@UiField
-	Button saveButton;
-	@UiField
 	Button cancelButton;
-	@UiField
-	TextBox textBox;
-	@UiField
-	Label errorLabel;
 
-	@UiField
-	HTMLPanel labelContainer;
 	@UiField
 	Label captionLabel;
 	@UiField
-	Label textLabel;
-	@UiField
 	Anchor editAnchor;
+	@UiField
+	Label errorLabel;
+	@UiField
+	HTMLPanel labelContainer;
 
-	private void doEditable(boolean editable) {
-		saveButton.setVisible(editable);
-		cancelButton.setVisible(editable);
-		textBox.setVisible(editable);
-		errorLabel.setVisible(editable);
-		textLabel.setVisible(!editable);
-		editAnchor.setVisible(!editable);
-	}
+	@UiField
+	Button saveButton;
+	private final Style style;
+	@UiField
+	TextBox textBox;
+	@UiField
+	Label textLabel;
 
 	public EditableLabelWidget() {
 		this("");
-	}
-
-	public EditableLabelWidget(String text) {
-		this(getDefaultResources(), text);
 	}
 
 	public EditableLabelWidget(Resources resources, String text) {
@@ -105,38 +93,33 @@ public class EditableLabelWidget extends Composite implements HasText,
 		setCaption(caption);
 	}
 
-	public void setCaption(String caption) {
-		if (caption.isEmpty()) {
-			captionLabel.setVisible(false);
-			return;
-		}
-		captionLabel.setText(caption);
-		captionLabel.setVisible(true);
+	public EditableLabelWidget(String text) {
+		this(getDefaultResources(), text);
 	}
 
-	@UiHandler("editAnchor")
-	void onEdit(ClickEvent e) {
-		textBox.setText(getText());
-		validate();
-		doEditable(true);
-		textBox.setFocus(true);
-		textBox.selectAll();
+	@Override
+	public HandlerRegistration addValueChangeHandler(
+			ValueChangeHandler<String> handler) {
+		return addHandler(handler, ValueChangeEvent.getType());
 	}
 
-	@UiHandler("saveButton")
-	void onSave(ClickEvent e) {
-		save();
+	private void doEditable(boolean editable) {
+		saveButton.setVisible(editable);
+		cancelButton.setVisible(editable);
+		textBox.setVisible(editable);
+		errorLabel.setVisible(editable);
+		textLabel.setVisible(!editable);
+		editAnchor.setVisible(!editable);
 	}
 
-	private void save() {
-		try {
-			isValid();
-			setText(textBox.getText());
-			doEditable(false);
-			ValueChangeEvent.fire(EditableLabelWidget.this, getText());
-		} catch (ValidatorException ex) {
-		}
-		;
+	@Override
+	public String getText() {
+		return textLabel.getText();
+	}
+
+	private void isValid() throws ValidatorException {
+		String text = textBox.getText();
+		Validator.isNotToShort(text);
 	}
 
 	@UiHandler("cancelButton")
@@ -149,9 +132,13 @@ public class EditableLabelWidget extends Composite implements HasText,
 		validate();
 	}
 
-	@UiHandler("textBox")
-	void onKeyUpEvent(KeyUpEvent e) {
+	@UiHandler("editAnchor")
+	void onEdit(ClickEvent e) {
+		textBox.setText(getText());
 		validate();
+		doEditable(true);
+		textBox.setFocus(true);
+		textBox.selectAll();
 	}
 
 	@UiHandler("textBox")
@@ -160,6 +147,42 @@ public class EditableLabelWidget extends Composite implements HasText,
 		if (keyCode == '\r' || keyCode == '\r') {
 			save();
 		}
+	}
+
+	@UiHandler("textBox")
+	void onKeyUpEvent(KeyUpEvent e) {
+		validate();
+	}
+
+	@UiHandler("saveButton")
+	void onSave(ClickEvent e) {
+		save();
+	}
+
+	private void save() {
+		try {
+			isValid();
+			setText(textBox.getText());
+			doEditable(false);
+			ValueChangeEvent.fire(this, getText());
+		} catch (ValidatorException ex) {
+		}
+		;
+	}
+
+	public void setCaption(String caption) {
+		if (caption.isEmpty()) {
+			captionLabel.setVisible(false);
+			return;
+		}
+		captionLabel.setText(caption);
+		captionLabel.setVisible(true);
+	}
+
+	@Override
+	public void setText(String text) {
+		textLabel.setText(text);
+		doEditable(false);
 	}
 
 	private void validate() {
@@ -176,26 +199,6 @@ public class EditableLabelWidget extends Composite implements HasText,
 					.hideClass());
 			textBox.addStyleName(this.style.errorClass());
 		}
-	}
-
-	private void isValid() throws ValidatorException {
-		String text = textBox.getText();
-		Validator.isNotToShort(text);
-	}
-
-	public void setText(String text) {
-		textLabel.setText(text);
-		doEditable(false);
-	}
-
-	public String getText() {
-		return textLabel.getText();
-	}
-
-	@Override
-	public HandlerRegistration addValueChangeHandler(
-			ValueChangeHandler<String> handler) {
-		return addHandler(handler, ValueChangeEvent.getType());
 	}
 
 }

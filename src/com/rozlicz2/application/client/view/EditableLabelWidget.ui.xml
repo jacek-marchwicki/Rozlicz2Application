@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with type="com.rozlicz2.application.client.resources.ApplicationResources" field="res"></ui:with>
 	<ui:style>
 		.label {
 			font-weight: bold;
@@ -40,15 +41,6 @@
 			border-radius: 4px;
 		}
 		
-		.errorLabel {
-			clear: both;
-			font-size: 0.8em;
-			-webkit-transition-property: opacity;
-  			-webkit-transition-duration: 0.5s, 1s;
-  			min-height: 0.8em;
-  			color: #D73828;
-		}
-		
 		.textBox {
 			float: left;
 			font-size: 1em;
@@ -75,7 +67,7 @@
 		<g:Button ui:field="saveButton" text="Save" styleName="{style.saveButton}"></g:Button>
 		<g:Button ui:field="cancelButton" text="Cancel" styleName="{style.cancelButton}"></g:Button>
 		<g:Label visible="false" ui:field="captionLabel" styleName="{style.captionLabel}"></g:Label>
-		<g:Label ui:field="errorLabel" styleName="{style.errorLabel}"></g:Label>
+		<g:Label ui:field="errorLabel" styleName="{res.css.errorLabelClass}"></g:Label>
 		<div style="clear: both"></div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -26,12 +26,12 @@ import com.rozlicz2.application.client.view.ExpenseView.ExpensePayment;
 public class ExpenseActivity extends AbstractActivity implements
 		ExpenseView.Presenter, Presenter {
 
-	private final ExpensePlace place;
 	private final ClientFactory clientFactory;
 	private ExpenseEntity expense;
+	private AddParticipantView participantView;
+	private final ExpensePlace place;
 	private ProjectEntity project;
 	private ExpenseView view;
-	private AddParticipantView participantView;
 
 	public ExpenseActivity(ExpensePlace place, ClientFactory clientFactory) {
 		this.place = place;
@@ -39,48 +39,44 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		expense = clientFactory.getExpensesDAO().getExpense(
-				place.getExpenseId());
-		if (expense == null) {
-			notFoundPlace();
-			return;
+	public void addedUsers(Collection<String> users) {
+		for (String userName : users) {
+			project.addParticipant(userName);
 		}
-		project = clientFactory.getProjectsDAO().getProject(
-				expense.getProjectId());
-		if (project == null) {
-			notFoundPlace();
-			return;
-		}
-		view = clientFactory.getExpenseView();
-		view.setPresenter(this);
-
+		RootPanel.get().remove(participantView);
 		refreshView();
-
-		panel.setWidget(view.asWidget());
 	}
 
-	private void refreshView() {
-		List<ExpensePayment> payments = getPayments();
-		double sum = getPaymentsSum(payments);
-		List<ExpenseConsumer> consumers = getConsumers(sum);
-		view.setExpenseName(expense.getName());
-		view.setConsumers(consumers);
-		view.setPayments(payments);
-		view.setPaymentsSum(sum);
+	@Override
+	public void addParticipants() {
+		participantView = clientFactory.getAddParticipantView();
+		participantView.setPresenter(this);
+		participantView.setUsersList(getUsers());
+		RootPanel.get().add(participantView);
+		participantView.center();
 	}
 
-	private void notFoundPlace() {
-		Place place = new NotFoundPlace();
-		clientFactory.getPlaceController().goTo(place);
+	@Override
+	public void cancel() {
+		RootPanel.get().remove(participantView);
 	}
 
-	private double getPaymentsSum(List<ExpensePayment> payments) {
-		double ret = 0.0;
-		for (ExpensePayment payment : payments) {
-			ret += payment.value;
-		}
-		return ret;
+	@Override
+	public void consumerSet(Long userId, boolean isConsumer) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void consumerSetProportional(Long userId, boolean isProportional) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void consumerSetValue(Long userId, double value) {
+		// TODO Auto-generated method stub
+
 	}
 
 	private List<ExpenseConsumer> getConsumers(double sum) {
@@ -111,7 +107,7 @@ public class ExpenseActivity extends AbstractActivity implements
 			}
 			sum -= consumer.value;
 		}
-		double valuePerProportional = sum / (double) proportionals;
+		double valuePerProportional = sum / proportionals;
 		for (ExpenseConsumer consumer : consumers) {
 			if (!consumer.isConsumer)
 				continue;
@@ -139,6 +135,48 @@ public class ExpenseActivity extends AbstractActivity implements
 		return payments;
 	}
 
+	private double getPaymentsSum(List<ExpensePayment> payments) {
+		double ret = 0.0;
+		for (ExpensePayment payment : payments) {
+			ret += payment.value;
+		}
+		return ret;
+	}
+
+	private List<String> getUsers() {
+		ArrayList<String> users = new ArrayList<String>();
+		// TODO generate autocomplete
+		return users;
+	}
+
+	private void notFoundPlace() {
+		Place place = new NotFoundPlace();
+		clientFactory.getPlaceController().goTo(place);
+	}
+
+	@Override
+	public void paymentSetValue(Long userId, double value) {
+		Payment payment = expense.getPayment(userId);
+		if (payment == null) {
+			payment = new Payment();
+			payment.userId = userId;
+			expense.putPayment(payment);
+		}
+		payment.value = value;
+		clientFactory.getExpensesDAO().save(expense);
+		refreshView();
+	}
+
+	private void refreshView() {
+		List<ExpensePayment> payments = getPayments();
+		double sum = getPaymentsSum(payments);
+		List<ExpenseConsumer> consumers = getConsumers(sum);
+		view.setExpenseName(expense.getName());
+		view.setConsumers(consumers);
+		view.setPayments(payments);
+		view.setPaymentsSum(sum);
+	}
+
 	@Override
 	public void setExpenseName(String value) {
 		expense.setName(value);
@@ -148,56 +186,25 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void paymentSetValue(Long userId, double value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void consumerSet(Long userId, boolean isConsumer) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void consumerSetProportional(Long userId, boolean isProportional) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void consumerSetValue(Long userId, double value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	private List<String> getUsers() {
-		ArrayList<String> users = new ArrayList<String>();
-		// TODO generate autocomplete
-		return users;
-	}
-
-	@Override
-	public void addParticipants() {
-		participantView = clientFactory.getAddParticipantView();
-		participantView.setPresenter(this);
-		participantView.setUsersList(getUsers());
-		RootPanel.get().add(participantView);
-		participantView.center();
-	}
-
-	@Override
-	public void addedUsers(Collection<String> users) {
-		for (String userName : users) {
-			project.addParticipant(userName);
+	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		expense = clientFactory.getExpensesDAO().getExpense(
+				place.getExpenseId());
+		if (expense == null) {
+			notFoundPlace();
+			return;
 		}
-		RootPanel.get().remove(participantView);
-		refreshView();
-	}
+		project = clientFactory.getProjectsDAO().getProject(
+				expense.getProjectId());
+		if (project == null) {
+			notFoundPlace();
+			return;
+		}
+		view = clientFactory.getExpenseView();
+		view.setPresenter(this);
 
-	@Override
-	public void cancel() {
-		RootPanel.get().remove(participantView);
+		refreshView();
+
+		panel.setWidget(view.asWidget());
 	}
 
 }

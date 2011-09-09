@@ -4,5 +4,9 @@
 	<ui:style>
 
 	</ui:style>
-	<g:FlexTable ui:field="table"></g:FlexTable>
+	<g:HTMLPanel>
+		<g:FlexTable ui:field="table"></g:FlexTable>
+		<g:Label ui:field="sumLabel"></g:Label>
+	</g:HTMLPanel>
+	
 </ui:UiBinder> 
