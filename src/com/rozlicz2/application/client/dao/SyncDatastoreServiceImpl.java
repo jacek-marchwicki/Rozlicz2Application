@@ -311,7 +311,7 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 			if (storeEntity != null) {
 				SyncEntity entity = storeEntity.getEntity();
 				assert (entity != null);
-				firePutObservers(entity, null);
+				fireObservers(entity, null);
 			}
 		}
 	}
@@ -322,7 +322,29 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 		}
 	}
 
-	private void firePutObservers(SyncEntity before, SyncEntity after) {
+	private void fireAllPropertyObservers(SyncEntity before, SyncEntity after,
+			Map<String, List<SyncObserver>> map) {
+		for (List<SyncObserver> observerList : map.values()) {
+			for (SyncObserver syncObserver : observerList) {
+				syncObserver.changed(before, after);
+			}
+		}
+	}
+
+	private void fireChangedPropertyObservers(SyncEntity before,
+			SyncEntity after, Map<String, List<SyncObserver>> map) {
+		Collection<String> changedProperties = after.getChangedProperties();
+		for (String changedPropertyName : changedProperties) {
+			List<SyncObserver> list2 = map.get(changedPropertyName);
+			if (list2 != null) {
+				for (SyncObserver syncObserver : list2) {
+					syncObserver.changed(before, after);
+				}
+			}
+		}
+	}
+
+	private void fireObservers(SyncEntity before, SyncEntity after) {
 		String kind = null;
 		if (before != null)
 			kind = before.getKey().getKind();
@@ -335,13 +357,17 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 				observer.changed(before, after);
 			}
 		}
-		// TODO do a optimization
+		firePropertyObservers(kind, before, after);
+	}
+
+	private void firePropertyObservers(String kind, SyncEntity before,
+			SyncEntity after) {
 		Map<String, List<SyncObserver>> map = propertyObservers.get(kind);
 		if (map != null) {
-			for (List<SyncObserver> observerList : map.values()) {
-				for (SyncObserver syncObserver : observerList) {
-					syncObserver.changed(before, after);
-				}
+			if (before == null || after == null) {
+				fireAllPropertyObservers(before, after, map);
+			} else {
+				fireChangedPropertyObservers(before, after, map);
 			}
 		}
 	}
@@ -369,7 +395,7 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 		storeEntity.setEntity(entity.cloneMe());
 		createPropertyKeys(storeEntity, entity);
 		entities.put(key, storeEntity);
-		firePutObservers(old, entity);
+		fireObservers(old, entity);
 	}
 
 	@Override

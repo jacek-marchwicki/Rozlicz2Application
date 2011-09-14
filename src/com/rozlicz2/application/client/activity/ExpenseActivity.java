@@ -178,7 +178,7 @@ public class ExpenseActivity extends AbstractActivity implements
 	private double getPaymentsSum(IdMap<ExpensePayment> payments) {
 		double ret = 0.0;
 		for (ExpensePayment payment : payments.values()) {
-			ret += payment.value;
+			ret += payment.getValue();
 		}
 		return ret;
 	}

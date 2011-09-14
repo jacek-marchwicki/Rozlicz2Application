@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.ProvidesKey;
 import com.rozlicz2.application.client.entity.BaseEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
@@ -71,7 +70,8 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
 				ExpensePayment value, SafeHtmlBuilder sb) {
-			sb.append(template.productCellTemplate(value.name, "123,43 PLN"));
+			sb.append(template.productCellTemplate(value.getName(),
+					"123,43 PLN"));
 		}
 	}
 
@@ -160,15 +160,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	}
 
 	private CellTable<ExpensePayment> makePaymentsCellTable() {
-		final ProvidesKey<ExpensePayment> keyProvider = new ProvidesKey<ExpensePayment>() {
-
-			@Override
-			public Object getKey(ExpensePayment item) {
-				if (item == null)
-					return null;
-				return item.userId;
-			}
-		};
+		final BaseEntity.EntityKeyProvider<ExpensePayment> keyProvider = new BaseEntity.EntityKeyProvider<ExpensePayment>();
 
 		final CellTable<ExpensePayment> table = new CellTable<ExpensePayment>(
 				keyProvider);
@@ -177,7 +169,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 			@Override
 			public String getValue(ExpensePayment object) {
-				return object.name;
+				return object.getName();
 			}
 		};
 		table.addColumn(nameColumn, ApplicationConstants.constants.userName());
@@ -186,7 +178,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 				valueCell) {
 			@Override
 			public String getValue(ExpensePayment object) {
-				return Double.toString(object.value);
+				return Double.toString(object.getValue());
 			}
 		};
 		valueColumn.setFieldUpdater(new FieldUpdater<ExpensePayment, String>() {
@@ -195,7 +187,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 			public void update(int index, ExpensePayment object, String value) {
 				try {
 					double doubleValue = Double.parseDouble(value);
-					object.value = doubleValue;
+					object.setValue(doubleValue);
 					table.redraw();
 
 				} catch (NumberFormatException e) {

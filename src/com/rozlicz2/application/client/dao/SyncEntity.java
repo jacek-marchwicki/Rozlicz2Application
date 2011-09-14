@@ -12,6 +12,7 @@ public class SyncEntity implements Serializable, Cloneable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private final Map<String, String> changedProperties = new HashMap<String, String>();
 	private final SyncKey key;
 	private final Map<String, Object> properites = new HashMap<String, Object>();
 
@@ -22,6 +23,10 @@ public class SyncEntity implements Serializable, Cloneable {
 
 	public SyncEntity(SyncKey key) {
 		this.key = key;
+	}
+
+	public void clearChangedProperties() {
+		changedProperties.clear();
 	}
 
 	public SyncEntity cloneMe() {
@@ -36,6 +41,10 @@ public class SyncEntity implements Serializable, Cloneable {
 		return entity;
 	}
 
+	public Collection<String> getChangedProperties() {
+		return changedProperties.values();
+	}
+
 	public SyncKey getKey() {
 		return key;
 	}
@@ -48,11 +57,17 @@ public class SyncEntity implements Serializable, Cloneable {
 		return properites.get(propertyName);
 	}
 
+	private void propertyChanged(String propertyName) {
+		changedProperties.put(propertyName, propertyName);
+	}
+
 	public void removeProperty(String propertyName) {
+		propertyChanged(propertyName);
 		properites.remove(propertyName);
 	}
 
 	public void setProperty(String propertyName, Object value) {
+		propertyChanged(propertyName);
 		properites.put(propertyName, value);
 	}
 }

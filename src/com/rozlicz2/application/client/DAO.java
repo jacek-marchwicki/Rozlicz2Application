@@ -129,6 +129,12 @@ public class DAO {
 				assert (payments != null);
 
 				updateConsumers(participants, consumers);
+				updatePayments(participants, payments);
+
+				expenseE.setProperty(EXPANSE_CONSUMERS, consumers);
+				expenseE.setProperty(EXPANSE_PAYMENTS, payments);
+
+				dao.put(expenseE);
 			}
 		}
 	};
@@ -141,7 +147,8 @@ public class DAO {
 			dao.put(global);
 			globalKey = global.getKey();
 		}
-		dao.addObserver(DAO.PROJECT_PARTICIPANTS, projectParticipantsObserver);
+		dao.addPropertyObserver(DAO.PROJECT, DAO.PROJECT_PARTICIPANTS,
+				projectParticipantsObserver);
 		dao.addObserver(DAO.EXPANSE, expenseObserver);
 		dao.addObserver(DAO.PROJECT, projectObserver);
 	}
@@ -168,5 +175,25 @@ public class DAO {
 				i.remove();
 		}
 
+	}
+
+	protected void updatePayments(IdMap<Participant> participants,
+			IdMap<ExpensePayment> payments) {
+		for (Participant participant : participants.values()) {
+			ExpensePayment payment = payments.get(participant.getId());
+			if (payment == null) {
+				payment = new ExpensePayment();
+				payment.setId(participant.getId());
+				payment.setValue(0);
+			}
+			payment.setName(participant.getName());
+		}
+		for (Iterator<ExpensePayment> i = payments.values().iterator(); i
+				.hasNext();) {
+			ExpensePayment payment = i.next();
+			long consumerId = payment.getId();
+			if (!participants.containsKey(consumerId))
+				i.remove();
+		}
 	}
 }
