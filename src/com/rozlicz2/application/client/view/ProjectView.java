@@ -1,18 +1,22 @@
 package com.rozlicz2.application.client.view;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 import com.rozlicz2.application.client.entity.ExpenseShortEntity;
+import com.rozlicz2.application.client.entity.IdMap;
 
 public interface ProjectView extends IsWidget {
-	void setProjectName(String projectName);
-	void setExpenses(List<ExpenseShortEntity> expenses);
 	public interface Presenter {
-		void setProjectName(String projectName);
-		void editExpense(Long expenseId);
 		void createExpense();
+
+		void editExpense(long syncKey);
+
+		void setProjectName(String projectName);
 	}
+
+	void setExpenses(IdMap<ExpenseShortEntity> expenses);
+
 	void setPresenter(Presenter presenter);
-	
+
+	void setProjectName(String projectName);
+
 }

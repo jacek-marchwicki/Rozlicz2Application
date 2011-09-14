@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class SyncDatastoreServiceImpl implements SyncDatastoreService {
@@ -45,6 +45,11 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 			this.query = query;
 			this.entities = entities;
 			this.properties = properties;
+		}
+
+		@Override
+		public AbstractEntityProvider asDataProvider() {
+			return new AbstractEntityProvider(asIterable());
 		}
 
 		@Override
@@ -87,8 +92,9 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 
 		private final Map<SyncKey, StoreEntity> entities;
 		boolean hasNextItem;
+		private Iterator<SyncPropertyKey> iterator;
 		private final String kind;
-		private Entry<SyncPropertyKey, SyncKey> nextKey;
+		private SyncPropertyKey nextKey;
 
 		private final TreeMap<SyncPropertyKey, SyncKey> properties;
 		private final SyncQuery query;
@@ -108,7 +114,11 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 		}
 
 		private void calculateNextKey() {
-			nextKey = properties.higherEntry(nextKey.getKey());
+			if (iterator.hasNext()) {
+				nextKey = iterator.next();
+			} else {
+				nextKey = null;
+			}
 		}
 
 		private void createStartKey() {
@@ -134,7 +144,12 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 				throw new RuntimeException("Not implemented");
 				// TODO
 			}
-			nextKey = properties.ceilingEntry(propertyKey);
+			SortedMap<SyncPropertyKey, SyncKey> subMap;
+			subMap = properties.tailMap(propertyKey);
+			iterator = subMap.keySet().iterator();
+			if (iterator.hasNext()) {
+				nextKey = iterator.next();
+			}
 		}
 
 		@Override
@@ -151,8 +166,7 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 				throw new RuntimeException("Not implemented");
 				// TODO
 			}
-			boolean contains = validator.contains(nextKey.getKey()) == 0 ? true
-					: false;
+			boolean contains = validator.contains(nextKey) == 0 ? true : false;
 			hasNextItem = contains;
 		}
 
@@ -162,7 +176,7 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 				throw new NoSuchElementException();
 			assert (nextKey != null);
 
-			SyncKey key = nextKey.getValue();
+			SyncKey key = properties.get(nextKey);
 			assert (key != null);
 
 			StoreEntity storeEntity = entities.get(key);
@@ -174,7 +188,7 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 			calculateNextKey();
 			isValidNextKey();
 
-			return entity.clone();
+			return entity.cloneMe();
 		}
 
 		@Override
@@ -185,7 +199,38 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 	}
 
 	private final Map<SyncKey, StoreEntity> entities = new HashMap<SyncKey, StoreEntity>();
+	private final Map<String, List<SyncObserver>> observers = new HashMap<String, List<SyncObserver>>();
+
 	private final TreeMap<SyncPropertyKey, SyncKey> properties = new TreeMap<SyncPropertyKey, SyncKey>();
+
+	private final Map<String, Map<String, List<SyncObserver>>> propertyObservers = new HashMap<String, Map<String, List<SyncObserver>>>();
+
+	@Override
+	public void addObserver(String kind, SyncObserver observer) {
+		List<SyncObserver> list = observers.get(kind);
+		if (list == null) {
+			list = new ArrayList<SyncObserver>();
+			observers.put(kind, list);
+		}
+		list.add(observer);
+	}
+
+	@Override
+	public void addPropertyObserver(String kind, String property,
+			SyncObserver observer) {
+		Map<String, List<SyncObserver>> map = propertyObservers.get(kind);
+		if (map == null) {
+			map = new HashMap<String, List<SyncObserver>>();
+			propertyObservers.put(kind, map);
+		}
+		List<SyncObserver> list = map.get(property);
+		if (list == null) {
+			list = new ArrayList<SyncObserver>();
+			map.put(property, list);
+		}
+		list.add(observer);
+
+	}
 
 	@Override
 	public void clean() {
@@ -259,9 +304,15 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 	public void delete(SyncKey... keys) {
 		for (SyncKey key : keys) {
 			StoreEntity storeEntity = entities.get(key);
-			if (storeEntity != null)
+			if (storeEntity != null) {
 				deletePropertyKeys(storeEntity);
+			}
 			entities.remove(key);
+			if (storeEntity != null) {
+				SyncEntity entity = storeEntity.getEntity();
+				assert (entity != null);
+				firePutObservers(entity, null);
+			}
 		}
 	}
 
@@ -271,10 +322,34 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 		}
 	}
 
+	private void firePutObservers(SyncEntity before, SyncEntity after) {
+		String kind = null;
+		if (before != null)
+			kind = before.getKey().getKind();
+		else if (after != null)
+			kind = after.getKey().getKind();
+		assert (kind != null);
+		List<SyncObserver> list = observers.get(kind);
+		if (list != null) {
+			for (SyncObserver observer : list) {
+				observer.changed(before, after);
+			}
+		}
+		// TODO do a optimization
+		Map<String, List<SyncObserver>> map = propertyObservers.get(kind);
+		if (map != null) {
+			for (List<SyncObserver> observerList : map.values()) {
+				for (SyncObserver syncObserver : observerList) {
+					syncObserver.changed(before, after);
+				}
+			}
+		}
+	}
+
 	@Override
 	public SyncEntity get(SyncKey key) {
 		StoreEntity syncEntity = entities.get(key);
-		return syncEntity == null ? null : syncEntity.getEntity().clone();
+		return (syncEntity == null ? null : syncEntity.getEntity().cloneMe());
 	}
 
 	@Override
@@ -288,10 +363,35 @@ public class SyncDatastoreServiceImpl implements SyncDatastoreService {
 		StoreEntity storeEntity = entities.get(key);
 		if (storeEntity != null)
 			deletePropertyKeys(storeEntity);
-		storeEntity = new StoreEntity();
-		storeEntity.setEntity(entity.clone());
+		if (storeEntity == null)
+			storeEntity = new StoreEntity();
+		SyncEntity old = storeEntity.getEntity();
+		storeEntity.setEntity(entity.cloneMe());
 		createPropertyKeys(storeEntity, entity);
 		entities.put(key, storeEntity);
+		firePutObservers(old, entity);
+	}
+
+	@Override
+	public void removeObserver(String entity, SyncObserver observer) {
+		List<SyncObserver> list = observers.get(entity);
+		if (list == null)
+			return;
+		list.remove(observer);
+	}
+
+	@Override
+	public void removePropertyObserver(String entity, String property,
+			SyncObserver observer) {
+		Map<String, List<SyncObserver>> map = propertyObservers.get(entity);
+		if (map == null) {
+			return;
+		}
+		List<SyncObserver> list = map.get(property);
+		if (list == null) {
+			return;
+		}
+		list.remove(observer);
 	}
 
 }

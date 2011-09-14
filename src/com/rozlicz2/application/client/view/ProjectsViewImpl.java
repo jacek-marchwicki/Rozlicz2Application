@@ -1,7 +1,5 @@
 package com.rozlicz2.application.client.view;
 
-import java.util.List;
-
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,35 +17,19 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.rozlicz2.application.client.DAO;
 import com.rozlicz2.application.client.EntityProvidesKey;
-import com.rozlicz2.application.client.entity.ProjectShortEntity;
+import com.rozlicz2.application.client.dao.AbstractEntityProvider;
+import com.rozlicz2.application.client.dao.SyncEntity;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
 
-public class ProjectsViewImpl extends Composite implements ProjectsView{
+public class ProjectsViewImpl extends Composite implements ProjectsView {
 
-	private static ProjectsViewImplUiBinder uiBinder = GWT
-			.create(ProjectsViewImplUiBinder.class);
-
-	interface ProjectsViewImplUiBinder extends UiBinder<Widget, ProjectsViewImpl> {
-	}
-
-	public ProjectsViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
-		cellList.redraw();
-	}
-
-	@UiField
-	CellList<ProjectShortEntity> cellList;
-
-	@UiField
-	Label projectsNumberLabel;
-
-	private ProjectsView.Presenter presenter;
-
-	public static class ProductCell extends AbstractCell<ProjectShortEntity> {
+	public static class ProductCell extends AbstractCell<SyncEntity> {
 		interface Template extends SafeHtmlTemplates {
-			@Template("<div>{0}</div><div>{1}</div>")
-			SafeHtml productCellTemplate(String name,String price);
+
+			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
+			SafeHtml productCellTemplate(String name, String price);
 		}
 
 		private static Template template;
@@ -59,33 +41,57 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 		}
 
 		@Override
-		public void render(Context context, ProjectShortEntity value, SafeHtmlBuilder sb) {
+		public void render(com.google.gwt.cell.client.Cell.Context context,
+				SyncEntity value, SafeHtmlBuilder sb) {
 			if (value != null) {
-				sb.append(template.productCellTemplate(value.getName(),"123,13 PLN"));
+				String name = (String) value.getProperty(DAO.PROJECTSHORT_NAME);
+				assert (name != null);
+				assert (name instanceof String);
+				sb.append(template.productCellTemplate(name, "123,13 PLN"));
 			}
 		}
 	}
 
-	@UiFactory CellList<ProjectShortEntity> makeCellList() {
-		EntityProvidesKey<ProjectShortEntity> keyProvider = new EntityProvidesKey<ProjectShortEntity>();
+	interface ProjectsViewImplUiBinder extends
+			UiBinder<Widget, ProjectsViewImpl> {
+	}
 
-		// Create a CellList using the keyProvider.
-		CellList<ProjectShortEntity> cellList = new CellList<ProjectShortEntity>(new ProductCell(),
-				keyProvider);
+	private static ProjectsViewImplUiBinder uiBinder = GWT
+			.create(ProjectsViewImplUiBinder.class);
 
-		// Push data into the CellList.
+	@UiField
+	CellList<SyncEntity> cellList;
 
+	private ProjectsView.Presenter presenter;
 
-		// Add a selection model using the same keyProvider.
-		final SingleSelectionModel<ProjectShortEntity> selectionModel = new SingleSelectionModel<ProjectShortEntity>(
+	@UiField
+	Label projectsNumberLabel;
+
+	public ProjectsViewImpl() {
+		initWidget(uiBinder.createAndBindUi(this));
+	}
+
+	@UiHandler("createButton")
+	void handleCreateButtonClick(ClickEvent e) {
+		presenter.createProject();
+	}
+
+	@UiFactory
+	CellList<SyncEntity> makeCellList() {
+		EntityProvidesKey keyProvider = new EntityProvidesKey();
+
+		CellList<SyncEntity> cellList = new CellList<SyncEntity>(
+				new ProductCell(), keyProvider);
+
+		final SingleSelectionModel<SyncEntity> selectionModel = new SingleSelectionModel<SyncEntity>(
 				keyProvider);
 		cellList.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new Handler() {
-			
+
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				ProjectShortEntity selectedObject = selectionModel.getSelectedObject();
-				if (selectedObject == null) 
+				SyncEntity selectedObject = selectionModel.getSelectedObject();
+				if (selectedObject == null)
 					return;
 				selectionModel.setSelected(selectedObject, false);
 				onSelectedObject(selectedObject);
@@ -94,18 +100,8 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 		return cellList;
 	}
 
-	protected void onSelectedObject(ProjectShortEntity selectedObject) {
-		presenter.editProject(selectedObject.getId());
-	}
-
-	@UiHandler("createButton")
-	void handleCreateButtonClick(ClickEvent e) {
-		presenter.createProject();
-	}
-
-	@Override
-	public void setUserName(String userName) {
-		// TODO Auto-generated method stub
+	protected void onSelectedObject(SyncEntity selectedObject) {
+		presenter.editProject(selectedObject.getKey());
 	}
 
 	@Override
@@ -114,15 +110,19 @@ public class ProjectsViewImpl extends Composite implements ProjectsView{
 	}
 
 	@Override
-	public void setProjectsList(List<ProjectShortEntity> projectsDetails) {
-		cellList.setRowCount(projectsDetails.size(), true);
-		cellList.setRowData(0, projectsDetails);
-		cellList.redraw();
+	public void setProjectsList(AbstractEntityProvider dataProvider) {
+		dataProvider.addDataDisplay(cellList);
 	}
 
 	@Override
 	public void setProjectsNumber(int numberOfProjects) {
-		projectsNumberLabel.setText(LocalizedMessages.messages.numberOfProjects(numberOfProjects));
+		projectsNumberLabel.setText(LocalizedMessages.messages
+				.numberOfProjects(numberOfProjects));
+	}
+
+	@Override
+	public void setUserName(String userName) {
+		// TODO Auto-generated method stub
 	}
 
 }

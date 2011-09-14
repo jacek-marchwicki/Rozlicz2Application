@@ -1,14 +1,27 @@
 package com.rozlicz2.application.client.dao;
 
-public class SyncKey implements java.io.Serializable, java.lang.Comparable<SyncKey> {
-	private final String kind;
-	private final long id;
-	transient private Integer hash;
+public class SyncKey implements java.io.Serializable,
+		java.lang.Comparable<SyncKey> {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
+	public static SyncKey fromString(String token) {
+		int indexOf = token.indexOf('|');
+		assert (token.length() > indexOf);
+		String kind = token.substring(0, indexOf);
+		String idStr = token.substring(indexOf + 1);
+		long id = Long.parseLong(idStr);
+
+		return new SyncKey(kind, id);
+	}
+
+	transient private Integer hash;
+	private final long id;
+
+	private final String kind;
+
 	public SyncKey(String kind, long id) {
 		this.kind = kind;
 		this.id = id;
@@ -25,22 +38,42 @@ public class SyncKey implements java.io.Serializable, java.lang.Comparable<SyncK
 			return 1;
 		return 0;
 	}
-	
+
 	@Override
-	public int hashCode() {
-		if (hash != null)
-			return hash.intValue();
-		String hashString = kind + "|" + Long.toString(id);
-		hash = new Integer(hashString.hashCode());
-		return hash;
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (!(o instanceof SyncKey)) {
+			return false;
+		}
+		SyncKey k = (SyncKey) o;
+		if (!kind.equals(k.kind))
+			return false;
+		if (id != k.id)
+			return false;
+		return true;
+	}
+
+	public long getId() {
+		return id;
 	}
 
 	public String getKind() {
 		return kind;
 	}
 
-	public long getId() {
-		return id;
+	@Override
+	public int hashCode() {
+		if (hash != null)
+			return hash.intValue();
+		String hashString = kind + "|" + Long.toString(id);
+		hash = new Integer(hashString.hashCode());
+		return hash.intValue();
+	}
+
+	@Override
+	public String toString() {
+		return kind + "|" + Long.toString(id);
 	}
 
 }

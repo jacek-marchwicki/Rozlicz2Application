@@ -7,3 +7,4 @@ war/WEB-INF/classes/**
 test-classes/**
 bin/**
 .gwt/**
+gwt-unitCache/**

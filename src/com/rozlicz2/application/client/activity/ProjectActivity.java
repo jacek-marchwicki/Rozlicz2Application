@@ -1,74 +1,121 @@
 package com.rozlicz2.application.client.activity;
 
-import java.util.List;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.rozlicz2.application.client.ClientFactory;
-import com.rozlicz2.application.client.entity.ExpenseEntity;
+import com.rozlicz2.application.client.DAO;
+import com.rozlicz2.application.client.dao.SyncDatastoreService;
+import com.rozlicz2.application.client.dao.SyncEntity;
+import com.rozlicz2.application.client.dao.SyncKey;
+import com.rozlicz2.application.client.dao.SyncObserver;
 import com.rozlicz2.application.client.entity.ExpenseShortEntity;
-import com.rozlicz2.application.client.entity.ProjectEntity;
+import com.rozlicz2.application.client.entity.IdArrayMap;
+import com.rozlicz2.application.client.entity.IdMap;
 import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
+import com.rozlicz2.application.client.resources.ApplicationConstants;
+import com.rozlicz2.application.client.view.ExpenseConsumer;
+import com.rozlicz2.application.client.view.ExpensePayment;
 import com.rozlicz2.application.client.view.ProjectView;
 
-public class ProjectActivity extends AbstractActivity implements ProjectView.Presenter {
+public class ProjectActivity extends AbstractActivity implements
+		ProjectView.Presenter {
 
-	private ClientFactory clientFactory;
-	private final ProjectPlace place;
-	private ProjectEntity project;
+	private final ClientFactory clientFactory;
+	private final SyncDatastoreService dao;
+	private final SyncKey projectKey;
+	private final SyncObserver projectObserver = new SyncObserver() {
+		@Override
+		public void changed(SyncEntity before, SyncEntity after) {
+			projectChanged();
+		}
+	};
+	private ProjectView projectView;
 
 	public ProjectActivity(ProjectPlace place, ClientFactory clientFactory) {
-		this.place = place;
+		long id = place.getProjectId();
+		projectKey = new SyncKey(DAO.PROJECT, id);
 		this.clientFactory = clientFactory;
+		dao = clientFactory.getDAO();
 	}
-	
+
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		
-		project = clientFactory.getProjectsDAO().getProject(place.getProjectId());
+	public void createExpense() {
+		SyncEntity expanseE = new SyncEntity(DAO.EXPANSE);
+		expanseE.setProperty(DAO.EXPANSE_NAME,
+				ApplicationConstants.constants.newExpense());
+		expanseE.setProperty(DAO.EXPANSE_PROJECTID, projectKey.getId());
+		expanseE.setProperty(DAO.EXPANSE_PAYMENTS,
+				new IdArrayMap<ExpensePayment>());
+		expanseE.setProperty(DAO.EXPANSE_CONSUMERS,
+				new IdArrayMap<ExpenseConsumer>());
+		expanseE.setProperty(DAO.EXPANSE_SUM, new Double(0));
+		dao.put(expanseE);
+
+		ExpensePlace place = new ExpensePlace(expanseE.getKey().getId());
+		clientFactory.getPlaceController().goTo(place);
+	}
+
+	@Override
+	public void editExpense(long expenseId) {
+		ExpensePlace place = new ExpensePlace(expenseId);
+		clientFactory.getPlaceController().goTo(place);
+	}
+
+	@Override
+	public void onCancel() {
+		removeObservers();
+	}
+
+	@Override
+	public void onStop() {
+		removeObservers();
+	}
+
+	protected void projectChanged() {
+		SyncEntity project = dao.get(projectKey);
 		if (project == null) {
 			Place place = new NotFoundPlace();
 			clientFactory.getPlaceController().goTo(place);
 			return;
 		}
-		List<ExpenseShortEntity> expenses= project.getExpensesShort();
-		
-		ProjectView projectView = clientFactory.getProjectView();
-		projectView.setPresenter(this);
-        projectView.setExpenses(expenses);
-        projectView.setProjectName(project.getName());
-        panel.setWidget(projectView.asWidget());
+		@SuppressWarnings("unchecked")
+		IdMap<ExpenseShortEntity> expenses = (IdMap<ExpenseShortEntity>) project
+				.getProperty(DAO.PROJECT_EXPENSES);
+		assert (expenses != null);
+		String name = (String) project.getProperty(DAO.PROJECT_NAME);
+		projectView.setExpenses(expenses);
+		projectView.setProjectName(name);
+	}
+
+	private void removeObservers() {
+		dao.removeObserver(DAO.PROJECT, projectObserver);
 	}
 
 	@Override
 	public void setProjectName(String projectName) {
-		project.setName(projectName);
-		clientFactory.getProjectsDAO().save(project);
-		clientFactory.getProjectsShortDAO().save(project);
+		SyncEntity project = dao.get(projectKey);
+		project.setProperty(DAO.PROJECT_NAME, projectName);
+		dao.put(project);
 	}
 
 	@Override
-	public void createExpense() {
-		ExpenseEntity expenseEntity = new ExpenseEntity(project.getId());
-		
-		project.addExpenseShort(expenseEntity);
-		clientFactory.getExpensesDAO().addExpense(expenseEntity);
-		clientFactory.getProjectsDAO().save(project);
-		clientFactory.getProjectsShortDAO().save(project);
-		
-		ExpensePlace place = new ExpensePlace(expenseEntity.getId());
-		clientFactory.getPlaceController().goTo(place);
+	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		projectView = clientFactory.getProjectView();
+		projectView.setPresenter(this);
+
+		projectChanged();
+
+		panel.setWidget(projectView.asWidget());
+
+		addObservers();
 	}
 
-	@Override
-	public void editExpense(Long expenseId) {
-		ExpensePlace place = new ExpensePlace(expenseId);
-		clientFactory.getPlaceController().goTo(place);
+	private void addObservers() {
+		dao.addObserver(DAO.PROJECT, projectObserver);
 	}
-	
-	
+
 }

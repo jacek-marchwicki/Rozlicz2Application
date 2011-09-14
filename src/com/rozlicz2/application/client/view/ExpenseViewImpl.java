@@ -1,7 +1,5 @@
 package com.rozlicz2.application.client.view;
 
-import java.util.List;
-
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -25,56 +23,50 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
+import com.rozlicz2.application.client.entity.BaseEntity;
+import com.rozlicz2.application.client.entity.IdMap;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 
 public class ExpenseViewImpl extends Composite implements ExpenseView {
 
-	private static ExpenseViewImplUiBinder uiBinder = GWT
-			.create(ExpenseViewImplUiBinder.class);
+	public static class ConsumerCell extends AbstractCell<ExpenseConsumer> {
+
+		interface Template extends SafeHtmlTemplates {
+			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
+			SafeHtml productCellTemplate(String name, String price);
+		}
+
+		private static Template template;
+
+		public ConsumerCell() {
+			if (template == null)
+				template = GWT.create(Template.class);
+		}
+
+		@Override
+		public void render(com.google.gwt.cell.client.Cell.Context context,
+				ExpenseConsumer value, SafeHtmlBuilder sb) {
+			sb.append(template.productCellTemplate(value.getName(),
+					"123,45 PLN"));
+		}
+	}
 
 	interface ExpenseViewImplUiBinder extends UiBinder<Widget, ExpenseViewImpl> {
 	}
 
-	public ExpenseViewImpl() {
-		consumersCellTable = makeConsumersCellTable();
-		paymentsCellTable = makePaymentsCellTable();
-		initWidget(uiBinder.createAndBindUi(this));
-		radioButtonAll.setValue(true);
-	}
-
-	@UiField
-	HTMLPanel htmlPanel;
-
-	@UiField
-	EditableLabelWidget expenseNameWidget;
-
-	@UiField(provided = true)
-	CellTable<ExpenseConsumer> consumersCellTable;
-
-	@UiField(provided = true)
-	CellTable<ExpensePayment> paymentsCellTable;
-	
-	@UiField
-	RadioButton radioButtonAll;
-	
-	@UiField
-	RadioButton radioButtonSelected;
-	
-	private Presenter presenter;
-
 	public static class PaymentCell extends AbstractCell<ExpensePayment> {
 
 		interface Template extends SafeHtmlTemplates {
-			@Template("<div>{0}</div><div>{1}</div>")
+			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
 			SafeHtml productCellTemplate(String name, String price);
 		}
+
+		private static Template template;
 
 		public PaymentCell() {
 			if (template == null)
 				template = GWT.create(Template.class);
 		}
-
-		private static Template template;
 
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
@@ -83,25 +75,88 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		}
 	}
 
-	public static class ConsumerCell extends AbstractCell<ExpenseConsumer> {
+	private static ExpenseViewImplUiBinder uiBinder = GWT
+			.create(ExpenseViewImplUiBinder.class);
 
-		interface Template extends SafeHtmlTemplates {
-			@Template("<div>{0}</div><div>{1}</div>")
-			SafeHtml productCellTemplate(String name, String price);
-		}
+	@UiField(provided = true)
+	CellTable<ExpenseConsumer> consumersCellTable;
 
-		public ConsumerCell() {
-			if (template == null)
-				template = GWT.create(Template.class);
-		}
+	@UiField
+	EditableLabelWidget expenseNameWidget;
 
-		private static Template template;
+	@UiField
+	HTMLPanel htmlPanel;
 
-		@Override
-		public void render(com.google.gwt.cell.client.Cell.Context context,
-				ExpenseConsumer value, SafeHtmlBuilder sb) {
-			sb.append(template.productCellTemplate(value.name, "123,45 PLN"));
-		}
+	@UiField(provided = true)
+	CellTable<ExpensePayment> paymentsCellTable;
+
+	private Presenter presenter;
+
+	@UiField
+	RadioButton radioButtonAll;
+
+	@UiField
+	RadioButton radioButtonSelected;
+
+	public ExpenseViewImpl() {
+		consumersCellTable = makeConsumersCellTable();
+		paymentsCellTable = makePaymentsCellTable();
+		initWidget(uiBinder.createAndBindUi(this));
+		radioButtonAll.setValue(true);
+	}
+
+	private CellTable<ExpenseConsumer> makeConsumersCellTable() {
+		BaseEntity.EntityKeyProvider<ExpenseConsumer> keyProvider = new BaseEntity.EntityKeyProvider<ExpenseConsumer>();
+
+		final CellTable<ExpenseConsumer> table = new CellTable<ExpenseConsumer>(
+				keyProvider);
+		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+
+		CheckboxCell isConsumerCell = new CheckboxCell();
+		Column<ExpenseConsumer, Boolean> isConsumerColumn = new Column<ExpenseConsumer, Boolean>(
+				isConsumerCell) {
+
+			@Override
+			public Boolean getValue(ExpenseConsumer object) {
+				return object.isConsumer();
+			}
+		};
+		table.addColumn(isConsumerColumn,
+				ApplicationConstants.constants.getConsumer());
+
+		TextColumn<ExpenseConsumer> userNameColumn = new TextColumn<ExpenseConsumer>() {
+
+			@Override
+			public String getValue(ExpenseConsumer object) {
+				return object.getName();
+			}
+		};
+		table.addColumn(userNameColumn,
+				ApplicationConstants.constants.userName());
+
+		CheckboxCell isProportionalCell = new CheckboxCell();
+		Column<ExpenseConsumer, Boolean> isProportionalColumn = new Column<ExpenseConsumer, Boolean>(
+				isProportionalCell) {
+
+			@Override
+			public Boolean getValue(ExpenseConsumer object) {
+				return object.isProportional();
+			}
+		};
+		table.addColumn(isProportionalColumn,
+				ApplicationConstants.constants.proportional());
+
+		final TextInputCell valueCell = new TextInputCell();
+		Column<ExpenseConsumer, String> valueColumn = new Column<ExpenseConsumer, String>(
+				valueCell) {
+
+			@Override
+			public String getValue(ExpenseConsumer object) {
+				return Double.toString(object.getValue());
+			}
+		};
+		table.addColumn(valueColumn, ApplicationConstants.constants.value());
+		return table;
 	}
 
 	private CellTable<ExpensePayment> makePaymentsCellTable() {
@@ -115,7 +170,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 			}
 		};
 
-		final CellTable<ExpensePayment> table = new CellTable<ExpenseView.ExpensePayment>(
+		final CellTable<ExpensePayment> table = new CellTable<ExpensePayment>(
 				keyProvider);
 		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		TextColumn<ExpensePayment> nameColumn = new TextColumn<ExpensePayment>() {
@@ -134,93 +189,35 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 				return Double.toString(object.value);
 			}
 		};
-		valueColumn
-				.setFieldUpdater(new FieldUpdater<ExpenseView.ExpensePayment, String>() {
+		valueColumn.setFieldUpdater(new FieldUpdater<ExpensePayment, String>() {
 
-					@Override
-					public void update(int index, ExpensePayment object,
-							String value) {
-						try {
-							double doubleValue = Double.parseDouble(value);
-							object.value = doubleValue;
-							table.redraw();
+			@Override
+			public void update(int index, ExpensePayment object, String value) {
+				try {
+					double doubleValue = Double.parseDouble(value);
+					object.value = doubleValue;
+					table.redraw();
 
-						} catch (NumberFormatException e) {
-							Window.alert("wrong double format");
-							valueCell.clearViewData(keyProvider.getKey(object));
-							table.redraw();
-							return;
-						}
-					}
-				});
+				} catch (NumberFormatException e) {
+					Window.alert("wrong double format");
+					valueCell.clearViewData(keyProvider.getKey(object));
+					table.redraw();
+					return;
+				}
+			}
+		});
 		table.addColumn(valueColumn, ApplicationConstants.constants.value());
 		return table;
 	}
 
-	private CellTable<ExpenseConsumer> makeConsumersCellTable() {
-		ProvidesKey<ExpenseConsumer> keyProvider = new ProvidesKey<ExpenseConsumer>() {
-
-			@Override
-			public Object getKey(ExpenseConsumer item) {
-				if (item == null)
-					return null;
-				return item.userId;
-			}
-		};
-		final CellTable<ExpenseConsumer> table = new CellTable<ExpenseConsumer>(
-				keyProvider);
-		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-
-		CheckboxCell isConsumerCell = new CheckboxCell();
-		Column<ExpenseConsumer, Boolean> isConsumerColumn = new Column<ExpenseView.ExpenseConsumer, Boolean>(
-				isConsumerCell) {
-
-			@Override
-			public Boolean getValue(ExpenseConsumer object) {
-				return object.isConsumer;
-			}
-		};
-		table.addColumn(isConsumerColumn,
-				ApplicationConstants.constants.getConsumer());
-
-		TextColumn<ExpenseConsumer> userNameColumn = new TextColumn<ExpenseView.ExpenseConsumer>() {
-
-			@Override
-			public String getValue(ExpenseConsumer object) {
-				return object.name;
-			}
-		};
-		table.addColumn(userNameColumn,
-				ApplicationConstants.constants.userName());
-
-		CheckboxCell isProportionalCell = new CheckboxCell();
-		Column<ExpenseConsumer, Boolean> isProportionalColumn = new Column<ExpenseView.ExpenseConsumer, Boolean>(
-				isProportionalCell) {
-
-			@Override
-			public Boolean getValue(ExpenseConsumer object) {
-				return object.isProportional;
-			}
-		};
-		table.addColumn(isProportionalColumn,
-				ApplicationConstants.constants.proportional());
-
-		final TextInputCell valueCell = new TextInputCell();
-		Column<ExpenseConsumer, String> valueColumn = new Column<ExpenseView.ExpenseConsumer, String>(
-				valueCell) {
-
-			@Override
-			public String getValue(ExpenseConsumer object) {
-				return Double.toString(object.value);
-			}
-		};
-		table.addColumn(valueColumn, ApplicationConstants.constants.value());
-		return table;
+	@UiHandler("addParticipantButton")
+	public void onAddParticipant(ClickEvent e) {
+		this.presenter.addParticipants();
 	}
 
-	@Override
-	public void setExpenseName(String name) {
-		expenseNameWidget.setText(name);
+	@UiHandler({ "radioButtonSelected", "radioButtonAll" })
+	void onChangeParticipants(ValueChangeEvent<Boolean> e) {
+		consumersCellTable.setVisible(radioButtonAll.getValue() ? false : true);
 	}
 
 	@UiHandler("expenseNameWidget")
@@ -228,25 +225,20 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		presenter.setExpenseName(e.getValue());
 	}
 
-	@UiHandler("addParticipantButton")
-	public void onAddParticipant(ClickEvent e) {
-		this.presenter.addParticipants();
-	}
-	
-	@UiHandler({"radioButtonSelected", "radioButtonAll"})
-	void onChangeParticipants(ValueChangeEvent<Boolean> e) {
-		consumersCellTable.setVisible(radioButtonAll.getValue() ? false : true);
-}
-	
 	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
+	public void setConsumers(IdMap<ExpenseConsumer> consumers) {
+		consumers.addDataDisplay(consumersCellTable);
+		consumersCellTable.redraw();
 	}
 
 	@Override
-	public void setPayments(List<ExpensePayment> payments) {
-		paymentsCellTable.setRowCount(payments.size(), true);
-		paymentsCellTable.setRowData(payments);
+	public void setExpenseName(String name) {
+		expenseNameWidget.setText(name);
+	}
+
+	@Override
+	public void setPayments(IdMap<ExpensePayment> payments) {
+		payments.addDataDisplay(paymentsCellTable);
 		paymentsCellTable.redraw();
 	}
 
@@ -257,10 +249,8 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	}
 
 	@Override
-	public void setConsumers(List<ExpenseConsumer> consumers) {
-		consumersCellTable.setRowCount(consumers.size(), true);
-		consumersCellTable.setRowData(consumers);
-		consumersCellTable.redraw();
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 
 }
