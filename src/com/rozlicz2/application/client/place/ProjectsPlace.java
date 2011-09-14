@@ -4,7 +4,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 
 public class ProjectsPlace extends Place {
-	public int id;
 	public static class Tokenizer implements PlaceTokenizer<ProjectsPlace> {
 
 		@Override
@@ -16,6 +15,6 @@ public class ProjectsPlace extends Place {
 		public String getToken(ProjectsPlace place) {
 			return null;
 		}
-		
+
 	}
 }

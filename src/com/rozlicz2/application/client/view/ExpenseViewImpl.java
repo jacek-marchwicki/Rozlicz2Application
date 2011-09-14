@@ -227,6 +227,8 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@Override
 	public void setConsumers(IdMap<ExpenseConsumer> consumers) {
+		if (consumers.getDataDisplays().contains(consumersCellTable))
+			consumers.removeDataDisplay(consumersCellTable);
 		consumers.addDataDisplay(consumersCellTable);
 		consumersCellTable.redraw();
 	}
@@ -238,6 +240,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@Override
 	public void setPayments(IdMap<ExpensePayment> payments) {
+		if (payments.getDataDisplays().contains(paymentsCellTable)) {
+			payments.removeDataDisplay(paymentsCellTable);
+		}
 		payments.addDataDisplay(paymentsCellTable);
 		paymentsCellTable.redraw();
 	}
