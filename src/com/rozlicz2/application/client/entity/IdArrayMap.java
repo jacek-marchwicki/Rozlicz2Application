@@ -16,6 +16,15 @@ public class IdArrayMap<T extends BaseEntity> extends AbstractDataProvider<T>
 	Map<Long, T> map = new HashMap<Long, T>();
 
 	@Override
+	public void addDataDisplay(final HasData<T> display) {
+		if (display == null) {
+			throw new IllegalArgumentException("display cannot be null");
+		}
+		display.setRowCount(0, true);
+		super.addDataDisplay(display);
+	}
+
+	@Override
 	public boolean containsKey(Long key) {
 		return map.containsKey(key);
 	}
@@ -37,9 +46,11 @@ public class IdArrayMap<T extends BaseEntity> extends AbstractDataProvider<T>
 		for (T entity : map.values()) {
 			entities.add(entity);
 		}
-		if (entities.size() != 0) {
-			updateRowData(display, 0, entities);
-		}
+		updateRowData(display, 0, entities);
+		int newRowCount = entities.size();
+		int actualRowCount = display.getRowCount();
+		if (newRowCount != actualRowCount)
+			display.setRowCount(newRowCount, true);
 	}
 
 	@Override
@@ -51,6 +62,11 @@ public class IdArrayMap<T extends BaseEntity> extends AbstractDataProvider<T>
 	@Override
 	public void remove(T o) {
 		map.remove(o);
+	}
+
+	@Override
+	public String toString() {
+		return map.values().toString();
 	}
 
 	@Override

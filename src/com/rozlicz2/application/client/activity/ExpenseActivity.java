@@ -79,6 +79,7 @@ public class ExpenseActivity extends AbstractActivity implements
 		}
 		projectE.setProperty(DAO.PROJECT_PARTICIPANTS, participants);
 		dao.put(projectE);
+		RootPanel.get().remove(participantView);
 	}
 
 	private void addObservers() {
@@ -273,14 +274,14 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		addObservers();
+
 		view = clientFactory.getExpenseView();
 		view.setPresenter(this);
 
 		refreshView();
 
 		panel.setWidget(view.asWidget());
-
-		addObservers();
 	}
 
 }

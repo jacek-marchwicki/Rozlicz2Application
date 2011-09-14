@@ -166,6 +166,7 @@ public class DAO {
 				consumers.put(consumer);
 			}
 			consumer.setName(participant.getName());
+			consumers.put(consumer);
 		}
 		for (Iterator<ExpenseConsumer> i = consumers.values().iterator(); i
 				.hasNext();) {
@@ -187,6 +188,7 @@ public class DAO {
 				payment.setValue(0);
 			}
 			payment.setName(participant.getName());
+			payments.put(payment);
 		}
 		for (Iterator<ExpensePayment> i = payments.values().iterator(); i
 				.hasNext();) {

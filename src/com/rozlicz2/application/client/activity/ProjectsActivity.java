@@ -90,14 +90,14 @@ public class ProjectsActivity extends AbstractActivity implements
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		addObservers();
+
 		projectsView = clientFactory.getProjectsView();
 		projectsView.setPresenter(this);
 
 		updateProjectsList();
 		updateProjectsCount();
 		panel.setWidget(projectsView.asWidget());
-
-		addObservers();
 	}
 
 	private void updateProjectsCount() {

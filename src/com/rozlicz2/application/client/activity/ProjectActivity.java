@@ -42,6 +42,10 @@ public class ProjectActivity extends AbstractActivity implements
 		dao = clientFactory.getDAO();
 	}
 
+	private void addObservers() {
+		dao.addObserver(DAO.PROJECT, projectObserver);
+	}
+
 	@Override
 	public void createExpense() {
 		SyncEntity expanseE = new SyncEntity(DAO.EXPANSE);
@@ -104,18 +108,14 @@ public class ProjectActivity extends AbstractActivity implements
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		addObservers();
+
 		projectView = clientFactory.getProjectView();
 		projectView.setPresenter(this);
 
 		projectChanged();
 
 		panel.setWidget(projectView.asWidget());
-
-		addObservers();
-	}
-
-	private void addObservers() {
-		dao.addObserver(DAO.PROJECT, projectObserver);
 	}
 
 }

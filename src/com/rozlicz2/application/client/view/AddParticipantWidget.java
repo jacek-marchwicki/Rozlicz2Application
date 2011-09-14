@@ -32,14 +32,55 @@ import com.google.gwt.user.client.ui.Widget;
 public class AddParticipantWidget extends Composite implements ClickHandler,
 		AddParticipantView {
 
-	private static AddParticipantWidgetUiBinder uiBinder = GWT
-			.create(AddParticipantWidgetUiBinder.class);
-
 	interface AddParticipantWidgetUiBinder extends
 			UiBinder<Widget, AddParticipantWidget> {
 	}
 
+	interface MyTemplate extends SafeHtmlTemplates {
+		@Template("{0}")
+		SafeHtml productUserTemplate(String name);
+	}
+
 	private static MyTemplate template;
+
+	private static AddParticipantWidgetUiBinder uiBinder = GWT
+			.create(AddParticipantWidgetUiBinder.class);
+	@UiField
+	CheckBox allowEditCheckBox;
+
+	@UiField
+	Button cancelButton;
+
+	private char enterCharCode = 0;
+
+	@UiField
+	FlowPanel flowPanel;
+
+	@UiField
+	FocusPanel focusPanel;
+
+	private int hackKeyUp = 0;
+
+	@UiField
+	CheckBox inviteCheckBox;
+
+	@UiField
+	PopupPanel mainPanel;
+
+	private MultiWordSuggestOracle oracle;
+
+	private Presenter presenter;
+
+	@UiField
+	Button saveButton;
+
+	@UiField
+	HTMLPanel shadowPanel;
+
+	@UiField
+	SuggestBox suggestBox;
+
+	HashMap<String, String> users = new HashMap<String, String>();
 
 	public AddParticipantWidget() {
 		if (template == null)
@@ -48,61 +89,12 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 		allowEditCheckBox.setEnabled(false);
 		inviteCheckBox.setEnabled(false);
 		suggestBox.getTextBox().addBlurHandler(new BlurHandler() {
-			
+
 			@Override
 			public void onBlur(BlurEvent event) {
 				onSuggestBoxBlur(event);
 			}
 		});
-	}
-	interface MyTemplate extends SafeHtmlTemplates {
-		@Template("{0}")
-		SafeHtml productUserTemplate(String name);
-	}
-
-	@UiField
-	HTMLPanel shadowPanel;
-
-	@UiField
-	PopupPanel mainPanel;
-
-	@UiField
-	SuggestBox suggestBox;
-
-	@UiField
-	FocusPanel focusPanel;
-
-	@UiField
-	FlowPanel flowPanel;
-
-	@UiField
-	CheckBox inviteCheckBox;
-
-	@UiField
-	CheckBox allowEditCheckBox;
-
-	@UiField
-	Button saveButton;
-
-	@UiField
-	Button cancelButton;
-
-	@UiFactory
-	public SuggestBox makeSuggestBox() {
-		oracle = new MultiWordSuggestOracle();
-		SuggestBox suggestBox = new SuggestBox(oracle);
-		return suggestBox;
-	}
-
-	HashMap<String, String> users = new HashMap<String, String>();
-
-	private MultiWordSuggestOracle oracle;
-
-	private Presenter presenter;
-
-	@UiHandler("focusPanel")
-	public void onFocusPanelClick(ClickEvent e) {
-		suggestBox.setFocus(true);
 	}
 
 	private void addUser(String user) {
@@ -115,33 +107,51 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 		widget.setText(name);
 		widget.addClickHandler(this);
 		int lastWidget = flowPanel.getWidgetCount();
-		flowPanel.insert(widget, lastWidget-1);
+		flowPanel.insert(widget, lastWidget - 1);
 		users.put(name, name);
 		setVisibility();
 	}
-	private int hackKeyUp = 0;
-	@UiHandler("suggestBox")
-	public void onKeyUp(KeyDownEvent e) {
-		if (++hackKeyUp % 2 == 0)
-			return;
-		int key = e.getNativeKeyCode();
-		if (key == KeyCodes.KEY_BACKSPACE && suggestBox.getValue().isEmpty()) {
-			removeLast();
-			e.preventDefault();
-			e.stopPropagation();
+
+	@Override
+	public Widget asWidget() {
+		for (int i = 0; i < flowPanel.getWidgetCount();) {
+			Widget widget = flowPanel.getWidget(i);
+			if (widget instanceof AddedParticipantWidget) {
+				flowPanel.remove(i);
+			} else {
+				++i;
+			}
 		}
+		users.clear();
+		return super.asWidget();
 	}
-	
-	public void onSuggestBoxBlur(BlurEvent e) {
-		String user = suggestBox.getValue();
-		addUser(user);
-		suggestBox.setValue("");
+
+	@Override
+	public void center() {
+		int positionLeft = shadowPanel.getOffsetWidth();
+		positionLeft -= mainPanel.getOffsetWidth();
+		positionLeft /= 2;
+		positionLeft += shadowPanel.getAbsoluteLeft();
+		int positionTop = shadowPanel.getOffsetHeight();
+		positionTop -= mainPanel.getOffsetHeight();
+		positionTop /= 2;
+		mainPanel.setPopupPosition(positionLeft, positionTop);
 	}
-	
-	private char enterCharCode = 0;
-	
+
+	public boolean isEmailOnList() {
+		Collection<String> usersCollection = users.values();
+		for (String user : usersCollection) {
+			boolean isEmail = user
+					.matches("^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}$");
+			if (isEmail)
+				return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Check when key is enter char code, eliminating twice char codes for enter
+	 * 
 	 * @param key
 	 * @return
 	 */
@@ -157,12 +167,48 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 		return false;
 	}
 
+	@UiFactory
+	public SuggestBox makeSuggestBox() {
+		oracle = new MultiWordSuggestOracle();
+		SuggestBox suggestBox = new SuggestBox(oracle);
+		return suggestBox;
+	}
+
+	@Override
+	protected void onAttach() {
+		setVisibility();
+		suggestBox.setFocus(true);
+		super.onAttach();
+	}
+
+	@UiHandler("cancelButton")
+	public void onCancel(ClickEvent e) {
+		presenter.cancel();
+	}
+
+	@Override
+	public void onClick(ClickEvent event) {
+		Object source = event.getSource();
+		if (source instanceof AddedParticipantWidget) {
+			AddedParticipantWidget addedWidget = (AddedParticipantWidget) source;
+			String userName = addedWidget.getText();
+			users.remove(userName);
+			flowPanel.remove(addedWidget);
+			setVisibility();
+		}
+	}
+
+	@UiHandler("focusPanel")
+	public void onFocusPanelClick(ClickEvent e) {
+		suggestBox.setFocus(true);
+	}
+
 	@UiHandler("suggestBox")
 	public void onKeyPress(KeyPressEvent e) {
 		if (++hackKeyUp % 2 == 0)
 			return;
 		char key = e.getCharCode();
-		if ((! isEnterCharCode(key)) && key != ',')
+		if ((!isEnterCharCode(key)) && key != ',')
 			return;
 		String user = suggestBox.getValue();
 		addUser(user);
@@ -176,32 +222,53 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 		submitUsers();
 	}
 
+	@UiHandler("suggestBox")
+	public void onKeyUp(KeyDownEvent e) {
+		if (++hackKeyUp % 2 == 0)
+			return;
+		int key = e.getNativeKeyCode();
+		if (key == KeyCodes.KEY_BACKSPACE && suggestBox.getValue().isEmpty()) {
+			removeLast();
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	}
+
+	@UiHandler("saveButton")
+	public void onSave(ClickEvent e) {
+		submitUsers();
+	}
+
+	public void onSuggestBoxBlur(BlurEvent e) {
+		String user = suggestBox.getValue();
+		addUser(user);
+		suggestBox.setValue("");
+	}
+
 	private void removeLast() {
 		int widgetCount = flowPanel.getWidgetCount();
 		if (widgetCount < 2)
 			return;
 		int widgetPos = widgetCount - 2;
 		Widget widget = flowPanel.getWidget(widgetPos);
-		assert(widget instanceof AddedParticipantWidget);
+		assert (widget instanceof AddedParticipantWidget);
 		AddedParticipantWidget participantWidget = (AddedParticipantWidget) widget;
 		String text = participantWidget.getText();
 		users.remove(text);
 		flowPanel.remove(widget);
 	}
 
-	private void submitUsers() {
-		presenter.addedUsers(users.values());
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 
-	public boolean isEmailOnList() {
-		Collection<String> usersCollection = users.values();
-		for (String user : usersCollection) {
-			boolean isEmail = user
-					.matches("^[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}$");
-			if (isEmail)
-				return true;
+	@Override
+	public void setUsersList(List<String> users) {
+		oracle.clear();
+		for (String user : users) {
+			oracle.add(user);
 		}
-		return false;
 	}
 
 	public void setVisibility() {
@@ -219,75 +286,8 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 		inviteCheckBox.setEnabled(true);
 	}
 
-	@Override
-	public void onClick(ClickEvent event) {
-		Object source = event.getSource();
-		if (source instanceof AddedParticipantWidget) {
-			AddedParticipantWidget addedWidget = (AddedParticipantWidget) source;
-			String userName = addedWidget.getText();
-			users.remove(userName);
-			flowPanel.remove(addedWidget);
-			setVisibility();
-		}
-	}
-
-	@UiHandler("saveButton")
-	public void onSave(ClickEvent e) {
-		submitUsers();
-	}
-
-	@UiHandler("cancelButton")
-	public void onCancel(ClickEvent e) {
-		presenter.cancel();
-	}
-
-	@Override
-	public void setUsersList(List<String> users) {
-		oracle.clear();
-		oracle.add("marek");
-		oracle.add("jacek");
-		oracle.add("janek");
-		for (String user : users) {
-			oracle.add(user);
-		}
-	}
-
-	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
-	}
-
-	@Override
-	public void center() {
-		int positionLeft = shadowPanel.getOffsetWidth();
-		positionLeft -= mainPanel.getOffsetWidth();
-		positionLeft /= 2;
-		positionLeft += shadowPanel.getAbsoluteLeft();
-		int positionTop = shadowPanel.getOffsetHeight();
-		positionTop -= mainPanel.getOffsetHeight();
-		positionTop /= 2;
-		mainPanel.setPopupPosition(positionLeft, positionTop);
-	}
-	
-	@Override
-	protected void onAttach() {
-		setVisibility();
-		suggestBox.setFocus(true);
-		super.onAttach();
-	}
-
-	@Override
-	public Widget asWidget() {
-		for (int i = 0; i < flowPanel.getWidgetCount();) {
-			Widget widget = flowPanel.getWidget(i);
-			if (widget instanceof AddedParticipantWidget) {
-				flowPanel.remove(i);
-			} else {
-				++i;
-			}
-		}
-		users.clear();
-		return super.asWidget();
+	private void submitUsers() {
+		presenter.addedUsers(users.values());
 	}
 
 }
