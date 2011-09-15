@@ -2,6 +2,7 @@ package com.rozlicz2.application.client.activity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -18,6 +19,7 @@ import com.rozlicz2.application.client.dao.SyncObserver;
 import com.rozlicz2.application.client.dao.SyncPreparedQuery;
 import com.rozlicz2.application.client.dao.SyncQuery;
 import com.rozlicz2.application.client.entity.ExpenseConsumerEntity;
+import com.rozlicz2.application.client.entity.ExpenseEntity;
 import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 import com.rozlicz2.application.client.entity.ParticipantEntity;
@@ -32,7 +34,7 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	private final ClientFactory clientFactory;
 	private final SyncDatastoreService dao;
-	private final SyncKey expanseK;
+	private final SyncKey expenseK;
 	private final SyncObserver expenseObserver = new SyncObserver() {
 
 		@Override
@@ -40,21 +42,42 @@ public class ExpenseActivity extends AbstractActivity implements
 			refreshView();
 		}
 	};
-	private AddParticipantView participantView;
 
+	private AddParticipantView participantView;
 	private ExpenseView view;
 
 	public ExpenseActivity(ExpensePlace place, ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
 
 		long expenseId = place.getExpenseId();
-		expanseK = new SyncKey(DAOManager.EXPANSE, expenseId);
+		expenseK = new SyncKey(DAOManager.EXPANSE, expenseId);
 
 		dao = clientFactory.getDAO();
 	}
 
 	@Override
 	public void addedUsers(Collection<String> users) {
+		addUsersToProject(users);
+
+		updateProjectEntitiesParticipants();
+
+		RootPanel.get().remove(participantView);
+	}
+
+	private void addObservers() {
+		dao.addObserver(DAOManager.EXPANSE, expenseObserver);
+	}
+
+	@Override
+	public void addParticipants() {
+		participantView = clientFactory.getAddParticipantView();
+		participantView.setPresenter(this);
+		participantView.setUsersList(getUsers());
+		RootPanel.get().add(participantView);
+		participantView.center();
+	}
+
+	private void addUsersToProject(Collection<String> users) {
 		SyncEntity projectE = getProjectEntity();
 		@SuppressWarnings("unchecked")
 		IdMap<ParticipantEntity> participants = (IdMap<ParticipantEntity>) projectE
@@ -62,7 +85,8 @@ public class ExpenseActivity extends AbstractActivity implements
 		assert (participants != null);
 		for (String user : users) {
 			SyncQuery q = new SyncQuery(DAOManager.USER);
-			q.addFilter(DAOManager.USER_NAME, SyncQuery.FilterOperator.EQUAL, user);
+			q.addFilter(DAOManager.USER_NAME, SyncQuery.FilterOperator.EQUAL,
+					user);
 			SyncPreparedQuery pq = dao.prepare(q);
 			SyncEntity userE = pq.asSingleEntity();
 			if (userE == null) {
@@ -80,20 +104,6 @@ public class ExpenseActivity extends AbstractActivity implements
 		}
 		projectE.setProperty(DAOManager.PROJECT_PARTICIPANTS, participants);
 		dao.put(projectE);
-		RootPanel.get().remove(participantView);
-	}
-
-	private void addObservers() {
-		dao.addObserver(DAOManager.EXPANSE, expenseObserver);
-	}
-
-	@Override
-	public void addParticipants() {
-		participantView = clientFactory.getAddParticipantView();
-		participantView.setPresenter(this);
-		participantView.setUsersList(getUsers());
-		RootPanel.get().add(participantView);
-		participantView.center();
 	}
 
 	@Override
@@ -103,26 +113,51 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Override
 	public void consumerSet(Long userId, boolean isConsumer) {
-		// TODO Auto-generated method stub
-
+		SyncEntity expenseE = dao.get(expenseK);
+		@SuppressWarnings("unchecked")
+		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) expenseE
+				.getProperty(DAOManager.EXPANSE_CONSUMERS);
+		ExpenseConsumerEntity expenseConsumerEntity = consumers.get(userId);
+		expenseConsumerEntity.setConsumer(isConsumer);
+		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
+				expenseConsumerEntity);
+		dao.put(expenseE);
+		updateThisEntityValues();
 	}
 
 	@Override
 	public void consumerSetProportional(Long userId, boolean isProportional) {
-		// TODO Auto-generated method stub
-
+		SyncEntity expenseE = dao.get(expenseK);
+		@SuppressWarnings("unchecked")
+		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) expenseE
+				.getProperty(DAOManager.EXPANSE_CONSUMERS);
+		ExpenseConsumerEntity expenseConsumerEntity = consumers.get(userId);
+		expenseConsumerEntity.setProportional(isProportional);
+		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
+				expenseConsumerEntity);
+		dao.put(expenseE);
+		updateThisEntityValues();
 	}
 
 	@Override
 	public void consumerSetValue(Long userId, double value) {
-		// TODO Auto-generated method stub
-
+		SyncEntity expenseE = dao.get(expenseK);
+		@SuppressWarnings("unchecked")
+		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) expenseE
+				.getProperty(DAOManager.EXPANSE_CONSUMERS);
+		ExpenseConsumerEntity expenseConsumerEntity = consumers.get(userId);
+		expenseConsumerEntity.setValue(value);
+		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
+				expenseConsumerEntity);
+		dao.put(expenseE);
+		updateThisEntityValues();
 	}
 
 	private SyncEntity getProjectEntity() {
-		SyncEntity expanseE = dao.get(expanseK);
+		SyncEntity expanseE = dao.get(expenseK);
 		assert (expanseE != null);
-		Long projectId = (Long) expanseE.getProperty(DAOManager.EXPANSE_PROJECTID);
+		Long projectId = (Long) expanseE
+				.getProperty(DAOManager.EXPANSE_PROJECTID);
 		assert (projectId != null);
 		SyncKey projectK = new SyncKey(DAOManager.PROJECT, projectId);
 		return dao.get(projectK);
@@ -170,7 +205,7 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	private void refreshView() {
-		SyncEntity syncEntity = dao.get(expanseK);
+		SyncEntity syncEntity = dao.get(expenseK);
 		if (syncEntity == null) {
 			notFoundPlace();
 			return;
@@ -202,7 +237,7 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Override
 	public void setExpenseName(String value) {
-		SyncEntity syncEntity = dao.get(expanseK);
+		SyncEntity syncEntity = dao.get(expenseK);
 		syncEntity.setProperty(DAOManager.EXPANSE_NAME, value);
 		dao.put(syncEntity);
 	}
@@ -217,6 +252,134 @@ public class ExpenseActivity extends AbstractActivity implements
 		refreshView();
 
 		panel.setWidget(view.asWidget());
+	}
+
+	protected void updateConsumers(final IdMap<ParticipantEntity> participants,
+			final IdMap<ExpenseConsumerEntity> consumers) {
+		for (ParticipantEntity participant : participants.values()) {
+			ExpenseConsumerEntity consumer = consumers.get(participant.getId());
+			if (consumer == null) {
+				consumer = new ExpenseConsumerEntity();
+				consumer.setProportional(true);
+				consumer.setConsumer(false);
+				consumer.setId(participant.getId());
+				consumer.setValue(0);
+				consumers.put(consumer);
+			}
+			consumer.setName(participant.getName());
+			consumers.put(consumer);
+		}
+		for (Iterator<ExpenseConsumerEntity> i = consumers.values().iterator(); i
+				.hasNext();) {
+			ExpenseConsumerEntity consumer = i.next();
+			long consumerId = consumer.getId();
+			if (!participants.containsKey(consumerId))
+				i.remove();
+		}
+
+	}
+
+	private double updateEntityValues(IdMap<ExpensePaymentEntity> payments,
+			IdMap<ExpenseConsumerEntity> consumers) {
+		double sum = 0;
+		for (ExpensePaymentEntity payment : payments.values()) {
+			sum += payment.getValue();
+		}
+		int proportionals = 0;
+		double value = sum;
+		for (ExpenseConsumerEntity consumer : consumers.values()) {
+			if (!consumer.isConsumer())
+				continue;
+			if (consumer.isProportional()) {
+				proportionals++;
+				continue;
+			}
+			value -= consumer.getValue();
+		}
+		double proportionalValue = value / proportionals;
+		for (ExpenseConsumerEntity consumer : consumers.values()) {
+			if (!consumer.isConsumer())
+				continue;
+			if (!consumer.isProportional())
+				continue;
+			consumer.setValue(proportionalValue);
+		}
+		return sum;
+	}
+
+	protected void updatePayments(IdMap<ParticipantEntity> participants,
+			IdMap<ExpensePaymentEntity> payments) {
+		for (ParticipantEntity participant : participants.values()) {
+			ExpensePaymentEntity payment = payments.get(participant.getId());
+			if (payment == null) {
+				payment = new ExpensePaymentEntity();
+				payment.setId(participant.getId());
+				payment.setValue(0);
+			}
+			payment.setName(participant.getName());
+			payments.put(payment);
+		}
+		for (Iterator<ExpensePaymentEntity> i = payments.values().iterator(); i
+				.hasNext();) {
+			ExpensePaymentEntity payment = i.next();
+			long consumerId = payment.getId();
+			if (!participants.containsKey(consumerId))
+				i.remove();
+		}
+	}
+
+	private void updateProjectEntitiesParticipants() {
+		SyncEntity projectEntity = getProjectEntity();
+		@SuppressWarnings("unchecked")
+		IdMap<ParticipantEntity> participants = (IdMap<ParticipantEntity>) projectEntity
+				.getProperty(DAOManager.PROJECT_PARTICIPANTS);
+		@SuppressWarnings("unchecked")
+		IdMap<ExpenseEntity> expenses = (IdMap<ExpenseEntity>) projectEntity
+				.getProperty(DAOManager.PROJECT_EXPENSES);
+		assert (expenses != null);
+		for (Long expenseId : expenses.keySet()) {
+			SyncKey expenseK = new SyncKey(DAOManager.EXPANSE, expenseId);
+			SyncEntity expenseE = dao.get(expenseK);
+			assert (expenseE != null);
+			@SuppressWarnings("unchecked")
+			IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) expenseE
+					.getProperty(DAOManager.EXPANSE_CONSUMERS);
+			assert (consumers != null);
+			@SuppressWarnings("unchecked")
+			IdMap<ExpensePaymentEntity> payments = (IdMap<ExpensePaymentEntity>) expenseE
+					.getProperty(DAOManager.EXPANSE_PAYMENTS);
+			assert (payments != null);
+
+			updateConsumers(participants, consumers);
+			updatePayments(participants, payments);
+			double sum = updateEntityValues(payments, consumers);
+
+			expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS, consumers);
+			expenseE.setProperty(DAOManager.EXPANSE_PAYMENTS, payments);
+			expenseE.setProperty(DAOManager.EXPANSE_SUM, new Double(sum));
+
+			dao.put(expenseE);
+		}
+	}
+
+	private void updateThisEntityValues() {
+		SyncEntity expenseE = dao.get(expenseK);
+
+		@SuppressWarnings("unchecked")
+		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) expenseE
+				.getProperty(DAOManager.EXPANSE_CONSUMERS);
+		assert (consumers != null);
+		@SuppressWarnings("unchecked")
+		IdMap<ExpensePaymentEntity> payments = (IdMap<ExpensePaymentEntity>) expenseE
+				.getProperty(DAOManager.EXPANSE_PAYMENTS);
+		assert (payments != null);
+
+		double sum = updateEntityValues(payments, consumers);
+
+		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS, consumers);
+		expenseE.setProperty(DAOManager.EXPANSE_PAYMENTS, payments);
+		expenseE.setProperty(DAOManager.EXPANSE_SUM, new Double(sum));
+		dao.put(expenseE);
 	}
 
 }

@@ -16,6 +16,7 @@
 		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
 		<c:CellTable ui:field="paymentsCellTable"></c:CellTable>
 		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>
+		<g:Label ui:field="sumLabel" text="" />
 		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
 		<g:VerticalPanel>
 			<g:Label styleName="{res.css.labelClass}" text="{i18n.expenseParticipants}"></g:Label>

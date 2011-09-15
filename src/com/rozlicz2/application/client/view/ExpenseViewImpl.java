@@ -7,6 +7,7 @@ import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -20,6 +21,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.rozlicz2.application.client.entity.BaseEntity;
@@ -30,7 +32,8 @@ import com.rozlicz2.application.client.resources.ApplicationConstants;
 
 public class ExpenseViewImpl extends Composite implements ExpenseView {
 
-	public static class ConsumerCell extends AbstractCell<ExpenseConsumerEntity> {
+	public static class ConsumerCell extends
+			AbstractCell<ExpenseConsumerEntity> {
 
 		interface Template extends SafeHtmlTemplates {
 			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
@@ -99,6 +102,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@UiField
 	RadioButton radioButtonSelected;
+
+	@UiField
+	Label sumLabel;
 
 	public ExpenseViewImpl() {
 		consumersCellTable = makeConsumersCellTable();
@@ -183,23 +189,25 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 				return Double.toString(object.getValue());
 			}
 		};
-		valueColumn.setFieldUpdater(new FieldUpdater<ExpensePaymentEntity, String>() {
+		valueColumn
+				.setFieldUpdater(new FieldUpdater<ExpensePaymentEntity, String>() {
 
-			@Override
-			public void update(int index, ExpensePaymentEntity object, String value) {
-				try {
-					double doubleValue = Double.parseDouble(value);
-					object.setValue(doubleValue);
-					table.redraw();
+					@Override
+					public void update(int index, ExpensePaymentEntity object,
+							String value) {
+						try {
+							double doubleValue = Double.parseDouble(value);
+							object.setValue(doubleValue);
+							table.redraw();
 
-				} catch (NumberFormatException e) {
-					Window.alert("wrong double format");
-					valueCell.clearViewData(keyProvider.getKey(object));
-					table.redraw();
-					return;
-				}
-			}
-		});
+						} catch (NumberFormatException e) {
+							Window.alert("wrong double format");
+							valueCell.clearViewData(keyProvider.getKey(object));
+							table.redraw();
+							return;
+						}
+					}
+				});
 		table.addColumn(valueColumn, ApplicationConstants.constants.value());
 		return table;
 	}
@@ -243,8 +251,8 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@Override
 	public void setPaymentsSum(double value) {
-		// TODO Auto-generated method stub
-
+		String format = NumberFormat.getCurrencyFormat().format(value);
+		sumLabel.setText(format);
 	}
 
 	@Override
