@@ -8,6 +8,7 @@ import com.rozlicz2.application.client.view.ExpenseView;
 import com.rozlicz2.application.client.view.NotFoundView;
 import com.rozlicz2.application.client.view.ProjectView;
 import com.rozlicz2.application.client.view.ProjectsView;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 
 public interface ClientFactory {
 	AddParticipantView getAddParticipantView();
@@ -25,4 +26,6 @@ public interface ClientFactory {
 	ProjectsView getProjectsView();
 
 	ProjectView getProjectView();
+
+	ListwidgetRequestFactory getRf();
 }

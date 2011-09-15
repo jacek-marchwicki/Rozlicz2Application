@@ -1,8 +1,14 @@
 package com.rozlicz2.application.client.activity;
 
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.rozlicz2.application.client.ClientFactory;
 import com.rozlicz2.application.client.DAOManager;
 import com.rozlicz2.application.client.dao.SyncDatastoreService;
@@ -18,6 +24,9 @@ import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectsView;
+import com.rozlicz2.application.shared.proxy.ProjectListProxy;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ItemListRequestContext;
 
 public class ProjectsActivity extends AbstractActivity implements
 		ProjectsView.Presenter {
@@ -39,16 +48,18 @@ public class ProjectsActivity extends AbstractActivity implements
 		}
 	};;
 	private ProjectsView projectsView;
+	private final ListwidgetRequestFactory rf;
 
 	public ProjectsActivity(ProjectsPlace place, ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
 		dao = clientFactory.getDAO();
+		rf = clientFactory.getRf();
 	}
 
 	private void addObservers() {
 		dao.addObserver(DAOManager.PROJECTSHORT, projectShortObserver);
-		dao.addPropertyObserver(DAOManager.GLOBAL, DAOManager.GLOBAL_PROJECTCOUNT,
-				projectsCountObserver);
+		dao.addPropertyObserver(DAOManager.GLOBAL,
+				DAOManager.GLOBAL_PROJECTCOUNT, projectsCountObserver);
 	}
 
 	@Override
@@ -85,8 +96,8 @@ public class ProjectsActivity extends AbstractActivity implements
 
 	private void removeObservers() {
 		dao.removeObserver(DAOManager.PROJECTSHORT, projectShortObserver);
-		dao.removePropertyObserver(DAOManager.GLOBAL, DAOManager.GLOBAL_PROJECTCOUNT,
-				projectsCountObserver);
+		dao.removePropertyObserver(DAOManager.GLOBAL,
+				DAOManager.GLOBAL_PROJECTCOUNT, projectsCountObserver);
 	}
 
 	@Override
@@ -98,6 +109,22 @@ public class ProjectsActivity extends AbstractActivity implements
 
 		updateProjectsList();
 		updateProjectsCount();
+
+		ItemListRequestContext projectListRequest = rf.projectListRequest();
+		Request<List<ProjectListProxy>> listAll = projectListRequest.listAll();
+		listAll.fire(new Receiver<List<ProjectListProxy>>() {
+
+			@Override
+			public void onFailure(ServerFailure error) {
+				Window.alert("error: " + error);
+				super.onFailure(error);
+			}
+
+			@Override
+			public void onSuccess(List<ProjectListProxy> response) {
+				Window.alert("response: " + response);
+			}
+		});
 		panel.setWidget(projectsView.asWidget());
 	}
 

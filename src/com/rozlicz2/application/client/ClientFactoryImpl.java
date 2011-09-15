@@ -1,5 +1,6 @@
 package com.rozlicz2.application.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
@@ -15,6 +16,7 @@ import com.rozlicz2.application.client.view.ProjectView;
 import com.rozlicz2.application.client.view.ProjectViewImpl;
 import com.rozlicz2.application.client.view.ProjectsView;
 import com.rozlicz2.application.client.view.ProjectsViewImpl;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 
 public class ClientFactoryImpl implements ClientFactory {
 	private final SyncDatastoreService dao = SyncDatastoreServiceFactory
@@ -27,6 +29,8 @@ public class ClientFactoryImpl implements ClientFactory {
 			eventBus);
 	private final ProjectsView projectsView = new ProjectsViewImpl();
 	private final ProjectView projectView = new ProjectViewImpl();
+	private final ListwidgetRequestFactory rf = GWT
+			.create(ListwidgetRequestFactory.class);
 
 	@Override
 	public AddParticipantView getAddParticipantView() {
@@ -66,6 +70,11 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public ProjectView getProjectView() {
 		return projectView;
+	}
+
+	@Override
+	public ListwidgetRequestFactory getRf() {
+		return rf;
 	}
 
 }

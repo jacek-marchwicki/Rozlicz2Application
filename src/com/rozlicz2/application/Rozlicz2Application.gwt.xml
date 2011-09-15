@@ -11,6 +11,9 @@
 	<inherits name="com.google.gwt.i18n.I18N" />
 	<inherits name="com.google.gwt.activity.Activity" />
 	<inherits name="com.google.gwt.place.Place" />
+	<inherits name="com.google.gwt.json.JSON" />
+	
+  <inherits name='com.google.web.bindery.requestfactory.RequestFactory' />
 
 	<!-- Dynamically loading locales -->
 	<!-- <inherits name="com.google.gwt.i18n.client.impl.CldrImpl" /> -->

@@ -9,5 +9,8 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-javadoc.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
