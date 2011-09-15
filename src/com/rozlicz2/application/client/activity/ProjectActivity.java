@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.rozlicz2.application.client.ClientFactory;
-import com.rozlicz2.application.client.DAO;
+import com.rozlicz2.application.client.DAOManager;
 import com.rozlicz2.application.client.dao.SyncDatastoreService;
 import com.rozlicz2.application.client.dao.SyncEntity;
 import com.rozlicz2.application.client.dao.SyncKey;
@@ -37,26 +37,26 @@ public class ProjectActivity extends AbstractActivity implements
 
 	public ProjectActivity(ProjectPlace place, ClientFactory clientFactory) {
 		long id = place.getProjectId();
-		projectKey = new SyncKey(DAO.PROJECT, id);
+		projectKey = new SyncKey(DAOManager.PROJECT, id);
 		this.clientFactory = clientFactory;
 		dao = clientFactory.getDAO();
 	}
 
 	private void addObservers() {
-		dao.addObserver(DAO.PROJECT, projectObserver);
+		dao.addObserver(DAOManager.PROJECT, projectObserver);
 	}
 
 	@Override
 	public void createExpense() {
-		SyncEntity expanseE = new SyncEntity(DAO.EXPANSE);
-		expanseE.setProperty(DAO.EXPANSE_NAME,
+		SyncEntity expanseE = new SyncEntity(DAOManager.EXPANSE);
+		expanseE.setProperty(DAOManager.EXPANSE_NAME,
 				ApplicationConstants.constants.newExpense());
-		expanseE.setProperty(DAO.EXPANSE_PROJECTID, projectKey.getId());
-		expanseE.setProperty(DAO.EXPANSE_PAYMENTS,
+		expanseE.setProperty(DAOManager.EXPANSE_PROJECTID, projectKey.getId());
+		expanseE.setProperty(DAOManager.EXPANSE_PAYMENTS,
 				new IdArrayMap<ExpensePaymentEntity>());
-		expanseE.setProperty(DAO.EXPANSE_CONSUMERS,
+		expanseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
 				new IdArrayMap<ExpenseConsumerEntity>());
-		expanseE.setProperty(DAO.EXPANSE_SUM, new Double(0));
+		expanseE.setProperty(DAOManager.EXPANSE_SUM, new Double(0));
 		dao.put(expanseE);
 
 		ExpensePlace place = new ExpensePlace(expanseE.getKey().getId());
@@ -88,21 +88,21 @@ public class ProjectActivity extends AbstractActivity implements
 		}
 		@SuppressWarnings("unchecked")
 		IdMap<ExpenseEntity> expenses = (IdMap<ExpenseEntity>) project
-				.getProperty(DAO.PROJECT_EXPENSES);
+				.getProperty(DAOManager.PROJECT_EXPENSES);
 		assert (expenses != null);
-		String name = (String) project.getProperty(DAO.PROJECT_NAME);
+		String name = (String) project.getProperty(DAOManager.PROJECT_NAME);
 		projectView.setExpenses(expenses);
 		projectView.setProjectName(name);
 	}
 
 	private void removeObservers() {
-		dao.removeObserver(DAO.PROJECT, projectObserver);
+		dao.removeObserver(DAOManager.PROJECT, projectObserver);
 	}
 
 	@Override
 	public void setProjectName(String projectName) {
 		SyncEntity project = dao.get(projectKey);
-		project.setProperty(DAO.PROJECT_NAME, projectName);
+		project.setProperty(DAOManager.PROJECT_NAME, projectName);
 		dao.put(project);
 	}
 

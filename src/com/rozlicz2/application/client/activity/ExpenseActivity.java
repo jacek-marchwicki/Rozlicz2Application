@@ -10,7 +10,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.rozlicz2.application.client.ClientFactory;
-import com.rozlicz2.application.client.DAO;
+import com.rozlicz2.application.client.DAOManager;
 import com.rozlicz2.application.client.dao.SyncDatastoreService;
 import com.rozlicz2.application.client.dao.SyncEntity;
 import com.rozlicz2.application.client.dao.SyncKey;
@@ -48,7 +48,7 @@ public class ExpenseActivity extends AbstractActivity implements
 		this.clientFactory = clientFactory;
 
 		long expenseId = place.getExpenseId();
-		expanseK = new SyncKey(DAO.EXPANSE, expenseId);
+		expanseK = new SyncKey(DAOManager.EXPANSE, expenseId);
 
 		dao = clientFactory.getDAO();
 	}
@@ -58,33 +58,33 @@ public class ExpenseActivity extends AbstractActivity implements
 		SyncEntity projectE = getProjectEntity();
 		@SuppressWarnings("unchecked")
 		IdMap<ParticipantEntity> participants = (IdMap<ParticipantEntity>) projectE
-				.getProperty(DAO.PROJECT_PARTICIPANTS);
+				.getProperty(DAOManager.PROJECT_PARTICIPANTS);
 		assert (participants != null);
 		for (String user : users) {
-			SyncQuery q = new SyncQuery(DAO.USER);
-			q.addFilter(DAO.USER_NAME, SyncQuery.FilterOperator.EQUAL, user);
+			SyncQuery q = new SyncQuery(DAOManager.USER);
+			q.addFilter(DAOManager.USER_NAME, SyncQuery.FilterOperator.EQUAL, user);
 			SyncPreparedQuery pq = dao.prepare(q);
 			SyncEntity userE = pq.asSingleEntity();
 			if (userE == null) {
-				userE = new SyncEntity(DAO.USER);
-				userE.setProperty(DAO.USER_NAME, user);
+				userE = new SyncEntity(DAOManager.USER);
+				userE.setProperty(DAOManager.USER_NAME, user);
 				dao.put(userE);
 			}
 			long userId = userE.getKey().getId();
-			String userName = (String) userE.getProperty(DAO.USER_NAME);
+			String userName = (String) userE.getProperty(DAOManager.USER_NAME);
 			assert (userName != null);
 			ParticipantEntity participant = new ParticipantEntity();
 			participant.setId(userId);
 			participant.setName(userName);
 			participants.put(participant);
 		}
-		projectE.setProperty(DAO.PROJECT_PARTICIPANTS, participants);
+		projectE.setProperty(DAOManager.PROJECT_PARTICIPANTS, participants);
 		dao.put(projectE);
 		RootPanel.get().remove(participantView);
 	}
 
 	private void addObservers() {
-		dao.addObserver(DAO.EXPANSE, expenseObserver);
+		dao.addObserver(DAOManager.EXPANSE, expenseObserver);
 	}
 
 	@Override
@@ -122,9 +122,9 @@ public class ExpenseActivity extends AbstractActivity implements
 	private SyncEntity getProjectEntity() {
 		SyncEntity expanseE = dao.get(expanseK);
 		assert (expanseE != null);
-		Long projectId = (Long) expanseE.getProperty(DAO.EXPANSE_PROJECTID);
+		Long projectId = (Long) expanseE.getProperty(DAOManager.EXPANSE_PROJECTID);
 		assert (projectId != null);
-		SyncKey projectK = new SyncKey(DAO.PROJECT, projectId);
+		SyncKey projectK = new SyncKey(DAOManager.PROJECT, projectId);
 		return dao.get(projectK);
 	}
 
@@ -132,16 +132,16 @@ public class ExpenseActivity extends AbstractActivity implements
 		SyncEntity projectE = getProjectEntity();
 		@SuppressWarnings("unchecked")
 		IdMap<ParticipantEntity> participants = (IdMap<ParticipantEntity>) projectE
-				.getProperty(DAO.PROJECT_PARTICIPANTS);
+				.getProperty(DAOManager.PROJECT_PARTICIPANTS);
 
 		ArrayList<String> users = new ArrayList<String>();
-		SyncQuery q = new SyncQuery(DAO.USER);
+		SyncQuery q = new SyncQuery(DAOManager.USER);
 		SyncPreparedQuery pq = dao.prepare(q);
 		for (SyncEntity user : pq.asIterable()) {
 			long userId = user.getKey().getId();
 			if (participants.containsKey(userId))
 				continue;
-			String userName = (String) user.getProperty(DAO.USER_NAME);
+			String userName = (String) user.getProperty(DAOManager.USER_NAME);
 			assert (userName != null);
 			users.add(userName);
 		}
@@ -177,17 +177,17 @@ public class ExpenseActivity extends AbstractActivity implements
 		}
 		@SuppressWarnings("unchecked")
 		IdMap<ExpensePaymentEntity> payments = (IdMap<ExpensePaymentEntity>) syncEntity
-				.getProperty(DAO.EXPANSE_PAYMENTS);
+				.getProperty(DAOManager.EXPANSE_PAYMENTS);
 		assert (payments != null);
 		@SuppressWarnings("unchecked")
 		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) syncEntity
-				.getProperty(DAO.EXPANSE_CONSUMERS);
+				.getProperty(DAOManager.EXPANSE_CONSUMERS);
 		assert (consumers != null);
 
-		Double sum = (Double) syncEntity.getProperty(DAO.EXPANSE_SUM);
+		Double sum = (Double) syncEntity.getProperty(DAOManager.EXPANSE_SUM);
 		assert (sum != null);
 
-		String name = (String) syncEntity.getProperty(DAO.EXPANSE_NAME);
+		String name = (String) syncEntity.getProperty(DAOManager.EXPANSE_NAME);
 		assert (name != null);
 
 		view.setExpenseName(name);
@@ -197,13 +197,13 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	private void removeObservers() {
-		dao.removeObserver(DAO.EXPANSE, expenseObserver);
+		dao.removeObserver(DAOManager.EXPANSE, expenseObserver);
 	}
 
 	@Override
 	public void setExpenseName(String value) {
 		SyncEntity syncEntity = dao.get(expanseK);
-		syncEntity.setProperty(DAO.EXPANSE_NAME, value);
+		syncEntity.setProperty(DAOManager.EXPANSE_NAME, value);
 		dao.put(syncEntity);
 	}
 

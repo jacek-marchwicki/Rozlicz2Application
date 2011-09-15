@@ -12,7 +12,7 @@ import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 import com.rozlicz2.application.client.entity.ParticipantEntity;
 
-public class DAO {
+public class DAOManager {
 	public static final String EXPANSE = "1";
 	public static final String EXPANSE_CONSUMERS = "12"; // IdMap<ExpanseConsumer>
 	public static final String EXPANSE_NAME = "2"; // String
@@ -42,7 +42,7 @@ public class DAO {
 			assert (entity != null);
 			long expenseId = entity.getKey().getId();
 			String expenseName = (String) entity.getProperty(EXPANSE_NAME);
-			Long projectId = (Long) entity.getProperty(DAO.EXPANSE_PROJECTID);
+			Long projectId = (Long) entity.getProperty(DAOManager.EXPANSE_PROJECTID);
 			assert (projectId != null);
 			SyncKey projectK = new SyncKey(PROJECT, projectId);
 			assert (projectK != null);
@@ -74,29 +74,29 @@ public class DAO {
 		public void changed(SyncEntity before, SyncEntity after) {
 			SyncEntity global = dao.get(globalKey);
 			Integer property = (Integer) global
-					.getProperty(DAO.GLOBAL_PROJECTCOUNT);
+					.getProperty(DAOManager.GLOBAL_PROJECTCOUNT);
 			if (before == null && after != null) {
 				int value = property.intValue() + 1;
-				global.setProperty(DAO.GLOBAL_PROJECTCOUNT, new Integer(value));
+				global.setProperty(DAOManager.GLOBAL_PROJECTCOUNT, new Integer(value));
 				dao.put(global);
 			}
 			if (before != null && after == null) {
 				int value = property.intValue() - 1;
-				global.setProperty(DAO.GLOBAL_PROJECTCOUNT, new Integer(value));
+				global.setProperty(DAOManager.GLOBAL_PROJECTCOUNT, new Integer(value));
 				dao.put(global);
 			}
 			SyncEntity entity = before != null ? before : after;
 			assert (entity != null);
 			long id = entity.getKey().getId();
-			SyncKey projectShortK = new SyncKey(DAO.PROJECTSHORT, id);
+			SyncKey projectShortK = new SyncKey(DAOManager.PROJECTSHORT, id);
 			if (after == null) {
 				dao.delete(projectShortK);
 			} else {
 				String projectName = (String) after
-						.getProperty(DAO.PROJECT_NAME);
+						.getProperty(DAOManager.PROJECT_NAME);
 				assert (projectName != null);
 				SyncEntity projectShortE = new SyncEntity(projectShortK);
-				projectShortE.setProperty(DAO.PROJECTSHORT_NAME, projectName);
+				projectShortE.setProperty(DAOManager.PROJECTSHORT_NAME, projectName);
 				dao.put(projectShortE);
 			}
 		}
@@ -109,7 +109,7 @@ public class DAO {
 				return;
 			@SuppressWarnings("unchecked")
 			IdMap<ParticipantEntity> participants = (IdMap<ParticipantEntity>) after
-					.getProperty(DAO.PROJECT_PARTICIPANTS);
+					.getProperty(DAOManager.PROJECT_PARTICIPANTS);
 			assert (participants != null);
 			@SuppressWarnings("unchecked")
 			IdMap<ExpenseEntity> expenses = (IdMap<ExpenseEntity>) after
@@ -139,18 +139,18 @@ public class DAO {
 		}
 	};
 
-	public DAO(SyncDatastoreService dao) {
+	public DAOManager(SyncDatastoreService dao) {
 		this.dao = dao;
 		{
-			SyncEntity global = new SyncEntity(DAO.GLOBAL);
-			global.setProperty(DAO.GLOBAL_PROJECTCOUNT, new Integer(0));
+			SyncEntity global = new SyncEntity(DAOManager.GLOBAL);
+			global.setProperty(DAOManager.GLOBAL_PROJECTCOUNT, new Integer(0));
 			dao.put(global);
 			globalKey = global.getKey();
 		}
-		dao.addPropertyObserver(DAO.PROJECT, DAO.PROJECT_PARTICIPANTS,
+		dao.addPropertyObserver(DAOManager.PROJECT, DAOManager.PROJECT_PARTICIPANTS,
 				projectParticipantsObserver);
-		dao.addObserver(DAO.EXPANSE, expenseObserver);
-		dao.addObserver(DAO.PROJECT, projectObserver);
+		dao.addObserver(DAOManager.EXPANSE, expenseObserver);
+		dao.addObserver(DAOManager.PROJECT, projectObserver);
 	}
 
 	protected void updateConsumers(final IdMap<ParticipantEntity> participants,

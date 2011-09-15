@@ -4,7 +4,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.rozlicz2.application.client.ClientFactory;
-import com.rozlicz2.application.client.DAO;
+import com.rozlicz2.application.client.DAOManager;
 import com.rozlicz2.application.client.dao.SyncDatastoreService;
 import com.rozlicz2.application.client.dao.SyncEntity;
 import com.rozlicz2.application.client.dao.SyncKey;
@@ -46,19 +46,19 @@ public class ProjectsActivity extends AbstractActivity implements
 	}
 
 	private void addObservers() {
-		dao.addObserver(DAO.PROJECTSHORT, projectShortObserver);
-		dao.addPropertyObserver(DAO.GLOBAL, DAO.GLOBAL_PROJECTCOUNT,
+		dao.addObserver(DAOManager.PROJECTSHORT, projectShortObserver);
+		dao.addPropertyObserver(DAOManager.GLOBAL, DAOManager.GLOBAL_PROJECTCOUNT,
 				projectsCountObserver);
 	}
 
 	@Override
 	public void createProject() {
-		SyncEntity syncEntity = new SyncEntity(DAO.PROJECT);
-		syncEntity.setProperty(DAO.PROJECT_NAME,
+		SyncEntity syncEntity = new SyncEntity(DAOManager.PROJECT);
+		syncEntity.setProperty(DAOManager.PROJECT_NAME,
 				ApplicationConstants.constants.newProject());
-		syncEntity.setProperty(DAO.PROJECT_EXPENSES,
+		syncEntity.setProperty(DAOManager.PROJECT_EXPENSES,
 				new IdArrayMap<ExpenseEntity>());
-		syncEntity.setProperty(DAO.PROJECT_PARTICIPANTS,
+		syncEntity.setProperty(DAOManager.PROJECT_PARTICIPANTS,
 				new IdArrayMap<ParticipantEntity>());
 		dao.put(syncEntity);
 
@@ -84,8 +84,8 @@ public class ProjectsActivity extends AbstractActivity implements
 	}
 
 	private void removeObservers() {
-		dao.removeObserver(DAO.PROJECTSHORT, projectShortObserver);
-		dao.removePropertyObserver(DAO.GLOBAL, DAO.GLOBAL_PROJECTCOUNT,
+		dao.removeObserver(DAOManager.PROJECTSHORT, projectShortObserver);
+		dao.removePropertyObserver(DAOManager.GLOBAL, DAOManager.GLOBAL_PROJECTCOUNT,
 				projectsCountObserver);
 	}
 
@@ -102,16 +102,16 @@ public class ProjectsActivity extends AbstractActivity implements
 	}
 
 	private void updateProjectsCount() {
-		SyncQuery q = new SyncQuery(DAO.GLOBAL);
+		SyncQuery q = new SyncQuery(DAOManager.GLOBAL);
 		SyncEntity asSingleEntity = dao.prepare(q).asSingleEntity();
 		assert (asSingleEntity != null);
 		Integer count = (Integer) asSingleEntity
-				.getProperty(DAO.GLOBAL_PROJECTCOUNT);
+				.getProperty(DAOManager.GLOBAL_PROJECTCOUNT);
 		projectsView.setProjectsNumber(count);
 	}
 
 	protected void updateProjectsList() {
-		SyncQuery q = new SyncQuery(DAO.PROJECTSHORT);
+		SyncQuery q = new SyncQuery(DAOManager.PROJECTSHORT);
 		SyncPreparedQuery prepare = dao.prepare(q);
 
 		projectsView.setProjectsList(prepare.asDataProvider());

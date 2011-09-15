@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.rozlicz2.application.client.DAO;
+import com.rozlicz2.application.client.DAOManager;
 import com.rozlicz2.application.client.EntityProvidesKey;
 import com.rozlicz2.application.client.dao.AbstractEntityProvider;
 import com.rozlicz2.application.client.dao.SyncEntity;
@@ -44,7 +44,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 		public void render(com.google.gwt.cell.client.Cell.Context context,
 				SyncEntity value, SafeHtmlBuilder sb) {
 			if (value != null) {
-				String name = (String) value.getProperty(DAO.PROJECTSHORT_NAME);
+				String name = (String) value.getProperty(DAOManager.PROJECTSHORT_NAME);
 				assert (name != null);
 				assert (name instanceof String);
 				sb.append(template.productCellTemplate(name, "123,13 PLN"));

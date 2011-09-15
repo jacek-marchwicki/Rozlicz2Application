@@ -32,7 +32,7 @@ public class Dashboard extends Composite {
 	public Dashboard() {
 		initWidget(uiBinder.createAndBindUi(this));
 		ClientFactory clientFactory = GWT.create(ClientFactory.class);
-		new DAO(clientFactory.getDAO());
+		new DAOManager(clientFactory.getDAO());
 		EventBus eventBus = clientFactory.getEventBus();
 		PlaceController placeController = clientFactory.getPlaceController();
 
