@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+
+	</ui:style>
+	<g:HTMLPanel>
+		<g:FlexTable ui:field="table"></g:FlexTable>
+		<g:Label ui:field="sumLabel"></g:Label>
+	</g:HTMLPanel>
+	
+</ui:UiBinder> 

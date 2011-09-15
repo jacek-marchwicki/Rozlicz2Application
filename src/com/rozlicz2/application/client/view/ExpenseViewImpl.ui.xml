@@ -14,14 +14,15 @@
 	<g:HTMLPanel ui:field="htmlPanel">
 		<v:EditableLabelWidget caption="{i18n.expenseName}" ui:field="expenseNameWidget"></v:EditableLabelWidget>
 		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
-		<c:CellTable ui:field="paymentsCellTable"></c:CellTable>
+		<v:PaymentsTableWidgetImpl ui:field="paymentsTable"></v:PaymentsTableWidgetImpl>
 		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>
 		<g:Label ui:field="sumLabel" text="" />
 		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
 		<g:VerticalPanel>
 			<g:Label styleName="{res.css.labelClass}" text="{i18n.expenseParticipants}"></g:Label>
-			<g:RadioButton name="participant" ui:field="radioButtonAll">Everybody</g:RadioButton>
-			<g:RadioButton name="participant" ui:field="radioButtonSelected">Selected users</g:RadioButton>
+			<g:RadioButton name="participant" ui:field="radioButtonAll" text="{i18n.everybody}"></g:RadioButton>
+			<g:RadioButton name="participant" ui:field="radioButtonMe" text="{i18n.onlyMe}"></g:RadioButton>
+			<g:RadioButton name="participant" ui:field="radioButtonSelected" text="{i18n.selectedUsers}"></g:RadioButton>
 		</g:VerticalPanel> 
 		<c:CellTable visible="false" ui:field="consumersCellTable"></c:CellTable>
 	</g:HTMLPanel>

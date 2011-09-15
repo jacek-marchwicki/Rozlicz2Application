@@ -93,6 +93,7 @@ public class ExpenseActivity extends AbstractActivity implements
 				userE = new SyncEntity(DAOManager.USER);
 				userE.setProperty(DAOManager.USER_NAME, user);
 				dao.put(userE);
+
 			}
 			long userId = userE.getKey().getId();
 			String userName = (String) userE.getProperty(DAOManager.USER_NAME);
@@ -119,8 +120,7 @@ public class ExpenseActivity extends AbstractActivity implements
 				.getProperty(DAOManager.EXPANSE_CONSUMERS);
 		ExpenseConsumerEntity expenseConsumerEntity = consumers.get(userId);
 		expenseConsumerEntity.setConsumer(isConsumer);
-		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
-				expenseConsumerEntity);
+		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS, consumers);
 		dao.put(expenseE);
 		updateThisEntityValues();
 	}
@@ -133,8 +133,7 @@ public class ExpenseActivity extends AbstractActivity implements
 				.getProperty(DAOManager.EXPANSE_CONSUMERS);
 		ExpenseConsumerEntity expenseConsumerEntity = consumers.get(userId);
 		expenseConsumerEntity.setProportional(isProportional);
-		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
-				expenseConsumerEntity);
+		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS, consumers);
 		dao.put(expenseE);
 		updateThisEntityValues();
 	}
@@ -147,8 +146,7 @@ public class ExpenseActivity extends AbstractActivity implements
 				.getProperty(DAOManager.EXPANSE_CONSUMERS);
 		ExpenseConsumerEntity expenseConsumerEntity = consumers.get(userId);
 		expenseConsumerEntity.setValue(value);
-		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
-				expenseConsumerEntity);
+		expenseE.setProperty(DAOManager.EXPANSE_CONSUMERS, consumers);
 		dao.put(expenseE);
 		updateThisEntityValues();
 	}
@@ -200,8 +198,15 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Override
 	public void paymentSetValue(Long userId, double value) {
-		// TODO Auto-generated method stub
-
+		SyncEntity expenseE = dao.get(expenseK);
+		@SuppressWarnings("unchecked")
+		IdMap<ExpensePaymentEntity> payments = (IdMap<ExpensePaymentEntity>) expenseE
+				.getProperty(DAOManager.EXPANSE_PAYMENTS);
+		ExpensePaymentEntity payment = payments.get(userId);
+		payment.setValue(value);
+		expenseE.setProperty(DAOManager.EXPANSE_PAYMENTS, payments);
+		dao.put(expenseE);
+		updateThisEntityValues();
 	}
 
 	private void refreshView() {
@@ -366,13 +371,14 @@ public class ExpenseActivity extends AbstractActivity implements
 		SyncEntity expenseE = dao.get(expenseK);
 
 		@SuppressWarnings("unchecked")
-		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) expenseE
-				.getProperty(DAOManager.EXPANSE_CONSUMERS);
-		assert (consumers != null);
-		@SuppressWarnings("unchecked")
 		IdMap<ExpensePaymentEntity> payments = (IdMap<ExpensePaymentEntity>) expenseE
 				.getProperty(DAOManager.EXPANSE_PAYMENTS);
 		assert (payments != null);
+
+		@SuppressWarnings("unchecked")
+		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) expenseE
+				.getProperty(DAOManager.EXPANSE_CONSUMERS);
+		assert (consumers != null);
 
 		double sum = updateEntityValues(payments, consumers);
 

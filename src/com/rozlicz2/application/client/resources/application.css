@@ -2,7 +2,6 @@ body {
 	padding: 0px;
 	margin: 0px;
 	font-family: Sans-serif;
-	 
 }
 /* @sprite body {
 	gwt-image: 'facebook';
@@ -11,27 +10,55 @@ body {
 	background-color: #D73828;
 	color: #ffffff;
 }
+
 h1,h2,h3 {
 	clear: both;
 }
-@-webkit-keyframes fadein{
-	0% { opacity: 0; }
-	100% { opacity: 0.7; }
+
+@
+-webkit-keyframes fadein { 0% {
+	opacity: 0;
+}
+
+100%
+{
+opacity
+:
+ 
+0
+.7
+;
+ 
+}
 }
 .hideClass {
 	opacity: 0;
 }
-@-webkit-keyframes slide{
-	0% { left: -500px; }
-	100% { left: 0px; }
+
+@
+-webkit-keyframes slide { 0% {
+	left: -500px;
 }
-#body > div > div {
-	position:absolute;
+
+100%
+{
+left
+:
+ 
+0
+px
+;
+ 
+}
+}
+#body>div>div {
+	position: absolute;
 	-webkit-animation-name: slide;
 	-webkit-animation-duration: 0.5s;
 	-webkit-animation-timing-function: cubic-bezier(0.5, 0.2, 0.3, 1.0);
 	-webkit-animation-iteration-count: 1;
 }
+
 .grayBackgroundClass {
 	position: absolute;
 	bottom: 0px;
@@ -44,6 +71,7 @@ h1,h2,h3 {
 	-webkit-animation-duration: 0.5s;
 	-webkit-animation-iteration-count: 1;
 }
+
 .fullScreenClass {
 	position: absolute;
 	bottom: 0px;
@@ -55,8 +83,17 @@ h1,h2,h3 {
 .labelClass {
 	font-size: 1.3em;
 	margin-top: 6px;
-
 }
+
 .clearClass {
 	clear: both;
+}
+
+.errorLabelClass {
+	clear: both;
+	font-size: 0.8em;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 0.5s, 1s;
+	min-height: 0.8em;
+	color: #D73828;
 }

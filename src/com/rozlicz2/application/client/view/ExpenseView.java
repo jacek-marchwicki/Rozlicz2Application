@@ -6,6 +6,7 @@ import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 
 public interface ExpenseView extends IsWidget {
+
 	public interface Presenter {
 		void addParticipants();
 

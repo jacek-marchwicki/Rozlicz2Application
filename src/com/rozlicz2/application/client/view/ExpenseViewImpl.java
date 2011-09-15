@@ -2,12 +2,10 @@ package com.rozlicz2.application.client.view;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -18,10 +16,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.rozlicz2.application.client.entity.BaseEntity;
@@ -30,7 +26,8 @@ import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 
-public class ExpenseViewImpl extends Composite implements ExpenseView {
+public class ExpenseViewImpl extends Composite implements ExpenseView,
+		com.rozlicz2.application.client.view.PaymentsTableWidget.Presenter {
 
 	public static class ConsumerCell extends
 			AbstractCell<ExpenseConsumerEntity> {
@@ -92,8 +89,8 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	@UiField
 	HTMLPanel htmlPanel;
 
-	@UiField(provided = true)
-	CellTable<ExpensePaymentEntity> paymentsCellTable;
+	@UiField
+	PaymentsTableWidget paymentsTable;
 
 	private Presenter presenter;
 
@@ -101,15 +98,15 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 	RadioButton radioButtonAll;
 
 	@UiField
-	RadioButton radioButtonSelected;
+	RadioButton radioButtonMe;
 
 	@UiField
-	Label sumLabel;
+	RadioButton radioButtonSelected;
 
 	public ExpenseViewImpl() {
 		consumersCellTable = makeConsumersCellTable();
-		paymentsCellTable = makePaymentsCellTable();
 		initWidget(uiBinder.createAndBindUi(this));
+		paymentsTable.setPresenter(this);
 		radioButtonAll.setValue(true);
 	}
 
@@ -167,59 +164,14 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 		return table;
 	}
 
-	private CellTable<ExpensePaymentEntity> makePaymentsCellTable() {
-		final BaseEntity.EntityKeyProvider<ExpensePaymentEntity> keyProvider = new BaseEntity.EntityKeyProvider<ExpensePaymentEntity>();
-
-		final CellTable<ExpensePaymentEntity> table = new CellTable<ExpensePaymentEntity>(
-				keyProvider);
-		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		TextColumn<ExpensePaymentEntity> nameColumn = new TextColumn<ExpensePaymentEntity>() {
-
-			@Override
-			public String getValue(ExpensePaymentEntity object) {
-				return object.getName();
-			}
-		};
-		table.addColumn(nameColumn, ApplicationConstants.constants.userName());
-		final TextInputCell valueCell = new TextInputCell();
-		Column<ExpensePaymentEntity, String> valueColumn = new Column<ExpensePaymentEntity, String>(
-				valueCell) {
-			@Override
-			public String getValue(ExpensePaymentEntity object) {
-				return Double.toString(object.getValue());
-			}
-		};
-		valueColumn
-				.setFieldUpdater(new FieldUpdater<ExpensePaymentEntity, String>() {
-
-					@Override
-					public void update(int index, ExpensePaymentEntity object,
-							String value) {
-						try {
-							double doubleValue = Double.parseDouble(value);
-							object.setValue(doubleValue);
-							table.redraw();
-
-						} catch (NumberFormatException e) {
-							Window.alert("wrong double format");
-							valueCell.clearViewData(keyProvider.getKey(object));
-							table.redraw();
-							return;
-						}
-					}
-				});
-		table.addColumn(valueColumn, ApplicationConstants.constants.value());
-		return table;
-	}
-
 	@UiHandler("addParticipantButton")
 	public void onAddParticipant(ClickEvent e) {
 		this.presenter.addParticipants();
 	}
 
-	@UiHandler({ "radioButtonSelected", "radioButtonAll" })
+	@UiHandler({ "radioButtonSelected", "radioButtonAll", "radioButtonMe" })
 	void onChangeParticipants(ValueChangeEvent<Boolean> e) {
-		consumersCellTable.setVisible(radioButtonAll.getValue() ? false : true);
+		consumersCellTable.setVisible(radioButtonSelected.getValue());
 	}
 
 	@UiHandler("expenseNameWidget")
@@ -242,17 +194,17 @@ public class ExpenseViewImpl extends Composite implements ExpenseView {
 
 	@Override
 	public void setPayments(IdMap<ExpensePaymentEntity> payments) {
-		if (payments.getDataDisplays().contains(paymentsCellTable)) {
-			payments.removeDataDisplay(paymentsCellTable);
-		}
-		payments.addDataDisplay(paymentsCellTable);
-		paymentsCellTable.redraw();
+		paymentsTable.setPayments(payments);
 	}
 
 	@Override
 	public void setPaymentsSum(double value) {
-		String format = NumberFormat.getCurrencyFormat().format(value);
-		sumLabel.setText(format);
+		paymentsTable.setSum(value);
+	}
+
+	@Override
+	public void setPaymentValue(Long userId, double value) {
+		this.presenter.paymentSetValue(userId, value);
 	}
 
 	@Override
