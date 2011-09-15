@@ -1,7 +1,7 @@
 package com.rozlicz2.application.client.view;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.rozlicz2.application.client.entity.ExpenseShortEntity;
+import com.rozlicz2.application.client.entity.ExpenseEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 
 public interface ProjectView extends IsWidget {
@@ -13,7 +13,7 @@ public interface ProjectView extends IsWidget {
 		void setProjectName(String projectName);
 	}
 
-	void setExpenses(IdMap<ExpenseShortEntity> expenses);
+	void setExpenses(IdMap<ExpenseEntity> expenses);
 
 	void setPresenter(Presenter presenter);
 

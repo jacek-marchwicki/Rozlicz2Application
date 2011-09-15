@@ -1,8 +1,7 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.entity;
 
-import com.rozlicz2.application.client.entity.BaseEntity;
 
-public class ExpenseConsumer extends BaseEntity {
+public class ExpenseConsumerEntity extends BaseEntity {
 	private boolean isConsumer;
 	private boolean isProportional;
 	private String name;

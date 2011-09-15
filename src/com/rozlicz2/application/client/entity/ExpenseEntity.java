@@ -1,7 +1,7 @@
 package com.rozlicz2.application.client.entity;
 
 
-public class ExpenseShortEntity extends BaseEntity {
+public class ExpenseEntity extends BaseEntity {
 
 	private String name;
 

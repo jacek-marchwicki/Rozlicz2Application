@@ -17,13 +17,14 @@ import com.rozlicz2.application.client.dao.SyncKey;
 import com.rozlicz2.application.client.dao.SyncObserver;
 import com.rozlicz2.application.client.dao.SyncPreparedQuery;
 import com.rozlicz2.application.client.dao.SyncQuery;
+import com.rozlicz2.application.client.entity.ExpenseConsumerEntity;
+import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
 import com.rozlicz2.application.client.entity.IdMap;
+import com.rozlicz2.application.client.entity.ParticipantEntity;
 import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.view.AddParticipantView;
 import com.rozlicz2.application.client.view.AddParticipantView.Presenter;
-import com.rozlicz2.application.client.view.ExpenseConsumer;
-import com.rozlicz2.application.client.view.ExpensePayment;
 import com.rozlicz2.application.client.view.ExpenseView;
 
 public class ExpenseActivity extends AbstractActivity implements
@@ -56,7 +57,7 @@ public class ExpenseActivity extends AbstractActivity implements
 	public void addedUsers(Collection<String> users) {
 		SyncEntity projectE = getProjectEntity();
 		@SuppressWarnings("unchecked")
-		IdMap<Participant> participants = (IdMap<Participant>) projectE
+		IdMap<ParticipantEntity> participants = (IdMap<ParticipantEntity>) projectE
 				.getProperty(DAO.PROJECT_PARTICIPANTS);
 		assert (participants != null);
 		for (String user : users) {
@@ -72,7 +73,7 @@ public class ExpenseActivity extends AbstractActivity implements
 			long userId = userE.getKey().getId();
 			String userName = (String) userE.getProperty(DAO.USER_NAME);
 			assert (userName != null);
-			Participant participant = new Participant();
+			ParticipantEntity participant = new ParticipantEntity();
 			participant.setId(userId);
 			participant.setName(userName);
 			participants.put(participant);
@@ -176,9 +177,9 @@ public class ExpenseActivity extends AbstractActivity implements
 	// return payments;
 	// }
 
-	private double getPaymentsSum(IdMap<ExpensePayment> payments) {
+	private double getPaymentsSum(IdMap<ExpensePaymentEntity> payments) {
 		double ret = 0.0;
-		for (ExpensePayment payment : payments.values()) {
+		for (ExpensePaymentEntity payment : payments.values()) {
 			ret += payment.getValue();
 		}
 		return ret;
@@ -196,7 +197,7 @@ public class ExpenseActivity extends AbstractActivity implements
 	private List<String> getUsers() {
 		SyncEntity projectE = getProjectEntity();
 		@SuppressWarnings("unchecked")
-		IdMap<Participant> participants = (IdMap<Participant>) projectE
+		IdMap<ParticipantEntity> participants = (IdMap<ParticipantEntity>) projectE
 				.getProperty(DAO.PROJECT_PARTICIPANTS);
 
 		ArrayList<String> users = new ArrayList<String>();
@@ -241,11 +242,11 @@ public class ExpenseActivity extends AbstractActivity implements
 			return;
 		}
 		@SuppressWarnings("unchecked")
-		IdMap<ExpensePayment> payments = (IdMap<ExpensePayment>) syncEntity
+		IdMap<ExpensePaymentEntity> payments = (IdMap<ExpensePaymentEntity>) syncEntity
 				.getProperty(DAO.EXPANSE_PAYMENTS);
 		assert (payments != null);
 		@SuppressWarnings("unchecked")
-		IdMap<ExpenseConsumer> consumers = (IdMap<ExpenseConsumer>) syncEntity
+		IdMap<ExpenseConsumerEntity> consumers = (IdMap<ExpenseConsumerEntity>) syncEntity
 				.getProperty(DAO.EXPANSE_CONSUMERS);
 		assert (consumers != null);
 

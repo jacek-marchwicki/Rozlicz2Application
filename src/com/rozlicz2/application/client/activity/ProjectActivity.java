@@ -10,15 +10,15 @@ import com.rozlicz2.application.client.dao.SyncDatastoreService;
 import com.rozlicz2.application.client.dao.SyncEntity;
 import com.rozlicz2.application.client.dao.SyncKey;
 import com.rozlicz2.application.client.dao.SyncObserver;
-import com.rozlicz2.application.client.entity.ExpenseShortEntity;
+import com.rozlicz2.application.client.entity.ExpenseConsumerEntity;
+import com.rozlicz2.application.client.entity.ExpenseEntity;
+import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
 import com.rozlicz2.application.client.entity.IdArrayMap;
 import com.rozlicz2.application.client.entity.IdMap;
 import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
-import com.rozlicz2.application.client.view.ExpenseConsumer;
-import com.rozlicz2.application.client.view.ExpensePayment;
 import com.rozlicz2.application.client.view.ProjectView;
 
 public class ProjectActivity extends AbstractActivity implements
@@ -53,9 +53,9 @@ public class ProjectActivity extends AbstractActivity implements
 				ApplicationConstants.constants.newExpense());
 		expanseE.setProperty(DAO.EXPANSE_PROJECTID, projectKey.getId());
 		expanseE.setProperty(DAO.EXPANSE_PAYMENTS,
-				new IdArrayMap<ExpensePayment>());
+				new IdArrayMap<ExpensePaymentEntity>());
 		expanseE.setProperty(DAO.EXPANSE_CONSUMERS,
-				new IdArrayMap<ExpenseConsumer>());
+				new IdArrayMap<ExpenseConsumerEntity>());
 		expanseE.setProperty(DAO.EXPANSE_SUM, new Double(0));
 		dao.put(expanseE);
 
@@ -87,7 +87,7 @@ public class ProjectActivity extends AbstractActivity implements
 			return;
 		}
 		@SuppressWarnings("unchecked")
-		IdMap<ExpenseShortEntity> expenses = (IdMap<ExpenseShortEntity>) project
+		IdMap<ExpenseEntity> expenses = (IdMap<ExpenseEntity>) project
 				.getProperty(DAO.PROJECT_EXPENSES);
 		assert (expenses != null);
 		String name = (String) project.getProperty(DAO.PROJECT_NAME);

@@ -19,13 +19,13 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.rozlicz2.application.client.entity.BaseEntity.EntityKeyProvider;
-import com.rozlicz2.application.client.entity.ExpenseShortEntity;
+import com.rozlicz2.application.client.entity.ExpenseEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 
 public class ProjectViewImpl extends Composite implements ProjectView {
 
 	public static class ExpenditureCell extends
-			AbstractCell<ExpenseShortEntity> {
+			AbstractCell<ExpenseEntity> {
 
 		interface Template extends SafeHtmlTemplates {
 			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
@@ -41,7 +41,7 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
-				ExpenseShortEntity value, SafeHtmlBuilder sb) {
+				ExpenseEntity value, SafeHtmlBuilder sb) {
 			if (value == null)
 				return;
 			String name = value.getName();
@@ -61,7 +61,7 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 	Button createExpenseButton;
 
 	@UiField
-	CellList<ExpenseShortEntity> expensesList;
+	CellList<ExpenseEntity> expensesList;
 
 	private Presenter presenter;
 
@@ -78,20 +78,20 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 	}
 
 	@UiFactory
-	CellList<ExpenseShortEntity> makeCellList() {
-		EntityKeyProvider<ExpenseShortEntity> keyProvider = new EntityKeyProvider<ExpenseShortEntity>();
+	CellList<ExpenseEntity> makeCellList() {
+		EntityKeyProvider<ExpenseEntity> keyProvider = new EntityKeyProvider<ExpenseEntity>();
 
-		CellList<ExpenseShortEntity> cellList = new CellList<ExpenseShortEntity>(
+		CellList<ExpenseEntity> cellList = new CellList<ExpenseEntity>(
 				new ExpenditureCell(), keyProvider);
 
-		final SingleSelectionModel<ExpenseShortEntity> selectionModel = new SingleSelectionModel<ExpenseShortEntity>(
+		final SingleSelectionModel<ExpenseEntity> selectionModel = new SingleSelectionModel<ExpenseEntity>(
 				keyProvider);
 		cellList.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new Handler() {
 
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				ExpenseShortEntity selectedObject = selectionModel
+				ExpenseEntity selectedObject = selectionModel
 						.getSelectedObject();
 				if (selectedObject == null)
 					return;
@@ -112,12 +112,12 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 		this.presenter.setProjectName(e.getValue());
 	}
 
-	protected void onSelectedObject(ExpenseShortEntity selectedObject) {
+	protected void onSelectedObject(ExpenseEntity selectedObject) {
 		presenter.editExpense(selectedObject.getId());
 	}
 
 	@Override
-	public void setExpenses(IdMap<ExpenseShortEntity> expenses) {
+	public void setExpenses(IdMap<ExpenseEntity> expenses) {
 		if (expenses.getDataDisplays().contains(expensesList))
 			expenses.removeDataDisplay(expensesList);
 		expenses.addDataDisplay(expensesList);

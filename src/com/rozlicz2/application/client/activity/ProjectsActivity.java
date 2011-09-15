@@ -11,8 +11,9 @@ import com.rozlicz2.application.client.dao.SyncKey;
 import com.rozlicz2.application.client.dao.SyncObserver;
 import com.rozlicz2.application.client.dao.SyncPreparedQuery;
 import com.rozlicz2.application.client.dao.SyncQuery;
-import com.rozlicz2.application.client.entity.ExpenseShortEntity;
+import com.rozlicz2.application.client.entity.ExpenseEntity;
 import com.rozlicz2.application.client.entity.IdArrayMap;
+import com.rozlicz2.application.client.entity.ParticipantEntity;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
@@ -56,9 +57,9 @@ public class ProjectsActivity extends AbstractActivity implements
 		syncEntity.setProperty(DAO.PROJECT_NAME,
 				ApplicationConstants.constants.newProject());
 		syncEntity.setProperty(DAO.PROJECT_EXPENSES,
-				new IdArrayMap<ExpenseShortEntity>());
+				new IdArrayMap<ExpenseEntity>());
 		syncEntity.setProperty(DAO.PROJECT_PARTICIPANTS,
-				new IdArrayMap<Participant>());
+				new IdArrayMap<ParticipantEntity>());
 		dao.put(syncEntity);
 
 		ProjectPlace place = new ProjectPlace(syncEntity.getKey().getId());

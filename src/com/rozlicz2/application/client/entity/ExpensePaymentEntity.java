@@ -1,8 +1,7 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.entity;
 
-import com.rozlicz2.application.client.entity.BaseEntity;
 
-public class ExpensePayment extends BaseEntity {
+public class ExpensePaymentEntity extends BaseEntity {
 	private String name;
 	private double value;
 

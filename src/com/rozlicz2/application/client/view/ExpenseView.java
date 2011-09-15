@@ -1,6 +1,8 @@
 package com.rozlicz2.application.client.view;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.rozlicz2.application.client.entity.ExpenseConsumerEntity;
+import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
 import com.rozlicz2.application.client.entity.IdMap;
 
 public interface ExpenseView extends IsWidget {
@@ -18,11 +20,11 @@ public interface ExpenseView extends IsWidget {
 		void setExpenseName(String value);
 	}
 
-	public void setConsumers(IdMap<ExpenseConsumer> consumers);
+	public void setConsumers(IdMap<ExpenseConsumerEntity> consumers);
 
 	public void setExpenseName(String name);
 
-	public void setPayments(IdMap<ExpensePayment> payments);
+	public void setPayments(IdMap<ExpensePaymentEntity> payments);
 
 	public void setPaymentsSum(double value);
 
