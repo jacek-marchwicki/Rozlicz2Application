@@ -4,34 +4,64 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.Constants;
 
 public interface ApplicationConstants extends Constants {
-	static ApplicationConstants constants = GWT.create(ApplicationConstants.class);
-	
-	String gwtUser();
-	String remoteProceduralCall();
-	String sendingTheNameToServer();
-	String close();
-	String nameLabel();
-	String emptyProject();
-	String emptyExpense();
-	String expense();
-	String newExpense();
-	String expenseParticipants();
-	String expensePaidBy();
-	String newProject();
-	String expensesList();
-	String expenseName();
-	String projectName();
-	String cancel();
-	String save();
-	String allowFriendsEdit();
-	String inviteFriends();
+	static ApplicationConstants constants = GWT
+			.create(ApplicationConstants.class);
+
 	String addParticipant();
-	String userName();
-	String value();
-	String getConsumer();
-	String proportional();
-	String removeUser();
+
+	String allowFriendsEdit();
+
+	String cancel();
+
+	String close();
+
+	String emptyExpense();
+
+	String emptyProject();
+
 	String everybody();
-	String selectedUsers();
+
+	String expense();
+
+	String expenseName();
+
+	String expensePaidBy();
+
+	String expenseParticipants();
+
+	String expensesList();
+
+	String getConsumer();
+
+	String gwtUser();
+
+	String inviteFriends();
+
+	String logout();
+
+	String nameLabel();
+
+	String newExpense();
+
+	String newProject();
+
 	String onlyMe();
+
+	String projectName();
+
+	String proportional();
+
+	String remoteProceduralCall();
+
+	String removeUser();
+
+	String save();
+
+	String selectedUsers();
+
+	String sendingTheNameToServer();
+
+	String userName();
+
+	String value();
 }

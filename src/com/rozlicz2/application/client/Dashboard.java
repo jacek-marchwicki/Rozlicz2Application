@@ -9,12 +9,14 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 import com.rozlicz2.application.client.mvp.AppActivityMapper;
 import com.rozlicz2.application.client.mvp.AppPlaceHistoryMapper;
 import com.rozlicz2.application.client.place.ProjectsPlace;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 
 public class Dashboard extends Composite {
 
@@ -24,16 +26,30 @@ public class Dashboard extends Composite {
 	private static DashboardUiBinder uiBinder = GWT
 			.create(DashboardUiBinder.class);
 
+	public static native String getUserEmailFromHtml() /*-{
+		return $wnd.userEmail;
+	}-*/;
+
 	@UiField
 	SimplePanel appWidget;
 
 	private final Place defaultPlace = new ProjectsPlace();
 
+	@UiField
+	Label emailLabel;
+
 	public Dashboard() {
 		initWidget(uiBinder.createAndBindUi(this));
+
+		String email = getUserEmailFromHtml();
+		assert email != null;
+		emailLabel.setText(email);
+
 		ClientFactory clientFactory = GWT.create(ClientFactory.class);
 		new DAOManager(clientFactory.getDAO());
 		EventBus eventBus = clientFactory.getEventBus();
+		ListwidgetRequestFactory rf = clientFactory.getRf();
+		rf.initialize(eventBus);
 		PlaceController placeController = clientFactory.getPlaceController();
 
 		// Start ActivityManager for the main widget with our ActivityMapper
@@ -52,4 +68,5 @@ public class Dashboard extends Composite {
 		// Goes to the place represented on URL else default place
 		historyHandler.handleCurrentHistory();
 	}
+
 }

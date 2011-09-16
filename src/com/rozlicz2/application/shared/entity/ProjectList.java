@@ -14,6 +14,9 @@ public class ProjectList extends DatastoreObject {
 	private String name;
 	private Key<AppUser> owner;
 
+	public ProjectList() {
+	}
+
 	public List<ListItem> getItems() {
 		return items;
 	}

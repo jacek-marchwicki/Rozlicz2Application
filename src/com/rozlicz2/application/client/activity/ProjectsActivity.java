@@ -17,12 +17,8 @@ import com.rozlicz2.application.client.dao.SyncKey;
 import com.rozlicz2.application.client.dao.SyncObserver;
 import com.rozlicz2.application.client.dao.SyncPreparedQuery;
 import com.rozlicz2.application.client.dao.SyncQuery;
-import com.rozlicz2.application.client.entity.ExpenseEntity;
-import com.rozlicz2.application.client.entity.IdArrayMap;
-import com.rozlicz2.application.client.entity.ParticipantEntity;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.place.ProjectsPlace;
-import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectsView;
 import com.rozlicz2.application.shared.proxy.ProjectListProxy;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
@@ -64,17 +60,19 @@ public class ProjectsActivity extends AbstractActivity implements
 
 	@Override
 	public void createProject() {
-		SyncEntity syncEntity = new SyncEntity(DAOManager.PROJECT);
-		syncEntity.setProperty(DAOManager.PROJECT_NAME,
-				ApplicationConstants.constants.newProject());
-		syncEntity.setProperty(DAOManager.PROJECT_EXPENSES,
-				new IdArrayMap<ExpenseEntity>());
-		syncEntity.setProperty(DAOManager.PROJECT_PARTICIPANTS,
-				new IdArrayMap<ParticipantEntity>());
-		dao.put(syncEntity);
-
-		ProjectPlace place = new ProjectPlace(syncEntity.getKey().getId());
-		clientFactory.getPlaceController().goTo(place);
+		receiveData();
+		/*
+		 * SyncEntity syncEntity = new SyncEntity(DAOManager.PROJECT);
+		 * syncEntity.setProperty(DAOManager.PROJECT_NAME,
+		 * ApplicationConstants.constants.newProject());
+		 * syncEntity.setProperty(DAOManager.PROJECT_EXPENSES, new
+		 * IdArrayMap<ExpenseEntity>());
+		 * syncEntity.setProperty(DAOManager.PROJECT_PARTICIPANTS, new
+		 * IdArrayMap<ParticipantEntity>()); dao.put(syncEntity);
+		 * 
+		 * ProjectPlace place = new ProjectPlace(syncEntity.getKey().getId());
+		 * clientFactory.getPlaceController().goTo(place);
+		 */
 	}
 
 	@Override
@@ -94,6 +92,24 @@ public class ProjectsActivity extends AbstractActivity implements
 		removeObservers();
 	}
 
+	private void receiveData() {
+		ItemListRequestContext projectListRequest = rf.projectListRequest();
+		Request<List<ProjectListProxy>> listAll = projectListRequest.listAll();
+		listAll.fire(new Receiver<List<ProjectListProxy>>() {
+
+			@Override
+			public void onFailure(ServerFailure error) {
+				Window.alert("error: " + error);
+				super.onFailure(error);
+			}
+
+			@Override
+			public void onSuccess(List<ProjectListProxy> response) {
+				Window.alert("response: " + response);
+			}
+		});
+	}
+
 	private void removeObservers() {
 		dao.removeObserver(DAOManager.PROJECTSHORT, projectShortObserver);
 		dao.removePropertyObserver(DAOManager.GLOBAL,
@@ -110,21 +126,7 @@ public class ProjectsActivity extends AbstractActivity implements
 		updateProjectsList();
 		updateProjectsCount();
 
-		ItemListRequestContext projectListRequest = rf.projectListRequest();
-		Request<List<ProjectListProxy>> listAll = projectListRequest.listAll();
-		listAll.fire(new Receiver<List<ProjectListProxy>>() {
-
-			@Override
-			public void onFailure(ServerFailure error) {
-				Window.alert("error: " + error);
-				super.onFailure(error);
-			}
-
-			@Override
-			public void onSuccess(List<ProjectListProxy> response) {
-				Window.alert("response: " + response);
-			}
-		});
+		receiveData();
 		panel.setWidget(projectsView.asWidget());
 	}
 

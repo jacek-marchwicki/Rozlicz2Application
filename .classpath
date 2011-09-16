@@ -10,7 +10,18 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
+	<classpathentry kind="src" path=".apt_generated">
+		<attributes>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/requestfactory-apt.jar"/>
+	<classpathentry kind="lib" path="lib/requestfactory-client-src.jar"/>
+	<classpathentry kind="lib" path="lib/requestfactory-client.jar"/>
+	<classpathentry kind="lib" path="lib/requestfactory-client+src.jar"/>
+	<classpathentry kind="lib" path="lib/requestfactory-server-src.jar"/>
+	<classpathentry kind="lib" path="lib/requestfactory-server+src.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-server.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

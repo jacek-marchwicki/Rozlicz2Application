@@ -1,28 +1,121 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:a="urn:import:com.rozlicz2.application.client">
+	<ui:with type="com.rozlicz2.application.client.resources.LocalizedMessages" field="messages"></ui:with>
+	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
 	<ui:style>
-		.important {
-			font-weight: bold;
+		.emailLabel {
+			display: inline-block;
+			margin-right: 20px;
 		}
+		.logoutAnchor {
+			color: #ffffff;
+			display: inline-block;
+			text-decoration: none;
+			font-size: 1em;
+			-webkit-transition: all .2s ease-in-out;
+		}
+		.logoutAnchor:VISITED {
+			color: #ffffff;
+		}
+		.logoutAnchor:HOVER {
+			color: #ffffff;
+			-webkit-transform: scale(1.1);
+			text-decoration: underline;
+		}
+		.h1h1 {
+			height: 35px;
+			background: #000000;
+			padding: 0px;
+			margin: 0px;
+		}
+		.h1h2 {
+			margin: 0px auto 0px auto;
+			color: #ffffff;
+			text-align: right;
+			padding: 0px;
+			width: 750px;
+			height: 35px;
+			line-height: 35px;
+		}
+		
+		.h2h1 {
+			background: #f0f0f0;
+			height: 90px;
+			border-bottom: 1px solid #E4E4E4;
+		}
+		
+		.h2h2 {
+			margin: 0px auto 0px auto;
+			padding: 10px 0px 10px 0px;
+			width: 750px;
+			height: 70px;
+			font-weight: normal;
+		}
+		
+		.content {
+			background: #ffffff;
+			position: absolute;
+			top: 126px;
+			left: 50%;
+			width: 750px;
+			bottom: 0px;
+		}
+		
+		.body {
+			position: absolute;
+			margin: 0px;
+			padding: 0px;
+			left: -375px;
+			top: 0px;
+			bottom: 0px;
+			
+			clear: both;
+			width: 750px;
+			padding: 20px 0px 0px 0px;
+		}
+		
+		.content-right {
+			text-align: right;
+			float: left;
+			width: 400px;
+			height: 65px;
+			color: #0773dd;
+			padding: 5px 0px 0px 0px;
+			font-size: 24px;
+		}
+		
+		.content-right span {
+			display: block;
+			font-size: 14px;
+		}
+		
+		.logo {
+			font-size: 56px;
+			color: #d73828;
+			float: left;
+			width: 350px;
+			height: 70px;
+		}
+				
 	</ui:style>
 	<g:HTMLPanel>
-		<div id="h1h1">
-			<div id="h1h2">
-				<a href="login">Zaloguj się</a>
+		<div class="{style.h1h1}">
+			<div class="{style.h1h2}">
+				<g:Label ui:field="emailLabel" styleName="{style.emailLabel}"></g:Label><g:Anchor styleName="{style.logoutAnchor}" href="/logout" text="{i18n.logout}"></g:Anchor>
 			</div>
 		</div>
-		<div id="h2h1">
-			<h1 id="h2h2">
-				<div id="logo">rozlicz<span class="green"><span class="two">2</span>.pl</span></div>
-				<div id="content-right">
+		<div class="{style.h2h1}">
+			<h1 class="{style.h2h2}">
+				<div class="{style.logo}">rozlicz<span class="green"><span class="two">2</span>.pl</span></div>
+				<div class="{style.content-right}">
 					rozliczaj się ze wszystkiego*
 					<span>*za darmo</span>
 				</div>
 			</h1>
 		</div>
-		<div id="content">
-			<div id="body">
+		<div class="{style.content}">
+			<div class="{style.body}">
 				<g:SimplePanel ui:field="appWidget"></g:SimplePanel>
 			</div>
 		</div>

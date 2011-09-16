@@ -8,3 +8,4 @@ test-classes/**
 bin/**
 .gwt/**
 gwt-unitCache/**
+.apt_generated/**

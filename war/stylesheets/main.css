@@ -1,17 +1,7 @@
 body {
 	padding: 0px;
 	margin: 0px;
-	font-family: Gill Sans, Verdana;
-	background: red;
-}
-
-#loading {
-	position: absolute;
-	left: 0px;
-	right: 0px;
-	top: 0px;
-	bottom: 0px;
-	background: #ffffff url('../images/loading.gif') no-repeat center center;
+	font-family: Gill Sans, Verdana, Sans-serif;
 }
 
 #h1h1 {
@@ -65,9 +55,12 @@ body {
 	margin: 0px;
 	padding: 0px;
 	left: -375px;
-	width: 750px;
 	top: 0px;
 	bottom: 0px;
+	
+	clear: both;
+	width: 750px;
+	padding: 20px 0px 0px 0px;
 }
 
 #content-right {
@@ -93,11 +86,6 @@ body {
 	height: 70px;
 }
 
-#body {
-	clear: both;
-	width: 750px;
-	padding: 20px 0px 0px 0px;
-}
 
 #logo .two {
 	font-size: 45px;

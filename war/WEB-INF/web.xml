@@ -7,9 +7,6 @@
 
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>greetServlet</servlet-name>
-		<servlet-class>com.rozlicz2.application.server.GreetingServiceImpl</servlet-class>
-	</servlet><servlet>
 		<servlet-name>FacebookLoginServlet</servlet-name>
 		<servlet-class>com.rozlicz2.application.server.FacebookLoginServlet</servlet-class>
 	</servlet>
@@ -17,9 +14,10 @@
 	<servlet>
 		<servlet-name>logoutServlet</servlet-name>
 		<servlet-class>com.rozlicz2.application.server.LogoutServlet</servlet-class>
-	</servlet><servlet>
+	</servlet>
+	<servlet>
 		<servlet-name>requestFactoryServlet</servlet-name>
-		<servlet-class>com.google.web.bindery.requestfactory.server.RequestFactoryServlet</servlet-class>
+		<servlet-class>com.rozlicz2.application.server.CustomRequestFactoryServlet</servlet-class>
 		<init-param>
 			<param-name>symbolMapsDirectory</param-name>
 			<!-- You'll need to compile with -extras and move the symbolMaps directory 
@@ -32,14 +30,6 @@
 	<static-files>
 		<include path="/favicon.ico" />
 	</static-files>
-	
-	
-	
-	<servlet-mapping>
-		<servlet-name>greetServlet</servlet-name>
-		<url-pattern>/rozlicz2application/greet</url-pattern>
-	</servlet-mapping>
-
 	
 	<servlet-mapping>
 		<servlet-name>FacebookLoginServlet</servlet-name>
@@ -60,7 +50,7 @@
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
-		<welcome-file>Rozlicz2Application.html</welcome-file>
+		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
 </web-app>

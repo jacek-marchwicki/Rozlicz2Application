@@ -1,7 +1,7 @@
 body {
 	padding: 0px;
 	margin: 0px;
-	font-family: Sans-serif;
+	font-family: Gill Sans, Verdana, Sans-serif;
 }
 /* @sprite body {
 	gwt-image: 'facebook';
@@ -15,41 +15,28 @@ h1,h2,h3 {
 	clear: both;
 }
 
-@
--webkit-keyframes fadein { 0% {
-	opacity: 0;
-}
+@-webkit-keyframes fadein {
+	0% {
+		opacity: 0;
+	}
 
-100%
-{
-opacity
-:
- 
-0
-.7
-;
- 
-}
+	100%
+	{
+		opacity: 0.7;
+	}
 }
 .hideClass {
 	opacity: 0;
 }
 
-@
--webkit-keyframes slide { 0% {
-	left: -500px;
-}
+@-webkit-keyframes slide {
+	0% {
+		left: -500px;
+	}
 
-100%
-{
-left
-:
- 
-0
-px
-;
- 
-}
+	100% {
+		left: 0px;
+	}
 }
 #body>div>div {
 	position: absolute;

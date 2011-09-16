@@ -11,10 +11,12 @@ import java.util.Map;
 
 import javax.persistence.Embedded;
 import javax.persistence.Transient;
+import javax.servlet.http.HttpServletRequest;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.PreparedQuery.TooManyResultsException;
+import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.NotFoundException;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.Query;
 import com.googlecode.objectify.util.DAOBase;
@@ -35,9 +37,6 @@ public class ObjectifyDao<T> extends DAOBase {
 
 	private static Rozlicz2UserService userService = new Rozlicz2UserService();
 
-	static {
-		ObjectifyService.register(AppUser.class);
-	}
 	protected Class<T> clazz;
 
 	@SuppressWarnings("unchecked")
@@ -102,11 +101,11 @@ public class ObjectifyDao<T> extends DAOBase {
 		return ofy().get(keys);
 	}
 
-	public T get(Key<T> key) throws EntityNotFoundException {
+	public T get(Key<T> key) throws NotFoundException {
 		return ofy().get(key);
 	}
 
-	public T get(Long id) throws EntityNotFoundException {
+	public T get(Long id) throws NotFoundException {
 		return ofy().get(this.clazz, id);
 	}
 
@@ -147,7 +146,9 @@ public class ObjectifyDao<T> extends DAOBase {
 	}
 
 	protected AppUser getCurrentUser() {
-		return userService.getCurrentUserInfo();
+		HttpServletRequest request = RequestFactoryServlet
+				.getThreadLocalRequest();
+		return userService.getCurrentUserInfo(request);
 	}
 
 	public Key<T> getKey(Long id) {
@@ -168,7 +169,8 @@ public class ObjectifyDao<T> extends DAOBase {
 	 */
 	public List<T> listAllForUser() {
 		AppUser currentUserInfo = getCurrentUser();
-
+		if (currentUserInfo == null)
+			return null;
 		Key<AppUser> userKey = currentUserInfo.getKey();
 		return listByProperty("owner", userKey);
 	}

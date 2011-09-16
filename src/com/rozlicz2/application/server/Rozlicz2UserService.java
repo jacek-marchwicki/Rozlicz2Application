@@ -2,20 +2,21 @@ package com.rozlicz2.application.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.SecureRandom;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.repackaged.org.json.JSONObject;
-import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.NotFoundException;
 import com.rozlicz2.application.server.service.AppUserDao;
 import com.rozlicz2.application.server.service.AppUserSessionDao;
 import com.rozlicz2.application.shared.entity.AppUser;
@@ -34,6 +35,10 @@ public class Rozlicz2UserService {
 	private static final String facebook_redirect_url = "http://localhost:8888/login";
 
 	private static final String facebook_secret = "307bba0282982ea7459bc2689a6039c3";
+
+	private static final SecureRandom random = new SecureRandom();
+
+	private static final String SESSION_ID = "user_id";
 
 	public static Rozlicz2UserService get() {
 		Rozlicz2UserService userService = new Rozlicz2UserService();
@@ -93,6 +98,7 @@ public class Rozlicz2UserService {
 
 			AppUserSession session = new AppUserSession();
 			session.setUserKey(user);
+			session.setSessionId(generateSessionId());
 			sessionDao.put(session);
 			assert session.getSessionId() != null;
 			setSessionId(request, session.getSessionId());
@@ -131,9 +137,12 @@ public class Rozlicz2UserService {
 		return "/logout?redirect_url=" + redirectUrl;
 	}
 
-	public AppUser getCurrentUserInfo() {
-		HttpServletRequest request = RequestFactoryServlet
-				.getThreadLocalRequest();
+	public String generateSessionId() {
+		return new BigInteger(130, random).toString(32);
+	}
+
+	public AppUser getCurrentUserInfo(HttpServletRequest request) {
+		assert (request != null);
 		String sessionId = getSessionId(request);
 
 		if (sessionId != null) {
@@ -144,7 +153,7 @@ public class Rozlicz2UserService {
 				appUserSession = sessionDao.get(sessionKey);
 				AppUser appUser = userDao.get(appUserSession.getUserKey());
 				return appUser;
-			} catch (EntityNotFoundException e) {
+			} catch (NotFoundException e) {
 				// not found entity or user in DAO
 			}
 
@@ -172,6 +181,7 @@ public class Rozlicz2UserService {
 
 			AppUserSession session = new AppUserSession();
 			session.setUserKey(user);
+			session.setSessionId(generateSessionId());
 			sessionDao.put(session);
 			assert session.getSessionId() != null;
 
@@ -186,17 +196,18 @@ public class Rozlicz2UserService {
 
 	public String getSessionId(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		return (String) session.getAttribute("user_id");
+		return (String) session.getAttribute(SESSION_ID);
 	}
 
 	public void logoutUser(HttpServletRequest request,
 			HttpServletResponse response, String redirect_url)
 			throws IOException {
 		String sessionId = getSessionId(request);
-		Key<AppUserSession> session = new Key<AppUserSession>(
-				AppUserSession.class, sessionId);
-		sessionDao.deleteKey(session);
-
+		if (sessionId != null) {
+			Key<AppUserSession> session = new Key<AppUserSession>(
+					AppUserSession.class, sessionId);
+			sessionDao.deleteKey(session);
+		}
 		User googleUser = googleUserService.getCurrentUser();
 
 		if (googleUser != null) {
@@ -211,6 +222,6 @@ public class Rozlicz2UserService {
 
 	public void setSessionId(HttpServletRequest request, String id) {
 		HttpSession session = request.getSession();
-		session.setAttribute("user_id", id);
+		session.setAttribute(SESSION_ID, id);
 	}
 }

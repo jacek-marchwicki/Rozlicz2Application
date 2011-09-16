@@ -9,6 +9,9 @@ public class AppUserSession {
 	private String sessionId;
 	private Key<AppUser> userKey;
 
+	public AppUserSession() {
+	}
+
 	public String getSessionId() {
 		return sessionId;
 	}
