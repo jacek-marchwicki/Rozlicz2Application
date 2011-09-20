@@ -97,6 +97,13 @@ public class ObjectifyDao<T> extends DAOBase {
 		ofy().delete(keys);
 	}
 
+	public T find(String id) {
+		if (id == null)
+			return null;
+		T elem = ofy().find(clazz, id);
+		return elem;
+	}
+
 	public Map<Key<T>, T> get(Iterable<Key<T>> keys) {
 		return ofy().get(keys);
 	}

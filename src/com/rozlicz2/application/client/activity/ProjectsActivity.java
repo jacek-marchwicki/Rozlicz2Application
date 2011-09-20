@@ -6,94 +6,83 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.event.shared.ResettableEventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.rozlicz2.application.client.ClientFactory;
-import com.rozlicz2.application.client.DAOManager;
-import com.rozlicz2.application.client.dao.SyncDatastoreService;
-import com.rozlicz2.application.client.dao.SyncEntity;
-import com.rozlicz2.application.client.dao.SyncKey;
-import com.rozlicz2.application.client.dao.SyncObserver;
-import com.rozlicz2.application.client.dao.SyncPreparedQuery;
-import com.rozlicz2.application.client.dao.SyncQuery;
+import com.rozlicz2.application.client.event.ProjectsListEvent;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.place.ProjectsPlace;
+import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectsView;
 import com.rozlicz2.application.shared.proxy.ProjectListProxy;
+import com.rozlicz2.application.shared.proxy.ProjectProxy;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
-import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ItemListRequestContext;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ProjectListRequestContext;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ProjectRequestContext;
+import com.rozlicz2.application.shared.tools.IdGenerator;
 
 public class ProjectsActivity extends AbstractActivity implements
 		ProjectsView.Presenter {
 
+	private ResettableEventBus childEventBus;
 	private final ClientFactory clientFactory;
-	private final SyncDatastoreService dao;
-	private final SyncObserver projectsCountObserver = new SyncObserver() {
-
-		@Override
-		public void changed(SyncEntity before, SyncEntity after) {
-			updateProjectsCount();
-		}
-	};;
-	private final SyncObserver projectShortObserver = new SyncObserver() {
-
-		@Override
-		public void changed(SyncEntity before, SyncEntity after) {
-			updateProjectsList();
-		}
-	};;
 	private ProjectsView projectsView;
 	private final ListwidgetRequestFactory rf;
 
 	public ProjectsActivity(ProjectsPlace place, ClientFactory clientFactory) {
 		this.clientFactory = clientFactory;
-		dao = clientFactory.getDAO();
 		rf = clientFactory.getRf();
-	}
-
-	private void addObservers() {
-		dao.addObserver(DAOManager.PROJECTSHORT, projectShortObserver);
-		dao.addPropertyObserver(DAOManager.GLOBAL,
-				DAOManager.GLOBAL_PROJECTCOUNT, projectsCountObserver);
 	}
 
 	@Override
 	public void createProject() {
-		receiveData();
-		/*
-		 * SyncEntity syncEntity = new SyncEntity(DAOManager.PROJECT);
-		 * syncEntity.setProperty(DAOManager.PROJECT_NAME,
-		 * ApplicationConstants.constants.newProject());
-		 * syncEntity.setProperty(DAOManager.PROJECT_EXPENSES, new
-		 * IdArrayMap<ExpenseEntity>());
-		 * syncEntity.setProperty(DAOManager.PROJECT_PARTICIPANTS, new
-		 * IdArrayMap<ParticipantEntity>()); dao.put(syncEntity);
-		 * 
-		 * ProjectPlace place = new ProjectPlace(syncEntity.getKey().getId());
-		 * clientFactory.getPlaceController().goTo(place);
-		 */
+		ProjectRequestContext projectRequest = rf.getProjectRequest();
+		ProjectProxy project = projectRequest.create(ProjectProxy.class);
+		project.setName(ApplicationConstants.constants.newProject());
+		project.setId(IdGenerator.nextId());
+		projectRequest.save(project).fire(new Receiver<Void>() {
+
+			@Override
+			public void onFailure(ServerFailure error) {
+				Window.alert("error: " + error);
+				super.onFailure(error);
+			}
+
+			@Override
+			public void onSuccess(Void response) {
+				Window.alert("saved");
+			}
+		});
+		ProjectPlace place = new ProjectPlace(project);
+		clientFactory.getPlaceController().goTo(place);
 	}
 
 	@Override
-	public void editProject(SyncKey key) {
-
+	public void editProject(ProjectListProxy key) {
 		ProjectPlace place = new ProjectPlace(key.getId());
 		clientFactory.getPlaceController().goTo(place);
 	}
 
 	@Override
 	public void onCancel() {
-		removeObservers();
+		// maybe remove handlers?
 	}
 
 	@Override
 	public void onStop() {
-		removeObservers();
+		childEventBus.removeHandlers();
 	}
 
-	private void receiveData() {
-		ItemListRequestContext projectListRequest = rf.projectListRequest();
+	protected void populateProjectsList(
+			List<ProjectListProxy> readOnlyProjectsList) {
+		projectsView.setProjectsNumber(readOnlyProjectsList.size());
+		projectsView.setProjectsList(readOnlyProjectsList);
+	}
+
+	private void receiveData(final EventBus eventBus) {
+		ProjectListRequestContext projectListRequest = rf.getProjectListRequest();
 		Request<List<ProjectListProxy>> listAll = projectListRequest.listAll();
 		listAll.fire(new Receiver<List<ProjectListProxy>>() {
 
@@ -105,45 +94,29 @@ public class ProjectsActivity extends AbstractActivity implements
 
 			@Override
 			public void onSuccess(List<ProjectListProxy> response) {
-				Window.alert("response: " + response);
+				ProjectsListEvent event = new ProjectsListEvent(response);
+				eventBus.fireEvent(event);
 			}
 		});
 	}
 
-	private void removeObservers() {
-		dao.removeObserver(DAOManager.PROJECTSHORT, projectShortObserver);
-		dao.removePropertyObserver(DAOManager.GLOBAL,
-				DAOManager.GLOBAL_PROJECTCOUNT, projectsCountObserver);
-	}
-
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		addObservers();
+		this.childEventBus = new ResettableEventBus(eventBus);
+		childEventBus.addHandler(ProjectsListEvent.TYPE,
+				new ProjectsListEvent.Handler() {
+
+					@Override
+					public void onProjectsList(ProjectsListEvent event) {
+						populateProjectsList(event.getReadOnlyProjectsList());
+					}
+				});
 
 		projectsView = clientFactory.getProjectsView();
 		projectsView.setPresenter(this);
 
-		updateProjectsList();
-		updateProjectsCount();
-
-		receiveData();
+		receiveData(eventBus);
 		panel.setWidget(projectsView.asWidget());
-	}
-
-	private void updateProjectsCount() {
-		SyncQuery q = new SyncQuery(DAOManager.GLOBAL);
-		SyncEntity asSingleEntity = dao.prepare(q).asSingleEntity();
-		assert (asSingleEntity != null);
-		Integer count = (Integer) asSingleEntity
-				.getProperty(DAOManager.GLOBAL_PROJECTCOUNT);
-		projectsView.setProjectsNumber(count);
-	}
-
-	protected void updateProjectsList() {
-		SyncQuery q = new SyncQuery(DAOManager.PROJECTSHORT);
-		SyncPreparedQuery prepare = dao.prepare(q);
-
-		projectsView.setProjectsList(prepare.asDataProvider());
 	}
 
 }

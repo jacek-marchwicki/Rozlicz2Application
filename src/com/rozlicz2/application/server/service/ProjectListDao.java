@@ -12,16 +12,29 @@ public class ProjectListDao extends ObjectifyDao<ProjectList> {
 		ObjectifyService.register(ProjectList.class);
 	}
 
-	@Override
-	public List<ProjectList> listAll() {
-		return super.listAllForUser();
-	}
-
 	/**
 	 * Remove a list. Since items are embedded, they are removed automatically.
 	 * 
 	 * @param list
 	 */
+
+	public ProjectList findUser(String projectId) {
+		ProjectList find = find(projectId);
+		if (find == null)
+			return null;
+		AppUser currentUser = getCurrentUser();
+		if (currentUser == null)
+			return null;
+		if (!find.getOwner().equals(currentUser.getKey()))
+			return null;
+		return find;
+	}
+
+	@Override
+	public List<ProjectList> listAll() {
+		return super.listAllForUser();
+	}
+
 	public void removeList(ProjectList list) {
 		this.delete(list);
 	}

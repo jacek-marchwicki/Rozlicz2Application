@@ -1,6 +1,7 @@
 package com.rozlicz2.application.client.view;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -10,7 +11,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.resources.client.CssResource.ImportedWithPrefix;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -27,7 +27,7 @@ import com.rozlicz2.application.client.Validator.ValidatorException;
 import com.rozlicz2.application.client.resources.ApplicationResources;
 
 public class EditableLabelWidget extends Composite implements HasText,
-		HasValueChangeHandlers<String> {
+		HasValueChangeHandlers<String>, LeafValueEditor<String> {
 
 	interface EditableLabelWidgetUiBinder extends
 			UiBinder<Widget, EditableLabelWidget> {
@@ -38,7 +38,7 @@ public class EditableLabelWidget extends Composite implements HasText,
 		Style widgetStyle();
 	}
 
-	@ImportedWithPrefix("gwt-CellList")
+	@CssResource.ImportedWithPrefix("gwt-CellList")
 	public interface Style extends CssResource {
 		String DEFAULT_CSS = "com/rozlicz2/application/client/view/EditableLabelWidget.css";
 
@@ -117,6 +117,11 @@ public class EditableLabelWidget extends Composite implements HasText,
 		return textLabel.getText();
 	}
 
+	@Override
+	public String getValue() {
+		return getText();
+	}
+
 	private void isValid() throws ValidatorException {
 		String text = textBox.getText();
 		Validator.isNotToShort(text);
@@ -183,6 +188,11 @@ public class EditableLabelWidget extends Composite implements HasText,
 	public void setText(String text) {
 		textLabel.setText(text);
 		doEditable(false);
+	}
+
+	@Override
+	public void setValue(String value) {
+		setText(value);
 	}
 
 	private void validate() {

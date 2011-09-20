@@ -7,27 +7,47 @@ import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.RequestFactory;
 import com.google.web.bindery.requestfactory.shared.Service;
 import com.rozlicz2.application.server.locator.DaoServiceLocator;
+import com.rozlicz2.application.server.service.ExpenseDao;
+import com.rozlicz2.application.server.service.ProjectDao;
 import com.rozlicz2.application.server.service.ProjectListDao;
+import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectListProxy;
+import com.rozlicz2.application.shared.proxy.ProjectProxy;
 
 public interface ListwidgetRequestFactory extends RequestFactory {
-	/**
-	 * Service stub for methods in ItemListDao
-	 * 
-	 * TODO Enhance RequestFactory to enable service stubs to extend a base
-	 * interface so we don't have to repeat methods from the base ObjectifyDao
-	 * in each stub
-	 */
+	@Service(value = ExpenseDao.class, locator = DaoServiceLocator.class)
+	interface ExpenseRequestContext extends RequestContext {
+
+		Request<ExpenseProxy> find(String id);
+
+		Request<List<ExpenseProxy>> findByProjectId(String projectId);
+
+		Request<Void> save(ExpenseProxy expense);
+
+	}
+
 	@Service(value = ProjectListDao.class, locator = DaoServiceLocator.class)
-	interface ItemListRequestContext extends RequestContext {
+	interface ProjectListRequestContext extends RequestContext {
 		Request<List<ProjectListProxy>> listAll();
 
 		Request<Void> removeList(ProjectListProxy list);
-
-		Request<Void> save(ProjectListProxy list);
-
-		Request<ProjectListProxy> saveAndReturn(ProjectListProxy newList);
 	}
 
-	ItemListRequestContext projectListRequest();
+	@Service(value = ProjectDao.class, locator = DaoServiceLocator.class)
+	interface ProjectRequestContext extends RequestContext {
+
+		Request<ProjectProxy> find(String id);
+
+		Request<Void> removeList(ProjectProxy list);
+
+		Request<Void> save(ProjectProxy list);
+
+		Request<ProjectProxy> saveAndReturn(ProjectProxy newList);
+	}
+
+	ExpenseRequestContext getExpenseRequest();
+
+	ProjectListRequestContext getProjectListRequest();
+
+	ProjectRequestContext getProjectRequest();
 }

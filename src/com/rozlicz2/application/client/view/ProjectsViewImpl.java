@@ -1,5 +1,7 @@
 package com.rozlicz2.application.client.view;
 
+import java.util.List;
+
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -14,18 +16,15 @@ import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SingleSelectionModel;
-import com.rozlicz2.application.client.DAOManager;
-import com.rozlicz2.application.client.EntityProvidesKey;
-import com.rozlicz2.application.client.dao.AbstractEntityProvider;
-import com.rozlicz2.application.client.dao.SyncEntity;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
+import com.rozlicz2.application.shared.proxy.ProjectListProxy;
 
 public class ProjectsViewImpl extends Composite implements ProjectsView {
 
-	public static class ProductCell extends AbstractCell<SyncEntity> {
+	public static class ProductCell extends AbstractCell<ProjectListProxy> {
 		interface Template extends SafeHtmlTemplates {
 
 			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
@@ -42,11 +41,9 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
-				SyncEntity value, SafeHtmlBuilder sb) {
+				ProjectListProxy value, SafeHtmlBuilder sb) {
 			if (value != null) {
-				String name = (String) value.getProperty(DAOManager.PROJECTSHORT_NAME);
-				assert (name != null);
-				assert (name instanceof String);
+				String name = value.getName();
 				sb.append(template.productCellTemplate(name, "123,13 PLN"));
 			}
 		}
@@ -60,7 +57,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 			.create(ProjectsViewImplUiBinder.class);
 
 	@UiField
-	CellList<SyncEntity> cellList;
+	CellList<ProjectListProxy> cellList;
 
 	private ProjectsView.Presenter presenter;
 
@@ -77,31 +74,28 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 	}
 
 	@UiFactory
-	CellList<SyncEntity> makeCellList() {
-		EntityProvidesKey keyProvider = new EntityProvidesKey();
+	CellList<ProjectListProxy> makeCellList() {
+		CellList<ProjectListProxy> cellList = new CellList<ProjectListProxy>(
+				new ProductCell());
 
-		CellList<SyncEntity> cellList = new CellList<SyncEntity>(
-				new ProductCell(), keyProvider);
-
-		final SingleSelectionModel<SyncEntity> selectionModel = new SingleSelectionModel<SyncEntity>(
-				keyProvider);
+		final NoSelectionModel<ProjectListProxy> selectionModel = new NoSelectionModel<ProjectListProxy>();
 		cellList.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new Handler() {
 
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				SyncEntity selectedObject = selectionModel.getSelectedObject();
+				ProjectListProxy selectedObject = selectionModel
+						.getLastSelectedObject();
 				if (selectedObject == null)
 					return;
-				selectionModel.setSelected(selectedObject, false);
 				onSelectedObject(selectedObject);
 			}
 		});
 		return cellList;
 	}
 
-	protected void onSelectedObject(SyncEntity selectedObject) {
-		presenter.editProject(selectedObject.getKey());
+	protected void onSelectedObject(ProjectListProxy selectedObject) {
+		presenter.editProject(selectedObject);
 	}
 
 	@Override
@@ -110,8 +104,8 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 	}
 
 	@Override
-	public void setProjectsList(AbstractEntityProvider dataProvider) {
-		dataProvider.addDataDisplay(cellList);
+	public void setProjectsList(List<ProjectListProxy> dataProvider) {
+		cellList.setRowData(dataProvider);
 	}
 
 	@Override

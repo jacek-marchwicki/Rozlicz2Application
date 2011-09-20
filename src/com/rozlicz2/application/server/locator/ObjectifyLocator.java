@@ -7,7 +7,7 @@ import com.rozlicz2.application.shared.entity.DatastoreObject;
 /**
  * Generic @Locator for objects that extend DatastoreObject
  */
-public class ObjectifyLocator extends Locator<DatastoreObject, Long> {
+public class ObjectifyLocator extends Locator<DatastoreObject, String> {
 	@Override
 	public DatastoreObject create(Class<? extends DatastoreObject> clazz) {
 		try {
@@ -20,7 +20,9 @@ public class ObjectifyLocator extends Locator<DatastoreObject, Long> {
 	}
 
 	@Override
-	public DatastoreObject find(Class<? extends DatastoreObject> clazz, Long id) {
+	public DatastoreObject find(Class<? extends DatastoreObject> clazz,
+			String id) {
+		@SuppressWarnings("rawtypes")
 		ObjectifyDao daoBase = new ObjectifyDao();
 		return daoBase.ofy().find(clazz, id);
 	}
@@ -32,13 +34,13 @@ public class ObjectifyLocator extends Locator<DatastoreObject, Long> {
 	}
 
 	@Override
-	public Long getId(DatastoreObject domainObject) {
+	public String getId(DatastoreObject domainObject) {
 		return domainObject.getId();
 	}
 
 	@Override
-	public Class<Long> getIdType() {
-		return Long.class;
+	public Class<String> getIdType() {
+		return String.class;
 	}
 
 	@Override

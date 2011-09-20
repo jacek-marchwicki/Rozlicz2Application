@@ -4,8 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
-import com.rozlicz2.application.client.dao.SyncDatastoreService;
-import com.rozlicz2.application.client.dao.SyncDatastoreServiceFactory;
 import com.rozlicz2.application.client.view.AddParticipantView;
 import com.rozlicz2.application.client.view.AddParticipantWidget;
 import com.rozlicz2.application.client.view.ExpenseView;
@@ -19,8 +17,6 @@ import com.rozlicz2.application.client.view.ProjectsViewImpl;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 
 public class ClientFactoryImpl implements ClientFactory {
-	private final SyncDatastoreService dao = SyncDatastoreServiceFactory
-			.getDatastoreService();
 	private final EventBus eventBus = new SimpleEventBus();
 	private final ExpenseView expenseView = new ExpenseViewImpl();
 	private final NotFoundView notFoundView = new NotFoundViewImpl();
@@ -35,11 +31,6 @@ public class ClientFactoryImpl implements ClientFactory {
 	@Override
 	public AddParticipantView getAddParticipantView() {
 		return participanView;
-	}
-
-	@Override
-	public SyncDatastoreService getDAO() {
-		return dao;
 	}
 
 	@Override

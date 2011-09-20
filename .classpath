@@ -23,5 +23,18 @@
 	<classpathentry kind="lib" path="lib/requestfactory-server-src.jar"/>
 	<classpathentry kind="lib" path="lib/requestfactory-server+src.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-server.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.inject.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/aopalliance.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-assistedinject-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-grapher-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-jmx-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-jndi-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-multibindings-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-persist-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-servlet-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-spring-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-struts2-plugin-3.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-throwingproviders-3.0.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -46,7 +46,6 @@ public class Dashboard extends Composite {
 		emailLabel.setText(email);
 
 		ClientFactory clientFactory = GWT.create(ClientFactory.class);
-		new DAOManager(clientFactory.getDAO());
 		EventBus eventBus = clientFactory.getEventBus();
 		ListwidgetRequestFactory rf = clientFactory.getRf();
 		rf.initialize(eventBus);

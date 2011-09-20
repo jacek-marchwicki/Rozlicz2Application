@@ -2,13 +2,23 @@ package com.rozlicz2.application.shared.entity;
 
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
+import javax.validation.constraints.Size;
 
 public class DatastoreObject {
 	@Id
-	private Long id;
+	@Size(max = 32, min = 32)
+	private String id;
 	private Integer version = 0;
 
-	public Long getId() {
+	public DatastoreObject() {
+	}
+
+	public DatastoreObject(DatastoreObject datastoreObject) {
+		this.id = datastoreObject.id;
+		this.version = datastoreObject.version;
+	}
+
+	public String getId() {
 		return id;
 	}
 
@@ -21,7 +31,7 @@ public class DatastoreObject {
 		this.version++;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

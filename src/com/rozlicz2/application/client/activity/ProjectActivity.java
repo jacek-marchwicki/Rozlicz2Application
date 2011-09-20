@@ -1,121 +1,184 @@
 package com.rozlicz2.application.client.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.event.shared.ResettableEventBus;
+import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.rozlicz2.application.client.ClientFactory;
-import com.rozlicz2.application.client.DAOManager;
-import com.rozlicz2.application.client.dao.SyncDatastoreService;
-import com.rozlicz2.application.client.dao.SyncEntity;
-import com.rozlicz2.application.client.dao.SyncKey;
-import com.rozlicz2.application.client.dao.SyncObserver;
-import com.rozlicz2.application.client.entity.ExpenseConsumerEntity;
-import com.rozlicz2.application.client.entity.ExpenseEntity;
-import com.rozlicz2.application.client.entity.ExpensePaymentEntity;
-import com.rozlicz2.application.client.entity.IdArrayMap;
-import com.rozlicz2.application.client.entity.IdMap;
+import com.rozlicz2.application.client.event.ExpensesChangedEvent;
+import com.rozlicz2.application.client.event.ProjectChangedEvent;
 import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectView;
+import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
+import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
+import com.rozlicz2.application.shared.proxy.ExpenseProxy;
+import com.rozlicz2.application.shared.proxy.ProjectProxy;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ExpenseRequestContext;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ProjectRequestContext;
+import com.rozlicz2.application.shared.tools.IdGenerator;
 
 public class ProjectActivity extends AbstractActivity implements
 		ProjectView.Presenter {
 
+	private ResettableEventBus childEventBus;
 	private final ClientFactory clientFactory;
-	private final SyncDatastoreService dao;
-	private final SyncKey projectKey;
-	private final SyncObserver projectObserver = new SyncObserver() {
-		@Override
-		public void changed(SyncEntity before, SyncEntity after) {
-			projectChanged();
-		}
-	};
+	private final ProjectPlace place;
+	private ProjectProxy project;
+	private ProjectRequestContext projectRequest;
 	private ProjectView projectView;
+	private final ListwidgetRequestFactory rf;
 
 	public ProjectActivity(ProjectPlace place, ClientFactory clientFactory) {
-		long id = place.getProjectId();
-		projectKey = new SyncKey(DAOManager.PROJECT, id);
+		this.place = place;
 		this.clientFactory = clientFactory;
-		dao = clientFactory.getDAO();
-	}
-
-	private void addObservers() {
-		dao.addObserver(DAOManager.PROJECT, projectObserver);
+		rf = clientFactory.getRf();
 	}
 
 	@Override
 	public void createExpense() {
-		SyncEntity expanseE = new SyncEntity(DAOManager.EXPANSE);
-		expanseE.setProperty(DAOManager.EXPANSE_NAME,
-				ApplicationConstants.constants.newExpense());
-		expanseE.setProperty(DAOManager.EXPANSE_PROJECTID, projectKey.getId());
-		expanseE.setProperty(DAOManager.EXPANSE_PAYMENTS,
-				new IdArrayMap<ExpensePaymentEntity>());
-		expanseE.setProperty(DAOManager.EXPANSE_CONSUMERS,
-				new IdArrayMap<ExpenseConsumerEntity>());
-		expanseE.setProperty(DAOManager.EXPANSE_SUM, new Double(0));
-		dao.put(expanseE);
+		ExpenseRequestContext expenseRequest = rf.getExpenseRequest();
+		ExpenseProxy expense = expenseRequest.create(ExpenseProxy.class);
+		expense.setId(IdGenerator.nextId());
+		expense.setName(ApplicationConstants.constants.newExpense());
+		expense.setPayments(new ArrayList<ExpensePaymentEntityProxy>());
+		expense.setConsumers(new ArrayList<ExpenseConsumerEntityProxy>());
+		expense.setProjectId(place.getProjectId());
+		expenseRequest.save(expense).fire(new Receiver<Void>() {
 
-		ExpensePlace place = new ExpensePlace(expanseE.getKey().getId());
+			@Override
+			public void onSuccess(Void response) {
+				Window.alert("Created");
+			}
+		});
+		ExpensePlace place = new ExpensePlace(expense);
 		clientFactory.getPlaceController().goTo(place);
 	}
 
+	protected void drawExpenses(List<ExpenseProxy> expenses) {
+		projectView.setExpenses(expenses);
+	}
+
 	@Override
-	public void editExpense(long expenseId) {
-		ExpensePlace place = new ExpensePlace(expenseId);
+	public void editExpense(ExpenseProxy expense) {
+		ExpensePlace place = new ExpensePlace(expense);
 		clientFactory.getPlaceController().goTo(place);
+	}
+
+	private void findProjectById(final EventBus eventBus) {
+		rf.getProjectRequest().find(place.getProjectId())
+				.fire(new Receiver<ProjectProxy>() {
+
+					@Override
+					public void onSuccess(ProjectProxy response) {
+						if (response == null) {
+							// project not found
+							clientFactory.getPlaceController().goTo(
+									new NotFoundPlace());
+						}
+						ProjectChangedEvent projectChangedEvent = new ProjectChangedEvent(
+								response);
+						eventBus.fireEvent(projectChangedEvent);
+					}
+				});
+		rf.getExpenseRequest().findByProjectId(place.getProjectId())
+				.with("payments", "consumers")
+				.fire(new Receiver<List<ExpenseProxy>>() {
+
+					@Override
+					public void onSuccess(List<ExpenseProxy> response) {
+						ExpensesChangedEvent event = new ExpensesChangedEvent(
+								place.getProjectId(), response);
+						eventBus.fireEvent(event);
+					}
+				});
 	}
 
 	@Override
 	public void onCancel() {
-		removeObservers();
+		// maybe remove handlers
 	}
 
 	@Override
 	public void onStop() {
-		removeObservers();
+		childEventBus.removeHandlers();
 	}
 
-	protected void projectChanged() {
-		SyncEntity project = dao.get(projectKey);
-		if (project == null) {
-			Place place = new NotFoundPlace();
-			clientFactory.getPlaceController().goTo(place);
-			return;
-		}
-		@SuppressWarnings("unchecked")
-		IdMap<ExpenseEntity> expenses = (IdMap<ExpenseEntity>) project
-				.getProperty(DAOManager.PROJECT_EXPENSES);
-		assert (expenses != null);
-		String name = (String) project.getProperty(DAOManager.PROJECT_NAME);
-		projectView.setExpenses(expenses);
-		projectView.setProjectName(name);
-	}
-
-	private void removeObservers() {
-		dao.removeObserver(DAOManager.PROJECT, projectObserver);
+	protected void projectChanged(ProjectProxy readOnlyProject) {
+		projectRequest = rf.getProjectRequest();
+		project = projectRequest.edit(readOnlyProject);
+		projectView.getDriver().edit(project);
 	}
 
 	@Override
-	public void setProjectName(String projectName) {
-		SyncEntity project = dao.get(projectKey);
-		project.setProperty(DAOManager.PROJECT_NAME, projectName);
-		dao.put(project);
+	public void save() {
+		project = projectView.getDriver().flush();
+		projectRequest.save(project).fire(new Receiver<Void>() {
+
+			@Override
+			public void onConstraintViolation(
+					Set<ConstraintViolation<?>> violations) {
+				projectView.getDriver().setConstraintViolations(violations);
+			}
+
+			@Override
+			public void onSuccess(Void response) {
+			}
+		});
+
 	}
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		addObservers();
+		this.childEventBus = new ResettableEventBus(eventBus);
+		childEventBus.addHandler(ProjectChangedEvent.TYPE,
+				new ProjectChangedEvent.Handler() {
+
+					@Override
+					public void onProjectChanged(ProjectChangedEvent event) {
+						ProjectProxy readOnlyProject = event.getProject();
+						if (place.getProjectId()
+								.equals(readOnlyProject.getId()))
+							projectChanged(readOnlyProject);
+					}
+				});
+		childEventBus.addHandler(ExpensesChangedEvent.TYPE,
+				new ExpensesChangedEvent.Handler() {
+
+					@Override
+					public void onChended(
+							ExpensesChangedEvent expenseChangedEvent) {
+						if (place.getProjectId() != expenseChangedEvent
+								.getProjectId())
+							return;
+						List<ExpenseProxy> expenses = expenseChangedEvent
+								.getExpenses();
+						drawExpenses(expenses);
+					}
+				});
 
 		projectView = clientFactory.getProjectView();
 		projectView.setPresenter(this);
+		drawExpenses(new ArrayList<ExpenseProxy>());
 
-		projectChanged();
+		ProjectProxy readOnlyProject = place.getProject();
+		if (readOnlyProject != null) {
+			projectChanged(readOnlyProject);
+		} else {
+			findProjectById(eventBus);
+		}
 
 		panel.setWidget(projectView.asWidget());
 	}
-
 }

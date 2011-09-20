@@ -1,31 +1,38 @@
 package com.rozlicz2.application.client.view;
 
+import java.util.List;
+
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.rozlicz2.application.client.entity.BaseEntity.EntityKeyProvider;
-import com.rozlicz2.application.client.entity.ExpenseEntity;
-import com.rozlicz2.application.client.entity.IdMap;
+import com.rozlicz2.application.shared.proxy.ExpenseProxy;
+import com.rozlicz2.application.shared.proxy.ProjectProxy;
 
-public class ProjectViewImpl extends Composite implements ProjectView {
+public class ProjectViewImpl extends Composite implements ProjectView,
+		Editor<ProjectProxy> {
 
-	public static class ExpenditureCell extends
-			AbstractCell<ExpenseEntity> {
+	interface Driver extends
+			SimpleBeanEditorDriver<ProjectProxy, ProjectViewImpl> {
+	}
+
+	public static class ExpenditureCell extends AbstractCell<ExpenseProxy> {
 
 		interface Template extends SafeHtmlTemplates {
 			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
@@ -41,13 +48,24 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
-				ExpenseEntity value, SafeHtmlBuilder sb) {
+				ExpenseProxy value, SafeHtmlBuilder sb) {
 			if (value == null)
 				return;
-			String name = value.getName();
-			assert (name != null);
-			assert (name instanceof String);
-			sb.append(template.productCellTemplate(name, "123,zł"));
+			sb.append(template.productCellTemplate(value.getName(), "123,zł"));
+		}
+	}
+
+	public static class ExpensesEditor extends CellList<ExpenseProxy> {
+		private static final ProvidesKey<ExpenseProxy> keyProvider = new ProvidesKey<ExpenseProxy>() {
+
+			@Override
+			public Object getKey(ExpenseProxy item) {
+				return item.getId();
+			}
+		};
+
+		public ExpensesEditor() {
+			super(new ExpenditureCell(), keyProvider);
 		}
 	}
 
@@ -60,38 +78,29 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 	@UiField
 	Button createExpenseButton;
 
+	Driver driver = GWT.create(Driver.class);
+
 	@UiField
-	CellList<ExpenseEntity> expensesList;
+	ExpensesEditor expensesEditor;
+
+	@UiField
+	EditableLabelWidget nameEditor;
 
 	private Presenter presenter;
 
-	@UiField
-	EditableLabelWidget projectNameWidget;
-
 	public ProjectViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
-	}
 
-	public ProjectViewImpl(String projectName) {
-		initWidget(uiBinder.createAndBindUi(this));
-		projectNameWidget.setText(projectName);
-	}
+		driver.initialize(this);
 
-	@UiFactory
-	CellList<ExpenseEntity> makeCellList() {
-		EntityKeyProvider<ExpenseEntity> keyProvider = new EntityKeyProvider<ExpenseEntity>();
-
-		CellList<ExpenseEntity> cellList = new CellList<ExpenseEntity>(
-				new ExpenditureCell(), keyProvider);
-
-		final SingleSelectionModel<ExpenseEntity> selectionModel = new SingleSelectionModel<ExpenseEntity>(
-				keyProvider);
-		cellList.setSelectionModel(selectionModel);
+		final SingleSelectionModel<ExpenseProxy> selectionModel = new SingleSelectionModel<ExpenseProxy>(
+				ExpensesEditor.keyProvider);
+		expensesEditor.setSelectionModel(selectionModel);
 		selectionModel.addSelectionChangeHandler(new Handler() {
 
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				ExpenseEntity selectedObject = selectionModel
+				ExpenseProxy selectedObject = selectionModel
 						.getSelectedObject();
 				if (selectedObject == null)
 					return;
@@ -99,7 +108,11 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 				onSelectedObject(selectedObject);
 			}
 		});
-		return cellList;
+	}
+
+	@Override
+	public SimpleBeanEditorDriver<ProjectProxy, ?> getDriver() {
+		return driver;
 	}
 
 	@UiHandler("createExpenseButton")
@@ -107,32 +120,25 @@ public class ProjectViewImpl extends Composite implements ProjectView {
 		presenter.createExpense();
 	}
 
-	@UiHandler("projectNameWidget")
-	public void onProjectNameChange(ValueChangeEvent<String> e) {
-		this.presenter.setProjectName(e.getValue());
+	@UiHandler("nameEditor")
+	public void onNameEditorChange(ValueChangeEvent<String> event) {
+		presenter.save();
 	}
 
-	protected void onSelectedObject(ExpenseEntity selectedObject) {
-		presenter.editExpense(selectedObject.getId());
+	protected void onSelectedObject(ExpenseProxy selectedObject) {
+		presenter.editExpense(selectedObject);
 	}
 
 	@Override
-	public void setExpenses(IdMap<ExpenseEntity> expenses) {
-		if (expenses.getDataDisplays().contains(expensesList))
-			expenses.removeDataDisplay(expensesList);
-		expenses.addDataDisplay(expensesList);
-		expensesList.redraw();
+	public void setExpenses(List<ExpenseProxy> expenses) {
+		expensesEditor.setRowData(expenses);
+		expensesEditor.setRowCount(expenses.size());
 	}
 
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
 
-	}
-
-	@Override
-	public void setProjectName(String projectName) {
-		projectNameWidget.setText(projectName);
 	}
 
 }

@@ -85,11 +85,6 @@
 			font-size: 24px;
 		}
 		
-		.content-right span {
-			display: block;
-			font-size: 14px;
-		}
-		
 		.logo {
 			font-size: 56px;
 			color: #d73828;
@@ -97,7 +92,16 @@
 			width: 350px;
 			height: 70px;
 		}
-				
+		.two {
+			font-size: 45px;
+		}
+		.green {
+			color: #019138;
+		}
+		.forfree {
+			display: block;
+			font-size: 14px;
+		}		
 	</ui:style>
 	<g:HTMLPanel>
 		<div class="{style.h1h1}">
@@ -107,10 +111,10 @@
 		</div>
 		<div class="{style.h2h1}">
 			<h1 class="{style.h2h2}">
-				<div class="{style.logo}">rozlicz<span class="green"><span class="two">2</span>.pl</span></div>
+				<div class="{style.logo}">rozlicz<span class="{style.green}"><span class="{style.two}">2</span>.pl</span></div>
 				<div class="{style.content-right}">
 					rozliczaj się ze wszystkiego*
-					<span>*za darmo</span>
+					<span class="{style.forfree}">*za darmo</span>
 				</div>
 			</h1>
 		</div>

@@ -2,10 +2,8 @@ package com.rozlicz2.application.server;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.security.SecureRandom;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +19,7 @@ import com.rozlicz2.application.server.service.AppUserDao;
 import com.rozlicz2.application.server.service.AppUserSessionDao;
 import com.rozlicz2.application.shared.entity.AppUser;
 import com.rozlicz2.application.shared.entity.AppUserSession;
+import com.rozlicz2.application.shared.tools.IdGenerator;
 import com.visural.common.IOUtil;
 import com.visural.common.StringUtil;
 
@@ -35,8 +34,6 @@ public class Rozlicz2UserService {
 	private static final String facebook_redirect_url = "http://localhost:8888/login";
 
 	private static final String facebook_secret = "307bba0282982ea7459bc2689a6039c3";
-
-	private static final SecureRandom random = new SecureRandom();
 
 	private static final String SESSION_ID = "user_id";
 
@@ -98,7 +95,7 @@ public class Rozlicz2UserService {
 
 			AppUserSession session = new AppUserSession();
 			session.setUserKey(user);
-			session.setSessionId(generateSessionId());
+			session.setSessionId(IdGenerator.nextId());
 			sessionDao.put(session);
 			assert session.getSessionId() != null;
 			setSessionId(request, session.getSessionId());
@@ -137,10 +134,6 @@ public class Rozlicz2UserService {
 		return "/logout?redirect_url=" + redirectUrl;
 	}
 
-	public String generateSessionId() {
-		return new BigInteger(130, random).toString(32);
-	}
-
 	public AppUser getCurrentUserInfo(HttpServletRequest request) {
 		assert (request != null);
 		String sessionId = getSessionId(request);
@@ -175,13 +168,14 @@ public class Rozlicz2UserService {
 					user.setNickname(googleUser.getNickname());
 				}
 				user.setGoogleId(googleUser.getUserId());
+				user.setId(IdGenerator.nextId());
 
 				userDao.put(user);
 			}
 
 			AppUserSession session = new AppUserSession();
 			session.setUserKey(user);
-			session.setSessionId(generateSessionId());
+			session.setSessionId(IdGenerator.nextId());
 			sessionDao.put(session);
 			assert session.getSessionId() != null;
 
