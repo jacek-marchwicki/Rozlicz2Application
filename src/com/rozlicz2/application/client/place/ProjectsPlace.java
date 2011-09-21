@@ -15,7 +15,7 @@ public class ProjectsPlace extends Place {
 
 		@Override
 		public String getToken(ProjectsPlace place) {
-			return null;
+			return "";
 		}
 
 	}

@@ -12,7 +12,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 
@@ -27,8 +26,6 @@ public class PaymentsTableWidget extends Composite implements
 	private static PaymentsTableWidgetUiBinder uiBinder = GWT
 			.create(PaymentsTableWidgetUiBinder.class);
 
-	@UiField
-	Label sumLabel;
 	@UiField
 	FlexTable table;
 

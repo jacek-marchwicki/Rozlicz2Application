@@ -20,6 +20,7 @@ import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectView;
+import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
@@ -55,6 +56,7 @@ public class ProjectActivity extends AbstractActivity implements
 		expense.setPayments(new ArrayList<ExpensePaymentEntityProxy>());
 		expense.setConsumers(new ArrayList<ExpenseConsumerEntityProxy>());
 		expense.setProjectId(place.getProjectId());
+		expense.setPaymentOption(PaymentOption.EVERYBODY);
 		expenseRequest.save(expense).fire(new Receiver<Void>() {
 
 			@Override

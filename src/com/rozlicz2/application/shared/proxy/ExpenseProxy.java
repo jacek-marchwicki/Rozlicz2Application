@@ -6,6 +6,7 @@ import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.rozlicz2.application.server.locator.ObjectifyLocator;
 import com.rozlicz2.application.shared.entity.Expense;
+import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 
 @ProxyFor(value = Expense.class, locator = ObjectifyLocator.class)
 public interface ExpenseProxy extends EntityProxy {
@@ -14,6 +15,8 @@ public interface ExpenseProxy extends EntityProxy {
 	String getId();
 
 	String getName();
+
+	public PaymentOption getPaymentOption();
 
 	public List<ExpensePaymentEntityProxy> getPayments();
 
@@ -24,6 +27,8 @@ public interface ExpenseProxy extends EntityProxy {
 	void setId(String id);
 
 	void setName(String name);
+
+	public void setPaymentOption(PaymentOption paymentOption);
 
 	public void setPayments(List<ExpensePaymentEntityProxy> payments);
 

@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class Expense extends DatastoreObject {
+	public static enum PaymentOption {
+		EVERYBODY, ONLY_ME, SELECTED_USERS
+	}
 
 	@Embedded
 	@NotNull
@@ -15,6 +18,8 @@ public class Expense extends DatastoreObject {
 	@NotNull
 	@Size(min = 2)
 	private String name;
+	@NotNull
+	private PaymentOption paymentOption = PaymentOption.EVERYBODY;
 	@Embedded
 	@NotNull
 	private List<ExpensePaymentEntity> payments = new ArrayList<ExpensePaymentEntity>();
@@ -28,6 +33,10 @@ public class Expense extends DatastoreObject {
 
 	public String getName() {
 		return name;
+	}
+
+	public PaymentOption getPaymentOption() {
+		return paymentOption;
 	}
 
 	public List<ExpensePaymentEntity> getPayments() {
@@ -44,6 +53,10 @@ public class Expense extends DatastoreObject {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void setPaymentOption(PaymentOption paymentOption) {
+		this.paymentOption = paymentOption;
 	}
 
 	public void setPayments(List<ExpensePaymentEntity> payments) {
