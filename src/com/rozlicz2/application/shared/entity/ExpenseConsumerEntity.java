@@ -1,5 +1,6 @@
 package com.rozlicz2.application.shared.entity;
 
+
 public class ExpenseConsumerEntity extends BaseEntity {
 	private Boolean isConsumer;
 	private Boolean isProportional;

@@ -1,6 +1,5 @@
 package com.rozlicz2.application.client.activity;
 
-import java.util.Collection;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -13,16 +12,16 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.rozlicz2.application.client.ClientFactory;
 import com.rozlicz2.application.client.event.ExpenseChangedEvent;
+import com.rozlicz2.application.client.place.AddParticipantPlace;
 import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
-import com.rozlicz2.application.client.view.AddParticipantView.Presenter;
 import com.rozlicz2.application.client.view.ExpenseView;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ExpenseRequestContext;
 
 public class ExpenseActivity extends AbstractActivity implements
-		ExpenseView.Presenter, Presenter {
+		ExpenseView.Presenter {
 
 	private ResettableEventBus childEventBus;
 
@@ -44,28 +43,9 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void addedUsers(Collection<String> users) {
-		// addUsersToProject(users);
-		//
-		// updateProjectEntitiesParticipants();
-		//
-		// RootPanel.get().remove(participantView);
-	}
-
-	@Override
 	public void addParticipants() {
-		// TODO
-		// participantView = clientFactory.getAddParticipantView();
-		// participantView.setPresenter(this);
-		// participantView.setUsersList(getUsers());
-		// RootPanel.get().add(participantView);
-		// participantView.center();
-	}
-
-	@Override
-	public void cancel() {
-		// TODO
-		// RootPanel.get().remove(participantView);
+		Place place = new AddParticipantPlace(this.place);
+		clientFactory.getPlaceController().goTo(place);
 	}
 
 	private void getExpenseById(final EventBus eventBus, String expenseId) {
@@ -152,7 +132,8 @@ public class ExpenseActivity extends AbstractActivity implements
 		expenseRequest = rf.getExpenseRequest();
 		expense = expenseRequest.edit(readOnlyExpense);
 		expenseView.getDriver().edit(expense);
-
+		Double sum = readOnlyExpense.getSum();
+		expenseView.setSum(sum);
 	}
 
 }

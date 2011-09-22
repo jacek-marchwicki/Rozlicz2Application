@@ -12,7 +12,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
@@ -49,6 +51,10 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	PaymentsTableWidget paymentsEditor;
 
 	private Presenter presenter;
+
+	@UiField
+	@Editor.Ignore
+	Label sumLabel;
 
 	public ExpenseViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -90,6 +96,11 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+	}
+
+	@Override
+	public void setSum(Double sum) {
+		sumLabel.setText(LocalizedMessages.messages.paymentsSum(sum));
 	}
 
 }

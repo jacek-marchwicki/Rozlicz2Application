@@ -1,5 +1,6 @@
 package com.rozlicz2.application.shared.entity;
 
+
 public class ExpensePaymentEntity extends BaseEntity {
 	private String name;
 	private double value;

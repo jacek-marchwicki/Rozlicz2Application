@@ -15,4 +15,6 @@ public interface ExpenseView extends IsWidget {
 	public SimpleBeanEditorDriver<ExpenseProxy, ?> getDriver();
 
 	public void setPresenter(Presenter presenter);
+
+	public void setSum(Double sum);
 }

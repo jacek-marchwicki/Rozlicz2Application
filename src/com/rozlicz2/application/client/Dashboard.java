@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 import com.rozlicz2.application.client.mvp.AppActivityMapper;
 import com.rozlicz2.application.client.mvp.AppPlaceHistoryMapper;
+import com.rozlicz2.application.client.mvp.PopupActivityMapper;
 import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 
@@ -27,8 +28,8 @@ public class Dashboard extends Composite {
 			.create(DashboardUiBinder.class);
 
 	public static native String getUserEmailFromHtml() /*-{
-		return $wnd.userEmail;
-	}-*/;
+														return $wnd.userEmail;
+														}-*/;
 
 	@UiField
 	SimplePanel appWidget;
@@ -37,6 +38,9 @@ public class Dashboard extends Composite {
 
 	@UiField
 	Label emailLabel;
+
+	@UiField
+	SimplePanel popupWidget;
 
 	public Dashboard() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -51,8 +55,14 @@ public class Dashboard extends Composite {
 		rf.initialize(eventBus);
 		PlaceController placeController = clientFactory.getPlaceController();
 
+		ActivityMapper popupActivityMapper = new PopupActivityMapper(
+				clientFactory);
+		ActivityManager popupActivityManager = new ActivityManager(
+				popupActivityMapper, eventBus);
+		popupActivityManager.setDisplay(popupWidget);
 		// Start ActivityManager for the main widget with our ActivityMapper
 		ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
+
 		ActivityManager activityManager = new ActivityManager(activityMapper,
 				eventBus);
 		activityManager.setDisplay(appWidget);

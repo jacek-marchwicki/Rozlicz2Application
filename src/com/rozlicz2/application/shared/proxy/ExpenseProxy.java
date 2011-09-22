@@ -22,6 +22,8 @@ public interface ExpenseProxy extends EntityProxy {
 
 	public String getProjectId();
 
+	public Double getSum();
+
 	public void setConsumers(List<ExpenseConsumerEntityProxy> consumers);
 
 	void setId(String id);

@@ -2,10 +2,12 @@ package com.rozlicz2.application.client.place;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
+import com.google.gwt.place.shared.Prefix;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 
 public class ExpensePlace extends Place {
 
+	@Prefix("expense")
 	public static class Tokenizer implements PlaceTokenizer<ExpensePlace> {
 
 		@Override

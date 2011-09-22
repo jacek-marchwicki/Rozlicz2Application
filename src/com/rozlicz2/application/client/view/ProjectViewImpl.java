@@ -22,6 +22,7 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
 
@@ -36,7 +37,7 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 
 		interface Template extends SafeHtmlTemplates {
 			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
-			SafeHtml productCellTemplate(String name, String price);
+			SafeHtml productCellTemplate(String name, SafeHtml price);
 		}
 
 		private static Template template;
@@ -51,7 +52,10 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 				ExpenseProxy value, SafeHtmlBuilder sb) {
 			if (value == null)
 				return;
-			sb.append(template.productCellTemplate(value.getName(), "123,zł"));
+
+			Double sum = value.getSum();
+			SafeHtml sumString = LocalizedMessages.messages.price(sum);
+			sb.append(template.productCellTemplate(value.getName(), sumString));
 		}
 	}
 
