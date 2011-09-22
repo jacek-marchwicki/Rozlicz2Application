@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:a="urn:import:com.rozlicz2.application.client">
-	<ui:with type="com.rozlicz2.application.client.resources.LocalizedMessages" field="messages"></ui:with>
+	<ui:with type="com.rozlicz2.application.client.resources.LocalizedMessages" field="msgs"></ui:with>
 	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
 	<ui:style>
 		.emailLabel {
@@ -112,8 +112,9 @@
 			<h1 class="{style.h2h2}">
 				<div class="{style.logo}">rozlicz<span class="{style.green}"><span class="{style.two}">2</span>.pl</span></div>
 				<div class="{style.content-right}">
-					rozliczaj się ze wszystkiego*
-					<span class="{style.forfree}">*za darmo</span>
+					<ui:msg key="calculateEverything" meaning="krowa" description="xyz">
+						calculate everything*<span ui:ph="banedSpan" class="{style.forfree}">*for free</span>
+					</ui:msg>
 				</div>
 			</h1>
 		</div>
