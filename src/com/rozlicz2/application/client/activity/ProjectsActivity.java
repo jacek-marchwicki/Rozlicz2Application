@@ -82,15 +82,10 @@ public class ProjectsActivity extends AbstractActivity implements
 	}
 
 	private void receiveData(final EventBus eventBus) {
-		ProjectListRequestContext projectListRequest = rf.getProjectListRequest();
+		ProjectListRequestContext projectListRequest = rf
+				.getProjectListRequest();
 		Request<List<ProjectListProxy>> listAll = projectListRequest.listAll();
 		listAll.fire(new Receiver<List<ProjectListProxy>>() {
-
-			@Override
-			public void onFailure(ServerFailure error) {
-				Window.alert("error: " + error);
-				super.onFailure(error);
-			}
 
 			@Override
 			public void onSuccess(List<ProjectListProxy> response) {

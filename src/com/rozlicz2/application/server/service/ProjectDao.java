@@ -50,8 +50,8 @@ public class ProjectDao extends ObjectifyDao<Project> {
 			list.setParticipants(new ArrayList<ParticipantEntity>());
 		put(list);
 		projectListDao.put(new ProjectList(list));
-		if (old == null | old.getParticipants() == null
-				| !old.getParticipants().equals(list.getParticipants())) {
+		if (old == null || old.getParticipants() == null
+				|| !old.getParticipants().equals(list.getParticipants())) {
 			expenseDao.refreshParticipantsForProject(list.getParticipants(),
 					list.getId());
 		}
