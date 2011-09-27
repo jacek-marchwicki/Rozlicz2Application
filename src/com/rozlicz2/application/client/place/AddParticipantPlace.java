@@ -15,8 +15,15 @@ public class AddParticipantPlace extends Place {
 
 		@Override
 		public AddParticipantPlace getPlace(String token) {
-			Place previousPlace = historyMapper.getPlace(token);
-			return new AddParticipantPlace(previousPlace);
+
+			int lastIndexOf = token.lastIndexOf(':');
+			String previousPlaceToken = token.substring(0, lastIndexOf);
+			if (lastIndexOf >= token.length())
+				return null;
+			String projectId = token.substring(lastIndexOf);
+
+			Place previousPlace = historyMapper.getPlace(previousPlaceToken);
+			return new AddParticipantPlace(previousPlace, projectId);
 		}
 
 		@Override
@@ -29,13 +36,19 @@ public class AddParticipantPlace extends Place {
 	}
 
 	private final Place previousPlace;
+	private final String projectId;
 
-	public AddParticipantPlace(Place previousPlace) {
+	public AddParticipantPlace(Place previousPlace, String projectId) {
 		this.previousPlace = previousPlace;
+		this.projectId = projectId;
 	}
 
 	public Place getPreviousPlace() {
 		return this.previousPlace;
+	}
+
+	public String getProjectId() {
+		return projectId;
 	}
 
 }

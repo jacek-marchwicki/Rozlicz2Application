@@ -44,7 +44,8 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Override
 	public void addParticipants() {
-		Place place = new AddParticipantPlace(this.place);
+		Place place = new AddParticipantPlace(this.place,
+				expense.getProjectId());
 		clientFactory.getPlaceController().goTo(place);
 	}
 
