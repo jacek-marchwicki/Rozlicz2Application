@@ -35,6 +35,9 @@ public interface ApplicationResources extends ClientBundle {
 	@Source("images/facebook.png")
 	public ImageResource facebook();
 
+	@Source("images/google.png")
+	public ImageResource google();
+
 	@Source("images/remove_user.png")
 	public ImageResource removeUser();
 }
