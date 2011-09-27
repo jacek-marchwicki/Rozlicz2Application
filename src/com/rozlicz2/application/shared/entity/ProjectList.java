@@ -33,10 +33,6 @@ public class ProjectList extends DatastoreObject {
 		this.name = name;
 	}
 
-	public void setOwner(AppUser owner) {
-		this.owner = owner.getKey();
-	}
-
 	public void setOwner(Key<AppUser> owner) {
 		this.owner = owner;
 	}

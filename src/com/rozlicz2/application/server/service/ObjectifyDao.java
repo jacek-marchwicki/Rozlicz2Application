@@ -178,7 +178,8 @@ public class ObjectifyDao<T> extends DAOBase {
 		AppUser currentUserInfo = getCurrentUser();
 		if (currentUserInfo == null)
 			return null;
-		Key<AppUser> userKey = currentUserInfo.getKey();
+		Key<AppUser> userKey = new Key<AppUser>(AppUser.class,
+				currentUserInfo.getId());
 		return listByProperty("owner", userKey);
 	}
 

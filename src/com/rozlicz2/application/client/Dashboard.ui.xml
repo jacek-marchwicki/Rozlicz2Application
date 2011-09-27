@@ -90,6 +90,12 @@
 			float: left;
 			width: 350px;
 			height: 70px;
+			display:block;
+			text-decoration: none;
+		}
+		.logo:HOVER {
+			text-decoration: none;
+			color: #d73828;
 		}
 		.two {
 			font-size: 45px;
@@ -110,9 +116,9 @@
 		</div>
 		<div class="{style.h2h1}">
 			<h1 class="{style.h2h2}">
-				<div class="{style.logo}">rozlicz<span class="{style.green}"><span class="{style.two}">2</span>.pl</span></div>
+				<g:InlineHyperlink targetHistoryToken="#" styleName="{style.logo}">rozlicz<span class="{style.two} {style.green}">2</span>.pl</g:InlineHyperlink>
 				<div class="{style.content-right}">
-					<ui:msg key="calculateEverything" meaning="krowa" description="xyz">
+					<ui:msg key="calculateEverything">
 						calculate everything*<span ui:ph="banedSpan" class="{style.forfree}">*for free</span>
 					</ui:msg>
 				</div>

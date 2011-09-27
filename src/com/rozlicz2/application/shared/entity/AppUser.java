@@ -1,6 +1,5 @@
 package com.rozlicz2.application.shared.entity;
 
-import com.googlecode.objectify.Key;
 
 public class AppUser extends DatastoreObject {
 	private String email;
@@ -22,10 +21,6 @@ public class AppUser extends DatastoreObject {
 
 	public String getGoogleId() {
 		return googleId;
-	}
-
-	public Key<AppUser> getKey() {
-		return new Key<AppUser>(AppUser.class, getId());
 	}
 
 	public String getNickname() {

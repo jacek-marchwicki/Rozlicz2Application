@@ -25,7 +25,9 @@ public class ProjectListDao extends ObjectifyDao<ProjectList> {
 		AppUser currentUser = getCurrentUser();
 		if (currentUser == null)
 			return null;
-		if (!find.getOwner().equals(currentUser.getKey()))
+		Key<AppUser> userKey = new Key<AppUser>(AppUser.class,
+				currentUser.getId());
+		if (!find.getOwner().equals(userKey))
 			return null;
 		return find;
 	}
@@ -41,13 +43,17 @@ public class ProjectListDao extends ObjectifyDao<ProjectList> {
 
 	public void save(ProjectList list) {
 		AppUser currentUser = getCurrentUser();
-		list.setOwner(currentUser);
+		Key<AppUser> userKey = new Key<AppUser>(AppUser.class,
+				currentUser.getId());
+		list.setOwner(userKey);
 		put(list);
 	}
 
 	public ProjectList saveAndReturn(ProjectList list) {
 		AppUser currentUser = getCurrentUser();
-		list.setOwner(currentUser);
+		Key<AppUser> userKey = new Key<AppUser>(AppUser.class,
+				currentUser.getId());
+		list.setOwner(userKey);
 		Key<ProjectList> key = put(list);
 		try {
 			return this.get(key);
