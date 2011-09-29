@@ -11,10 +11,10 @@ import com.rozlicz2.application.shared.entity.ProjectList;
 @ProxyFor(value = ProjectList.class, locator = ObjectifyLocator.class)
 public interface ProjectListProxy extends EntityProxy {
 
-	@Size(max = 32, min = 32)
+	@Size(max = 32, min = 32, message = "{custom.internal.error}")
 	public String getId();
 
-	@NotNull
-	@Size(min = 2, message = "{custom.name.size.message}")
+	@NotNull(message = "{custom.internal.error}")
+	@Size(min = 4, max = 100, message = "{custom.name.size.message}")
 	public String getName();
 }

@@ -1,7 +1,6 @@
 package com.rozlicz2.application.client.tools;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.google.gwt.validation.client.AbstractValidationMessageResolver;
 import com.google.gwt.validation.client.ProviderValidationMessageResolver;
 import com.google.gwt.validation.client.UserValidationMessagesResolver;
@@ -11,11 +10,11 @@ public class CustomValidationMessagesResolver extends
 		AbstractValidationMessageResolver implements
 		UserValidationMessagesResolver, ProviderValidationMessageResolver {
 
-	private final ValidationMessages messages = GWT
+	private static final ValidationMessages validationMessages = GWT
 			.create(ValidationMessages.class);
 
 	protected CustomValidationMessagesResolver() {
-		super((ConstantsWithLookup) GWT.create(ValidationMessages.class));
+		super(validationMessages);
 	}
 
 }
