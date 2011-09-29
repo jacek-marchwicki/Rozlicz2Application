@@ -23,7 +23,6 @@ import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
-import com.rozlicz2.application.client.tools.ServerValidator;
 import com.rozlicz2.application.client.view.ProjectView;
 import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
@@ -46,8 +45,6 @@ public class ProjectActivity extends AbstractActivity implements
 	private ProjectProxy project;
 	private ProjectView projectView;
 	private ListwidgetRequestFactory rf;
-
-	private ServerValidator serverValidator;
 
 	public ProjectActivity() {
 	}
@@ -140,17 +137,6 @@ public class ProjectActivity extends AbstractActivity implements
 		Request<ProjectProxy> projectPersistRequest = projectContext
 				.saveAndReturn(project);
 		projectPersistRequest.fire(new Receiver<ProjectProxy>() {
-
-			@Override
-			public void onConstraintViolation(
-					Set<ConstraintViolation<?>> violations) {
-				Set<ConstraintViolation<?>> clientValidations = serverValidator
-						.toClientValidations(violations);
-				projectView.getDriver().setConstraintViolations(
-						clientValidations);
-				projectView.setLocked(false);
-			}
-
 			@Override
 			public void onSuccess(ProjectProxy readOnlyProject) {
 				projectChanged(readOnlyProject);
@@ -176,11 +162,6 @@ public class ProjectActivity extends AbstractActivity implements
 	@Inject
 	public void setRf(ListwidgetRequestFactory rf) {
 		this.rf = rf;
-	}
-
-	@Inject
-	public void setServerValidator(ServerValidator serverValidator) {
-		this.serverValidator = serverValidator;
 	}
 
 	@Inject
