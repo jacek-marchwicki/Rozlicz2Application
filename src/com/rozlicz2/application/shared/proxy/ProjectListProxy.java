@@ -15,6 +15,6 @@ public interface ProjectListProxy extends EntityProxy {
 	public String getId();
 
 	@NotNull
-	@Size(min = 4)
+	@Size(min = 2, message = "{custom.name.size.message}")
 	public String getName();
 }

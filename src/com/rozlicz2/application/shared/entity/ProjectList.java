@@ -11,7 +11,7 @@ import com.rozlicz2.application.shared.validator.ServerGroup;
 public class ProjectList extends DatastoreObject {
 
 	@NotNull
-	@Size(min = 4)
+	@Size(min = 4, message = "{custom.name.size.message}")
 	private String name;
 
 	@NotNull(groups = { ServerGroup.class })

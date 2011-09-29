@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.validation.Configuration;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -14,7 +13,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.validation.client.Validation;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.ResettableEventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -25,6 +23,7 @@ import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
+import com.rozlicz2.application.client.tools.ServerValidator;
 import com.rozlicz2.application.client.view.ProjectView;
 import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
@@ -40,12 +39,15 @@ public class ProjectActivity extends AbstractActivity implements
 		ProjectView.Presenter {
 
 	private ResettableEventBus childEventBus;
+	private ValidatorFactory factory;
 	private ProjectPlace place;
 	private PlaceController placeController;
-	private ProjectProxy project;
 
+	private ProjectProxy project;
 	private ProjectView projectView;
 	private ListwidgetRequestFactory rf;
+
+	private ServerValidator serverValidator;
 
 	public ProjectActivity() {
 	}
@@ -142,7 +144,10 @@ public class ProjectActivity extends AbstractActivity implements
 			@Override
 			public void onConstraintViolation(
 					Set<ConstraintViolation<?>> violations) {
-				projectView.getDriver().setConstraintViolations(violations);
+				Set<ConstraintViolation<?>> clientValidations = serverValidator
+						.toClientValidations(violations);
+				projectView.getDriver().setConstraintViolations(
+						clientValidations);
 				projectView.setLocked(false);
 			}
 
@@ -171,6 +176,16 @@ public class ProjectActivity extends AbstractActivity implements
 	@Inject
 	public void setRf(ListwidgetRequestFactory rf) {
 		this.rf = rf;
+	}
+
+	@Inject
+	public void setServerValidator(ServerValidator serverValidator) {
+		this.serverValidator = serverValidator;
+	}
+
+	@Inject
+	public void setValidatorFactory(ValidatorFactory factory) {
+		this.factory = factory;
 	}
 
 	@Override
@@ -220,9 +235,7 @@ public class ProjectActivity extends AbstractActivity implements
 	@Override
 	public void validate() {
 		projectView.getDriver().flush();
-		Configuration<?> configuration = Validation.byDefaultProvider()
-				.configure();
-		ValidatorFactory factory = configuration.buildValidatorFactory();
+
 		Validator validator = factory.getValidator();
 		Set<ConstraintViolation<ProjectProxy>> validate = validator
 				.validate(project);
