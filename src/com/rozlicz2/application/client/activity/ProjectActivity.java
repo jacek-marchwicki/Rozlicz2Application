@@ -43,6 +43,7 @@ public class ProjectActivity extends AbstractActivity implements
 	private PlaceController placeController;
 
 	private ProjectProxy project;
+	private Request<ProjectProxy> projectPersistRequest = null;
 	private ProjectView projectView;
 	private ListwidgetRequestFactory rf;
 
@@ -133,13 +134,13 @@ public class ProjectActivity extends AbstractActivity implements
 		projectView.setLocked(true);
 		ProjectRequestContext projectContext = (ProjectRequestContext) projectView
 				.getDriver().flush();
-
-		Request<ProjectProxy> projectPersistRequest = projectContext
-				.saveAndReturn(project);
+		if (projectPersistRequest == null)
+			projectPersistRequest = projectContext.saveAndReturn(project);
 		projectPersistRequest.fire(new Receiver<ProjectProxy>() {
 			@Override
 			public void onSuccess(ProjectProxy readOnlyProject) {
 				projectChanged(readOnlyProject);
+				projectPersistRequest = null;
 			}
 		});
 

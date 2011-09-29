@@ -2,6 +2,7 @@ package com.rozlicz2.application.client;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -47,7 +48,8 @@ public class Dashboard extends Composite {
 			PlaceController placeController,
 			PopupActivityMapper popupActivityMapper,
 			AppActivityMapper appActivityMapper,
-			AppPlaceHistoryMapper historyMapper) {
+			AppPlaceHistoryMapper historyMapper,
+			UncaughtExceptionHandler uncaughtExceptionHandler) {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		String email = getUserEmailFromHtml();
@@ -55,6 +57,8 @@ public class Dashboard extends Composite {
 		emailLabel.setText(email);
 
 		rf.initialize(eventBus);
+
+		GWT.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 
 		ActivityManager popupActivityManager = new ActivityManager(
 				popupActivityMapper, eventBus);
@@ -73,5 +77,4 @@ public class Dashboard extends Composite {
 		// Goes to the place represented on URL else default place
 		historyHandler.handleCurrentHistory();
 	}
-
 }

@@ -2,6 +2,7 @@ package com.rozlicz2.application.client.mvp;
 
 import javax.validation.ValidatorFactory;
 
+import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Singleton;
@@ -30,6 +31,8 @@ public class AppModule extends AbstractGinModule {
 				Singleton.class);
 		bind(ServerValidator.class).to(ServerValidatorImpl.class).in(
 				Singleton.class);
+		bind(UncaughtExceptionHandler.class).to(
+				AppUncaughtExceptionHandler.class).in(Singleton.class);
 	}
 
 }
