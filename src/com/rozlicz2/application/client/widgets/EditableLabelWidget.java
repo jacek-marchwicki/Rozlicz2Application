@@ -6,7 +6,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.HasEditorErrors;
 import com.google.gwt.editor.client.LeafValueEditor;
+import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
@@ -21,7 +23,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -72,8 +74,9 @@ public class EditableLabelWidget extends Composite implements HasText,
 	Anchor editAnchor;
 	@UiField
 	Label errorLabel;
+
 	@UiField
-	HTMLPanel labelContainer;
+	FocusPanel focusPanel;
 
 	@UiField
 	Button saveButton;
@@ -114,6 +117,12 @@ public class EditableLabelWidget extends Composite implements HasText,
 		return addHandler(handler, ValueChangeEvent.getType());
 	}
 
+	private void cancel() {
+		doEditable(false);
+		textBox.setText(textLabel.getText());
+		changed();
+	}
+
 	private void changed() {
 		ValueChangeEvent.fire(this, getValue());
 	}
@@ -124,6 +133,19 @@ public class EditableLabelWidget extends Composite implements HasText,
 		textBox.setVisible(editable);
 		textLabel.setVisible(!editable);
 		editAnchor.setVisible(!editable);
+	}
+
+	private void edit() {
+		doEditable(true);
+		textBox.setFocus(true);
+		textBox.selectAll();
+	}
+
+	private void exit() {
+		// cancel if not changed
+		if (!textBox.getText().equals(textLabel.getText()))
+			return;
+		cancel();
 	}
 
 	@Override
@@ -138,9 +160,7 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	@UiHandler("cancelButton")
 	void onCancel(ClickEvent e) {
-		doEditable(false);
-		textBox.setText(captionLabel.getText());
-		changed();
+		cancel();
 	}
 
 	@UiHandler("textBox")
@@ -150,9 +170,12 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	@UiHandler("editAnchor")
 	void onEdit(ClickEvent e) {
-		doEditable(true);
-		textBox.setFocus(true);
-		textBox.selectAll();
+		edit();
+	}
+
+	@UiHandler("focusPanel")
+	public void onFocusPanelFocus(FocusEvent event) {
+		edit();
 	}
 
 	@UiHandler("textBox")
@@ -171,6 +194,11 @@ public class EditableLabelWidget extends Composite implements HasText,
 	@UiHandler("saveButton")
 	void onSave(ClickEvent e) {
 		save();
+	}
+
+	@UiHandler("textBox")
+	public void onTextBoxBlur(BlurEvent event) {
+		exit();
 	}
 
 	private void save() {

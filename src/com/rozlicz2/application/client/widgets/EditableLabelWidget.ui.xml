@@ -60,7 +60,8 @@
 		}
 		
 	</ui:style>
-	<g:HTMLPanel ui:field="labelContainer" styleName="{style.labelContainer}">
+	<g:FocusPanel ui:field="focusPanel" styleName="{style.labelContainer}">
+	<g:HTMLPanel>
 		<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
 		<g:Anchor ui:field="editAnchor" styleName="{style.edit}" text="[edit]"></g:Anchor>
 		<g:TextBox ui:field="textBox" styleName="{style.textBox}"></g:TextBox>
@@ -69,5 +70,5 @@
 		<g:Label ui:field="errorLabel" styleName="{res.css.errorLabelClass}"></g:Label>
 		<g:Label visible="false" ui:field="captionLabel" styleName="{style.captionLabel}"></g:Label>
 		<div style="clear: both"></div>
-	</g:HTMLPanel>
+	</g:HTMLPanel></g:FocusPanel>
 </ui:UiBinder> 
