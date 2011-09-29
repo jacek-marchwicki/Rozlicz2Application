@@ -131,6 +131,7 @@ public class EditableLabelWidget extends Composite implements HasText,
 		saveButton.setVisible(editable);
 		cancelButton.setVisible(editable);
 		textBox.setVisible(editable);
+		focusPanel.setVisible(!editable);
 		textLabel.setVisible(!editable);
 		editAnchor.setVisible(!editable);
 	}
@@ -182,6 +183,7 @@ public class EditableLabelWidget extends Composite implements HasText,
 	void onKeyPress(KeyPressEvent e) {
 		char keyCode = e.getCharCode();
 		if (keyCode == '\r' || keyCode == '\r') {
+			e.preventDefault();
 			save();
 		}
 	}
