@@ -112,6 +112,7 @@ public class ExpenseActivity extends AbstractActivity implements
 			public void onConstraintViolation(
 					Set<ConstraintViolation<?>> violations) {
 				expenseView.getDriver().setConstraintViolations(violations);
+				expenseView.setLocked(false);
 			}
 
 			@Override

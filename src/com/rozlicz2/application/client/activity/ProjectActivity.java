@@ -143,6 +143,7 @@ public class ProjectActivity extends AbstractActivity implements
 			public void onConstraintViolation(
 					Set<ConstraintViolation<?>> violations) {
 				projectView.getDriver().setConstraintViolations(violations);
+				projectView.setLocked(false);
 			}
 
 			@Override

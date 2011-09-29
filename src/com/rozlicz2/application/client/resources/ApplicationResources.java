@@ -18,7 +18,7 @@ public interface ApplicationResources extends ClientBundle {
 
 		String grayBackgroundClass();
 
-		String hideClass();
+		String errorLabelShowClass();
 
 		String labelClass();
 

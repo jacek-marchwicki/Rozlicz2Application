@@ -201,13 +201,13 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	public void showError(String error) {
 		if (error == null || error.isEmpty()) {
-			errorLabel.addStyleName(ApplicationResources.INSTANCE.css()
-					.hideClass());
+			errorLabel.removeStyleName(ApplicationResources.INSTANCE.css()
+					.errorLabelShowClass());
 			saveButton.setEnabled(true);
 		} else {
 			errorLabel.setText(error);
-			errorLabel.removeStyleName(ApplicationResources.INSTANCE.css()
-					.hideClass());
+			errorLabel.addStyleName(ApplicationResources.INSTANCE.css()
+					.errorLabelShowClass());
 			saveButton.setEnabled(false);
 		}
 	}

@@ -25,9 +25,6 @@ h1,h2,h3 {
 		opacity: 0.7;
 	}
 }
-.hideClass {
-	opacity: 0;
-}
 
 @-webkit-keyframes slide {
 	0% {
@@ -79,11 +76,21 @@ h1,h2,h3 {
 .errorLabelClass {
 	clear: both;
 	font-size: 0.8em;
-	-webkit-transition-property: opacity;
-	-webkit-transition-duration: 0.5s, 1s;
-	min-height: 0.8em;
+	overflow:hidden;
 	color: #D73828;
+	-webkit-transition: visibility 0s linear 0.5s,height 0.5s linear,opacity 0.2s linear;
+	height: 0px;
+	opacity: 0;
+	visibility: visible;
 }
+
+
+.errorLabelShowClass {
+	height:1.5em  !important;
+	visibility: visible  !important;
+	opacity: 1  !important;
+}
+
 .lockWidgetClass {
 	position: absolute;
 	top: 0;
