@@ -20,7 +20,6 @@ import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -71,23 +70,26 @@ public class EditableLabelWidget extends Composite implements HasText,
 	@UiField
 	Label captionLabel;
 	@UiField
-	Anchor editAnchor;
+	Label editAnchorLabel;
 	@UiField
 	Label errorLabel;
 
 	@UiField
 	FocusPanel focusPanel;
 
+	private boolean isEditing;
 	@UiField
 	Button saveButton;
 	private final Style style;
 	@UiField
 	TextBox textBox;
+
 	@UiField
 	Label textLabel;
 
 	public EditableLabelWidget() {
 		this("");
+		isEditing = false;
 	}
 
 	public EditableLabelWidget(Resources resources, String text) {
@@ -127,13 +129,13 @@ public class EditableLabelWidget extends Composite implements HasText,
 		ValueChangeEvent.fire(this, getValue());
 	}
 
-	private void doEditable(boolean editable) {
-		saveButton.setVisible(editable);
-		cancelButton.setVisible(editable);
-		textBox.setVisible(editable);
-		focusPanel.setVisible(!editable);
-		textLabel.setVisible(!editable);
-		editAnchor.setVisible(!editable);
+	private void doEditable(boolean isEditing) {
+		this.isEditing = isEditing;
+		saveButton.setVisible(isEditing);
+		cancelButton.setVisible(isEditing);
+		textBox.setVisible(isEditing);
+		focusPanel.setVisible(!isEditing);
+		textLabel.setVisible(!isEditing);
 	}
 
 	private void edit() {
@@ -161,21 +163,36 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	@UiHandler("cancelButton")
 	void onCancel(ClickEvent e) {
+		if (!isEditing)
+			return;
 		cancel();
+	}
+
+	@UiHandler("cancelButton")
+	public void onCancelButtonFocus(FocusEvent event) {
+		if (isEditing)
+			return;
+		event.preventDefault();
 	}
 
 	@UiHandler("textBox")
 	void onChange(ValueChangeEvent<String> e) {
+		if (!isEditing)
+			return;
 		ValueChangeEvent.fire(this, getText());
 	}
 
-	@UiHandler("editAnchor")
+	@UiHandler("editAnchorLabel")
 	void onEdit(ClickEvent e) {
+		if (isEditing)
+			return;
 		edit();
 	}
 
 	@UiHandler("focusPanel")
 	public void onFocusPanelFocus(FocusEvent event) {
+		if (isEditing)
+			return;
 		edit();
 	}
 
@@ -190,16 +207,22 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	@UiHandler("textBox")
 	void onKeyUpEvent(KeyUpEvent e) {
+		if (!isEditing)
+			return;
 		changed();
 	}
 
 	@UiHandler("saveButton")
 	void onSave(ClickEvent e) {
+		if (!isEditing)
+			return;
 		save();
 	}
 
 	@UiHandler("textBox")
 	public void onTextBoxBlur(BlurEvent event) {
+		if (!isEditing)
+			return;
 		exit();
 	}
 

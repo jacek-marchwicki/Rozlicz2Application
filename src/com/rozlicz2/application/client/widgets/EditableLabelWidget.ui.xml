@@ -8,8 +8,8 @@
 			font-size: 1.5em;
 			float: left;
 		}
-		.labelContainer{
-			min-height: 2em;
+		.focusPanel{
+			cursor: pointer;
 		}
 		.edit {
 			font-size: 0.8em;
@@ -61,10 +61,13 @@
 		
 	</ui:style>
 	<g:HTMLPanel>
-		<g:FocusPanel ui:field="focusPanel" styleName="{style.labelContainer}">
-			<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
+		<g:FocusPanel ui:field="focusPanel" styleName="{style.focusPanel}">
+			<g:HTMLPanel>
+				<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
+				<g:Label ui:field="editAnchorLabel" styleName="{style.edit}" text="[edit]"></g:Label>
+			</g:HTMLPanel>
 		</g:FocusPanel>
-		<g:Anchor ui:field="editAnchor" styleName="{style.edit}" text="[edit]"></g:Anchor>
+		
 		<g:TextBox ui:field="textBox" styleName="{style.textBox}"></g:TextBox>
 		<g:Button ui:field="saveButton" text="Save" styleName="{style.saveButton}"></g:Button>
 		<g:Button ui:field="cancelButton" text="Cancel" styleName="{style.cancelButton}"></g:Button>
