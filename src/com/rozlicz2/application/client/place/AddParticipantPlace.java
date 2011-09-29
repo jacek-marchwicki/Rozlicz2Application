@@ -20,7 +20,7 @@ public class AddParticipantPlace extends Place {
 			String previousPlaceToken = token.substring(0, lastIndexOf);
 			if (lastIndexOf >= token.length())
 				return null;
-			String projectId = token.substring(lastIndexOf);
+			String projectId = token.substring(lastIndexOf + 1);
 
 			Place previousPlace = historyMapper.getPlace(previousPlaceToken);
 			return new AddParticipantPlace(previousPlace, projectId);

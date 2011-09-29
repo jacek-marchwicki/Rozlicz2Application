@@ -116,6 +116,7 @@ public class AddParticipantActivity extends AbstractActivity implements
 
 	}
 
+	@Inject
 	public void setAddParticipantView(AddParticipantView addParticipantView) {
 		this.addParticipantView = addParticipantView;
 	}
@@ -157,6 +158,10 @@ public class AddParticipantActivity extends AbstractActivity implements
 
 					@Override
 					public void onProjectChanged(ProjectChangedEvent event) {
+						if (event.getProject() == null)
+							return;
+						if (event.getProject().getId() == null)
+							return;
 						if (!event.getProject().getId().equals(projectId))
 							return;
 						updateProject(event.getProject());
