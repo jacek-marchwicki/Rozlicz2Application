@@ -76,6 +76,7 @@ public class ProjectsActivity extends AbstractActivity implements
 
 	protected void populateProjectsList(
 			List<ProjectListProxy> readOnlyProjectsList) {
+		projectsView.setLocked(false);
 		projectsView.setProjectsNumber(readOnlyProjectsList.size());
 		projectsView.setProjectsList(readOnlyProjectsList);
 	}
@@ -130,6 +131,7 @@ public class ProjectsActivity extends AbstractActivity implements
 				});
 
 		projectsView.setPresenter(this);
+		projectsView.setLocked(true);
 
 		receiveData();
 		panel.setWidget(projectsView.asWidget());

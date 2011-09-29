@@ -14,6 +14,7 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
+		<w:LockWidget ui:field="lockWidget"></w:LockWidget>
 		
 		<w:EditableLabelWidget caption="{i18n.projectName}"
 					ui:field="nameEditor"></w:EditableLabelWidget>

@@ -20,6 +20,7 @@ import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
+import com.rozlicz2.application.client.widgets.LockWidget;
 import com.rozlicz2.application.shared.proxy.ProjectListProxy;
 
 public class ProjectsViewImpl extends Composite implements ProjectsView {
@@ -59,8 +60,10 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 	@UiField
 	CellList<ProjectListProxy> cellList;
 
-	private ProjectsView.Presenter presenter;
+	@UiField
+	LockWidget lockWidget;
 
+	private ProjectsView.Presenter presenter;
 	@UiField
 	Label projectsNumberLabel;
 
@@ -96,6 +99,11 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 
 	protected void onSelectedObject(ProjectListProxy selectedObject) {
 		presenter.editProject(selectedObject);
+	}
+
+	@Override
+	public void setLocked(boolean locked) {
+		lockWidget.setVisible(locked);
 	}
 
 	@Override

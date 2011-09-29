@@ -16,9 +16,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -27,6 +24,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.LockWidget;
 import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
@@ -81,23 +79,8 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	interface ProjectViewImplUiBinder extends UiBinder<Widget, ProjectViewImpl> {
 	}
 
-	private static PopupPanel glassPanel;
-
 	private static ProjectViewImplUiBinder uiBinder = GWT
 			.create(ProjectViewImplUiBinder.class);
-
-	private static void setGlassPanelVisible(boolean visible) {
-		if (glassPanel == null) {
-			glassPanel = new DecoratedPopupPanel(false, true);
-			glassPanel.setWidget(new Label("Loading..."));
-		}
-
-		if (visible) {
-			glassPanel.center();
-		} else {
-			glassPanel.hide();
-		}
-	}
 
 	@UiField
 	Button createExpenseButton;
@@ -106,6 +89,9 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 
 	@UiField
 	ExpensesEditor expensesEditor;
+
+	@UiField
+	LockWidget lockWidget;
 
 	@UiField
 	EditableLabelWidget nameEditor;
@@ -166,7 +152,7 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 
 	@Override
 	public void setLocked(boolean locked) {
-		setGlassPanelVisible(locked);
+		lockWidget.setVisible(locked);
 	}
 
 	@Override

@@ -12,6 +12,8 @@ public interface ProjectsView extends IsWidget {
 		void editProject(ProjectListProxy key);
 	}
 
+	void setLocked(boolean locked);
+
 	void setPresenter(Presenter presenter);
 
 	void setProjectsList(List<ProjectListProxy> list);

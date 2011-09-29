@@ -21,6 +21,14 @@ public interface ApplicationResources extends ClientBundle {
 		String hideClass();
 
 		String labelClass();
+
+		String loadingImageClass();
+
+		String loadingImageDivClass();
+
+		String lockWidgetClass();
+
+		String lockWidgetShowClass();
 	}
 
 	public static final ApplicationResources INSTANCE = GWT
@@ -34,6 +42,9 @@ public interface ApplicationResources extends ClientBundle {
 
 	@Source("images/facebook.png")
 	public ImageResource facebook();
+
+	@Source("images/loading.gif")
+	public ImageResource loading();
 
 	@Source("images/remove_user.png")
 	public ImageResource removeUser();

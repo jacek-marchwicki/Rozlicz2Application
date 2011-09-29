@@ -37,6 +37,8 @@ public interface ApplicationConstants extends Constants {
 
 	String inviteFriends();
 
+	String loadingImageAlt();
+
 	String logout();
 
 	String nameLabel();

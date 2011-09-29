@@ -10,15 +10,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.client.widgets.ConsumersTableWidget;
 import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.LockWidget;
 import com.rozlicz2.application.client.widgets.PaymentOptionWidget;
 import com.rozlicz2.application.client.widgets.PaymentsTableWidget;
 import com.rozlicz2.application.client.widgets.events.SaveEvent;
@@ -37,31 +35,15 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	interface ExpenseViewImplUiBinder extends UiBinder<Widget, ExpenseViewImpl> {
 	}
 
-	private static PopupPanel glassPanel;
-
 	private static ExpenseViewImplUiBinder uiBinder = GWT
 			.create(ExpenseViewImplUiBinder.class);
 
-	private static void setGlassPanelVisible(boolean visible) {
-		if (glassPanel == null) {
-			glassPanel = new DecoratedPopupPanel(false, true);
-			glassPanel.setWidget(new Label("Loading..."));
-		}
-
-		if (visible) {
-			glassPanel.center();
-		} else {
-			glassPanel.hide();
-		}
-	}
-
 	@UiField
 	ConsumersTableWidget consumersEditor;
-
 	Driver driver = GWT.create(Driver.class);
 
 	@UiField
-	HTMLPanel htmlPanel;
+	LockWidget lockWidget;
 
 	@UiField
 	EditableLabelWidget nameEditor;
@@ -122,7 +104,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 
 	@Override
 	public void setLocked(boolean locked) {
-		setGlassPanelVisible(locked);
+		lockWidget.setVisible(locked);
 	}
 
 	@Override
