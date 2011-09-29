@@ -2,15 +2,21 @@ package com.rozlicz2.application.client.activity;
 
 import java.util.Set;
 
+import javax.validation.Configuration;
 import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.ResettableEventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.validation.client.Validation;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.rozlicz2.application.client.ClientFactory;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.rozlicz2.application.client.event.ExpenseChangedEvent;
 import com.rozlicz2.application.client.place.AddParticipantPlace;
 import com.rozlicz2.application.client.place.ExpensePlace;
@@ -25,28 +31,36 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	private ResettableEventBus childEventBus;
 
-	private final ClientFactory clientFactory;
+	private EventBus eventBus;
 	private ExpenseProxy expense;
 
 	private ExpenseRequestContext expenseRequest;
 
 	private ExpenseView expenseView;
 
-	private final ExpensePlace place;
+	private ExpensePlace place;
 
-	private final ListwidgetRequestFactory rf;
+	private PlaceController placeController;
 
-	public ExpenseActivity(ExpensePlace place, ClientFactory clientFactory) {
-		this.place = place;
-		this.clientFactory = clientFactory;
-		rf = clientFactory.getRf();
+	private ListwidgetRequestFactory rf;
+
+	public ExpenseActivity() {
 	}
 
 	@Override
 	public void addParticipants() {
 		Place place = new AddParticipantPlace(this.place,
 				expense.getProjectId());
-		clientFactory.getPlaceController().goTo(place);
+		placeController.goTo(place);
+	}
+
+	protected void expenseChanged(ExpenseProxy readOnlyExpense) {
+		expenseRequest = rf.getExpenseRequest();
+		expense = expenseRequest.edit(readOnlyExpense);
+		expenseView.getDriver().edit(expense, expenseRequest);
+		Double sum = readOnlyExpense.getSum();
+		expenseView.setSum(sum);
+		expenseView.setLocked(false);
 	}
 
 	private void getExpenseById(final EventBus eventBus, String expenseId) {
@@ -69,23 +83,31 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	private void notFoundPlace() {
 		Place place = new NotFoundPlace();
-		clientFactory.getPlaceController().goTo(place);
+		placeController.goTo(place);
 	}
 
 	@Override
 	public void onCancel() {
-		// maybe remove handlers
+		expenseView.setLocked(false);
 	}
 
 	@Override
 	public void onStop() {
+		expenseView.setLocked(false);
 		childEventBus.removeHandlers();
 	}
 
 	@Override
 	public void save() {
-		expense = expenseView.getDriver().flush();
-		expenseRequest.save(expense).fire(new Receiver<Void>() {
+		validate();
+		if (expenseView.getDriver().hasErrors())
+			return;
+		expenseView.setLocked(true);
+		ExpenseRequestContext requestContext = (ExpenseRequestContext) expenseView
+				.getDriver().flush();
+		Request<ExpenseProxy> saveAndReturn = requestContext
+				.saveAndReturn(expense);
+		saveAndReturn.fire(new Receiver<ExpenseProxy>() {
 			@Override
 			public void onConstraintViolation(
 					Set<ConstraintViolation<?>> violations) {
@@ -93,13 +115,39 @@ public class ExpenseActivity extends AbstractActivity implements
 			}
 
 			@Override
-			public void onSuccess(Void response) {
+			public void onSuccess(ExpenseProxy readOnlyExpense) {
+				expenseChanged(readOnlyExpense);
 			}
 		});
 	}
 
+	@Inject
+	public void setEventBus(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
+
+	@Inject
+	public void setExpenseView(ExpenseView expenseView) {
+		this.expenseView = expenseView;
+	}
+
+	public void setPlace(ExpensePlace place) {
+		this.place = place;
+	}
+
+	@Inject
+	public void setPlaceController(PlaceController placeController) {
+		this.placeController = placeController;
+	}
+
+	@Inject
+	public void setRf(ListwidgetRequestFactory rf) {
+		this.rf = rf;
+	}
+
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+	public void start(AcceptsOneWidget panel,
+			com.google.gwt.event.shared.EventBus e) {
 		childEventBus = new ResettableEventBus(eventBus);
 		childEventBus.addHandler(ExpenseChangedEvent.TYPE,
 				new ExpenseChangedEvent.Handler() {
@@ -111,30 +159,38 @@ public class ExpenseActivity extends AbstractActivity implements
 						if (!(place.getExpenseId().equals(readOnlyExpense
 								.getId())))
 							return;
-						updateExpense(readOnlyExpense);
+						expenseChanged(readOnlyExpense);
 					}
 				});
 
-		expenseView = clientFactory.getExpenseView();
 		expenseView.setPresenter(this);
+		expenseView.setLocked(true);
 
 		ExpenseProxy readOnlyExpense = place.getExpense();
 		if (readOnlyExpense == null) {
 			String expenseId = place.getExpenseId();
 			getExpenseById(eventBus, expenseId);
 		} else {
-			updateExpense(readOnlyExpense);
+			expenseChanged(readOnlyExpense);
 		}
 
 		panel.setWidget(expenseView.asWidget());
 	}
 
-	protected void updateExpense(ExpenseProxy readOnlyExpense) {
-		expenseRequest = rf.getExpenseRequest();
-		expense = expenseRequest.edit(readOnlyExpense);
-		expenseView.getDriver().edit(expense);
-		Double sum = readOnlyExpense.getSum();
-		expenseView.setSum(sum);
+	@SuppressWarnings("unchecked")
+	@Override
+	public void validate() {
+		expenseView.getDriver().flush();
+		Configuration<?> configuration = Validation.byDefaultProvider()
+				.configure();
+		ValidatorFactory factory = configuration.buildValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<ExpenseProxy>> validate = validator
+				.validate(expense);
+
+		Iterable<?> violations = validate;
+		expenseView.getDriver().setConstraintViolations(
+				(Iterable<ConstraintViolation<?>>) violations);
 	}
 
 }

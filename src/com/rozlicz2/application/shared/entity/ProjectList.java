@@ -1,15 +1,20 @@
 package com.rozlicz2.application.shared.entity;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
+import com.rozlicz2.application.shared.validator.ServerGroup;
 
 @Entity
 public class ProjectList extends DatastoreObject {
 
-	@Size(min = 2)
+	@NotNull
+	@Size(min = 4)
 	private String name;
+
+	@NotNull(groups = { ServerGroup.class })
 	private Key<AppUser> owner;
 
 	public ProjectList() {

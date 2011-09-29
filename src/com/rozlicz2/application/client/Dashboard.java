@@ -1,7 +1,6 @@
 package com.rozlicz2.application.client;
 
 import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -12,6 +11,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.rozlicz2.application.client.mvp.AppActivityMapper;
 import com.rozlicz2.application.client.mvp.AppPlaceHistoryMapper;
@@ -28,8 +28,8 @@ public class Dashboard extends Composite {
 			.create(DashboardUiBinder.class);
 
 	public static native String getUserEmailFromHtml() /*-{
-														return $wnd.userEmail;
-														}-*/;
+		return $wnd.userEmail;
+	}-*/;
 
 	@UiField
 	SimplePanel appWidget;
@@ -42,34 +42,30 @@ public class Dashboard extends Composite {
 	@UiField
 	SimplePanel popupWidget;
 
-	public Dashboard() {
+	@Inject
+	public Dashboard(EventBus eventBus, ListwidgetRequestFactory rf,
+			PlaceController placeController,
+			PopupActivityMapper popupActivityMapper,
+			AppActivityMapper appActivityMapper,
+			AppPlaceHistoryMapper historyMapper) {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		String email = getUserEmailFromHtml();
 		assert email != null;
 		emailLabel.setText(email);
 
-		ClientFactory clientFactory = GWT.create(ClientFactory.class);
-		EventBus eventBus = clientFactory.getEventBus();
-		ListwidgetRequestFactory rf = clientFactory.getRf();
 		rf.initialize(eventBus);
-		PlaceController placeController = clientFactory.getPlaceController();
 
-		ActivityMapper popupActivityMapper = new PopupActivityMapper(
-				clientFactory);
 		ActivityManager popupActivityManager = new ActivityManager(
 				popupActivityMapper, eventBus);
 		popupActivityManager.setDisplay(popupWidget);
 		// Start ActivityManager for the main widget with our ActivityMapper
-		ActivityMapper activityMapper = new AppActivityMapper(clientFactory);
 
-		ActivityManager activityManager = new ActivityManager(activityMapper,
-				eventBus);
+		ActivityManager activityManager = new ActivityManager(
+				appActivityMapper, eventBus);
 		activityManager.setDisplay(appWidget);
 
 		// Start PlaceHistoryHandler with our PlaceHistoryMapper
-		AppPlaceHistoryMapper historyMapper = GWT
-				.create(AppPlaceHistoryMapper.class);
 		PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(
 				historyMapper);
 		historyHandler.register(placeController, eventBus, defaultPlace);

@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:v="urn:import:com.rozlicz2.application.client.view"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:w="urn:import:com.rozlicz2.application.client.widgets"
 	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	
 	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
@@ -12,14 +12,14 @@
 		}
 	</ui:style>
 	<g:HTMLPanel ui:field="htmlPanel">
-		<v:EditableLabelWidget caption="{i18n.expenseName}" ui:field="nameEditor"></v:EditableLabelWidget>
+		<w:EditableLabelWidget caption="{i18n.expenseName}" ui:field="nameEditor"></w:EditableLabelWidget>
 		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
-		<v:PaymentsTableWidget ui:field="paymentsEditor"></v:PaymentsTableWidget>
+		<w:PaymentsTableWidget ui:field="paymentsEditor"></w:PaymentsTableWidget>
 		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>
 		<g:Label ui:field="sumLabel" text="" />
 		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
 		<g:Label styleName="{res.css.labelClass}" text="{i18n.expenseParticipants}"></g:Label>
-		<v:PaymentOptionWidget ui:field="paymentOptionEditor"></v:PaymentOptionWidget>
-		<v:ConsumersTableWidget ui:field="consumersEditor"></v:ConsumersTableWidget>
+		<w:PaymentOptionWidget ui:field="paymentOptionEditor"></w:PaymentOptionWidget>
+		<w:ConsumersTableWidget ui:field="consumersEditor"></w:ConsumersTableWidget>
 	</g:HTMLPanel>
 </ui:UiBinder> 

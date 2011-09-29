@@ -30,7 +30,7 @@ public class AddParticipantPlace extends Place {
 		public String getToken(AddParticipantPlace place) {
 
 			String token = historyMapper.getToken(place.getPreviousPlace());
-			return token;
+			return token + ":" + place.getProjectId();
 		}
 
 	}

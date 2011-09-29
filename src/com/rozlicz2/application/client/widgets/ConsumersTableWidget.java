@@ -1,4 +1,4 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.widgets;
 
 import java.util.List;
 
@@ -49,6 +49,8 @@ public class ConsumersTableWidget extends FlexTable implements IsWidget,
 	public void setValue(List<ExpenseConsumerEntityProxy> values) {
 		this.values = values;
 		initializePaymentsTable();
+		if (values == null)
+			return;
 
 		int row = 0;
 		for (final ExpenseConsumerEntityProxy value : values) {

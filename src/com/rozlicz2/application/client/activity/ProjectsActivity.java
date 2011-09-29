@@ -3,17 +3,17 @@ package com.rozlicz2.application.client.activity;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.ResettableEventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
-import com.rozlicz2.application.client.ClientFactory;
 import com.rozlicz2.application.client.event.ProjectsListEvent;
 import com.rozlicz2.application.client.place.ProjectPlace;
-import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectsView;
 import com.rozlicz2.application.shared.proxy.ProjectListProxy;
@@ -27,13 +27,12 @@ public class ProjectsActivity extends AbstractActivity implements
 		ProjectsView.Presenter {
 
 	private ResettableEventBus childEventBus;
-	private final ClientFactory clientFactory;
+	private EventBus eventBus;
+	private PlaceController placeController;
 	private ProjectsView projectsView;
-	private final ListwidgetRequestFactory rf;
+	private ListwidgetRequestFactory rf;
 
-	public ProjectsActivity(ProjectsPlace place, ClientFactory clientFactory) {
-		this.clientFactory = clientFactory;
-		rf = clientFactory.getRf();
+	public ProjectsActivity() {
 	}
 
 	@Override
@@ -56,13 +55,13 @@ public class ProjectsActivity extends AbstractActivity implements
 			}
 		});
 		ProjectPlace place = new ProjectPlace(project);
-		clientFactory.getPlaceController().goTo(place);
+		placeController.goTo(place);
 	}
 
 	@Override
 	public void editProject(ProjectListProxy key) {
 		ProjectPlace place = new ProjectPlace(key.getId());
-		clientFactory.getPlaceController().goTo(place);
+		placeController.goTo(place);
 	}
 
 	@Override
@@ -81,10 +80,11 @@ public class ProjectsActivity extends AbstractActivity implements
 		projectsView.setProjectsList(readOnlyProjectsList);
 	}
 
-	private void receiveData(final EventBus eventBus) {
+	private void receiveData() {
 		ProjectListRequestContext projectListRequest = rf
 				.getProjectListRequest();
 		Request<List<ProjectListProxy>> listAll = projectListRequest.listAll();
+
 		listAll.fire(new Receiver<List<ProjectListProxy>>() {
 
 			@Override
@@ -93,10 +93,32 @@ public class ProjectsActivity extends AbstractActivity implements
 				eventBus.fireEvent(event);
 			}
 		});
+
+	}
+
+	@Inject
+	public void setEventBus(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
+
+	@Inject
+	public void setPlaceController(PlaceController placeController) {
+		this.placeController = placeController;
+	}
+
+	@Inject
+	public void setProjectsView(ProjectsView projectsView) {
+		this.projectsView = projectsView;
+	}
+
+	@Inject
+	public void setRf(ListwidgetRequestFactory rf) {
+		this.rf = rf;
 	}
 
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+	public void start(AcceptsOneWidget panel,
+			com.google.gwt.event.shared.EventBus e) {
 		this.childEventBus = new ResettableEventBus(eventBus);
 		childEventBus.addHandler(ProjectsListEvent.TYPE,
 				new ProjectsListEvent.Handler() {
@@ -107,10 +129,9 @@ public class ProjectsActivity extends AbstractActivity implements
 					}
 				});
 
-		projectsView = clientFactory.getProjectsView();
 		projectsView.setPresenter(this);
 
-		receiveData(eventBus);
+		receiveData();
 		panel.setWidget(projectsView.asWidget());
 	}
 

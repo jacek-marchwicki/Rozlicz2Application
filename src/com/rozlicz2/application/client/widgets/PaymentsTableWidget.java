@@ -1,4 +1,4 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.widgets;
 
 import java.util.List;
 
@@ -67,6 +67,8 @@ public class PaymentsTableWidget extends Composite implements
 	public void setValue(List<ExpensePaymentEntityProxy> values) {
 		this.values = values;
 		initializePaymentsTable();
+		if (values == null)
+			return;
 
 		int row = 0;
 

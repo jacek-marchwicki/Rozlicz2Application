@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.web.bindery.requestfactory.shared.ServiceLocator;
 import com.rozlicz2.application.server.service.AppUserSessionDao;
+import com.rozlicz2.application.server.service.ContactDao;
 import com.rozlicz2.application.server.service.ExpenseDao;
 import com.rozlicz2.application.server.service.ProjectDao;
 import com.rozlicz2.application.server.service.ProjectListDao;
@@ -20,6 +21,7 @@ public class DaoServiceLocator implements ServiceLocator {
 			bind(ExpenseDao.class);
 			bind(ProjectDao.class);
 			bind(ProjectListDao.class);
+			bind(ContactDao.class);
 		}
 
 	}

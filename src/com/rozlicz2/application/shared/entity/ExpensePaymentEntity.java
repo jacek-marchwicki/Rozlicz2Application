@@ -1,7 +1,9 @@
 package com.rozlicz2.application.shared.entity;
 
+import javax.validation.constraints.Size;
 
 public class ExpensePaymentEntity extends BaseEntity {
+	@Size(min = 2)
 	private String name;
 	private double value;
 

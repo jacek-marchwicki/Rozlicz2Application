@@ -1,6 +1,10 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.widgets;
+
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.EditorError;
+import com.google.gwt.editor.client.HasEditorErrors;
 import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
@@ -22,12 +26,14 @@ import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.rozlicz2.application.client.Validator;
-import com.rozlicz2.application.client.Validator.ValidatorException;
 import com.rozlicz2.application.client.resources.ApplicationResources;
+import com.rozlicz2.application.client.widgets.events.HasSaveHandlers;
+import com.rozlicz2.application.client.widgets.events.SaveEvent;
+import com.rozlicz2.application.client.widgets.events.SaveHandler;
 
 public class EditableLabelWidget extends Composite implements HasText,
-		HasValueChangeHandlers<String>, LeafValueEditor<String> {
+		HasValueChangeHandlers<String>, LeafValueEditor<String>,
+		HasEditorErrors<String>, HasSaveHandlers {
 
 	interface EditableLabelWidgetUiBinder extends
 			UiBinder<Widget, EditableLabelWidget> {
@@ -40,7 +46,7 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	@CssResource.ImportedWithPrefix("gwt-CellList")
 	public interface Style extends CssResource {
-		String DEFAULT_CSS = "com/rozlicz2/application/client/view/EditableLabelWidget.css";
+		String DEFAULT_CSS = "com/rozlicz2/application/client/widgets/EditableLabelWidget.css";
 
 		String errorClass();
 	}
@@ -98,23 +104,31 @@ public class EditableLabelWidget extends Composite implements HasText,
 	}
 
 	@Override
+	public HandlerRegistration addSaveHandler(SaveHandler handler) {
+		return addHandler(handler, SaveEvent.getType());
+	}
+
+	@Override
 	public HandlerRegistration addValueChangeHandler(
 			ValueChangeHandler<String> handler) {
 		return addHandler(handler, ValueChangeEvent.getType());
+	}
+
+	private void changed() {
+		ValueChangeEvent.fire(this, getValue());
 	}
 
 	private void doEditable(boolean editable) {
 		saveButton.setVisible(editable);
 		cancelButton.setVisible(editable);
 		textBox.setVisible(editable);
-		errorLabel.setVisible(editable);
 		textLabel.setVisible(!editable);
 		editAnchor.setVisible(!editable);
 	}
 
 	@Override
 	public String getText() {
-		return textLabel.getText();
+		return textBox.getText();
 	}
 
 	@Override
@@ -122,25 +136,20 @@ public class EditableLabelWidget extends Composite implements HasText,
 		return getText();
 	}
 
-	private void isValid() throws ValidatorException {
-		String text = textBox.getText();
-		Validator.isNotToShort(text);
-	}
-
 	@UiHandler("cancelButton")
 	void onCancel(ClickEvent e) {
 		doEditable(false);
+		textBox.setText(captionLabel.getText());
+		changed();
 	}
 
 	@UiHandler("textBox")
 	void onChange(ValueChangeEvent<String> e) {
-		validate();
+		ValueChangeEvent.fire(this, getText());
 	}
 
 	@UiHandler("editAnchor")
 	void onEdit(ClickEvent e) {
-		textBox.setText(getText());
-		validate();
 		doEditable(true);
 		textBox.setFocus(true);
 		textBox.selectAll();
@@ -156,7 +165,7 @@ public class EditableLabelWidget extends Composite implements HasText,
 
 	@UiHandler("textBox")
 	void onKeyUpEvent(KeyUpEvent e) {
-		validate();
+		changed();
 	}
 
 	@UiHandler("saveButton")
@@ -165,14 +174,7 @@ public class EditableLabelWidget extends Composite implements HasText,
 	}
 
 	private void save() {
-		try {
-			isValid();
-			setText(textBox.getText());
-			doEditable(false);
-			ValueChangeEvent.fire(this, getText());
-		} catch (ValidatorException ex) {
-		}
-		;
+		SaveEvent.fire(this);
 	}
 
 	public void setCaption(String caption) {
@@ -187,6 +189,8 @@ public class EditableLabelWidget extends Composite implements HasText,
 	@Override
 	public void setText(String text) {
 		textLabel.setText(text);
+		textBox.setText(text);
+
 		doEditable(false);
 	}
 
@@ -195,20 +199,26 @@ public class EditableLabelWidget extends Composite implements HasText,
 		setText(value);
 	}
 
-	private void validate() {
-		try {
-			isValid();
-			saveButton.setEnabled(true);
+	public void showError(String error) {
+		if (error == null || error.isEmpty()) {
 			errorLabel.addStyleName(ApplicationResources.INSTANCE.css()
 					.hideClass());
-			textBox.removeStyleName(this.style.errorClass());
-		} catch (ValidatorException e) {
-			saveButton.setEnabled(false);
-			errorLabel.setText(e.getMessage());
+			saveButton.setEnabled(true);
+		} else {
+			errorLabel.setText(error);
 			errorLabel.removeStyleName(ApplicationResources.INSTANCE.css()
 					.hideClass());
-			textBox.addStyleName(this.style.errorClass());
+			saveButton.setEnabled(false);
 		}
+	}
+
+	@Override
+	public void showErrors(List<EditorError> errors) {
+		String strErrors = "";
+		for (EditorError editorError : errors) {
+			strErrors += editorError.getMessage();
+		}
+		showError(strErrors);
 	}
 
 }

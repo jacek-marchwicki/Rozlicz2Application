@@ -1,4 +1,4 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.widgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,36 +16,38 @@ import com.google.gwt.user.client.ui.Widget;
 public class AddedParticipantWidget extends Composite implements HasText,
 		HasClickHandlers {
 
-	private static AddedParticipantWidgetUiBinder uiBinder = GWT
-			.create(AddedParticipantWidgetUiBinder.class);
-
 	interface AddedParticipantWidgetUiBinder extends
 			UiBinder<Widget, AddedParticipantWidget> {
 	}
+
+	private static AddedParticipantWidgetUiBinder uiBinder = GWT
+			.create(AddedParticipantWidgetUiBinder.class);
+
+	@UiField
+	Label userLabel;
 
 	public AddedParticipantWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	@UiField
-	Label userLabel;
+	@Override
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addHandler(handler, ClickEvent.getType());
+	}
+
+	@Override
+	public String getText() {
+		return userLabel.getText();
+	}
 
 	@UiHandler("removeImage")
 	void onClick(ClickEvent e) {
 		ClickEvent.fireNativeEvent(e.getNativeEvent(), this);
 	}
 
+	@Override
 	public void setText(String text) {
 		userLabel.setText(text);
-	}
-
-	public String getText() {
-		return userLabel.getText();
-	}
-
-	@Override
-	public HandlerRegistration addClickHandler(ClickHandler handler) {
-		return addHandler(handler, ClickEvent.getType());
 	}
 
 }

@@ -28,12 +28,14 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.rozlicz2.application.client.widgets.AddedParticipantWidget;
+import com.rozlicz2.application.shared.proxy.ContactProxy;
 
-public class AddParticipantWidget extends Composite implements ClickHandler,
+public class AddParticipantViewImpl extends Composite implements ClickHandler,
 		AddParticipantView {
 
-	interface AddParticipantWidgetUiBinder extends
-			UiBinder<Widget, AddParticipantWidget> {
+	interface AddParticipantViewImplUiBinder extends
+			UiBinder<Widget, AddParticipantViewImpl> {
 	}
 
 	interface MyTemplate extends SafeHtmlTemplates {
@@ -43,8 +45,8 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 
 	private static MyTemplate template;
 
-	private static AddParticipantWidgetUiBinder uiBinder = GWT
-			.create(AddParticipantWidgetUiBinder.class);
+	private static AddParticipantViewImplUiBinder uiBinder = GWT
+			.create(AddParticipantViewImplUiBinder.class);
 	@UiField
 	CheckBox allowEditCheckBox;
 
@@ -82,7 +84,7 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 
 	HashMap<String, String> users = new HashMap<String, String>();
 
-	public AddParticipantWidget() {
+	public AddParticipantViewImpl() {
 		if (template == null)
 			template = GWT.create(MyTemplate.class);
 		initWidget(uiBinder.createAndBindUi(this));
@@ -259,16 +261,16 @@ public class AddParticipantWidget extends Composite implements ClickHandler,
 	}
 
 	@Override
-	public void setPresenter(Presenter presenter) {
-		this.presenter = presenter;
+	public void setContacts(List<ContactProxy> contacts) {
+		oracle.clear();
+		for (ContactProxy contact : contacts) {
+			oracle.add(contact.getName());
+		}
 	}
 
 	@Override
-	public void setUsersList(List<String> users) {
-		oracle.clear();
-		for (String user : users) {
-			oracle.add(user);
-		}
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 	}
 
 	public void setVisibility() {

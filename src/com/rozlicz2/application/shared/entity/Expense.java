@@ -3,9 +3,11 @@ package com.rozlicz2.application.shared.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.Embedded;
+import javax.persistence.Embedded;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.rozlicz2.application.shared.validator.ServerGroup;
 
 public class Expense extends DatastoreObject {
 	public static enum PaymentOption {
@@ -15,9 +17,9 @@ public class Expense extends DatastoreObject {
 	@Embedded
 	@NotNull
 	private List<ExpenseConsumerEntity> consumers = new ArrayList<ExpenseConsumerEntity>();
-	@NotNull
+	@NotNull(groups = { ServerGroup.class })
 	private String me;
-	@NotNull
+	@NotNull(groups = { ServerGroup.class })
 	private String meId;
 	@NotNull
 	@Size(min = 2)
@@ -30,7 +32,7 @@ public class Expense extends DatastoreObject {
 	@NotNull
 	@Size(min = 32, max = 32)
 	private String projectId;
-	@NotNull
+	@NotNull(groups = { ServerGroup.class })
 	private Double sum;
 
 	public List<ExpenseConsumerEntity> getConsumers() {

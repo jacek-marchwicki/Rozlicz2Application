@@ -11,8 +11,10 @@
 	<inherits name="com.google.gwt.i18n.I18N" />
 	<inherits name="com.google.gwt.activity.Activity" />
 	<inherits name="com.google.gwt.place.Place" />
+  <inherits name="com.google.gwt.inject.Inject"/>
 	<inherits name="com.google.gwt.json.JSON" />
 	<inherits name="com.googlecode.objectify.Objectify" />
+	<inherits name='org.hibernate.validator.HibernateValidator' />
 	
   <inherits name='com.google.web.bindery.requestfactory.RequestFactory' />
 
@@ -27,10 +29,12 @@
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='com.rozlicz2.application.client.Rozlicz2Application' />
-
-	<replace-with class="com.rozlicz2.application.client.ClientFactoryImpl">
-		<when-type-is class="com.rozlicz2.application.client.ClientFactory" />
-	</replace-with>
+	
+	<replace-with
+    class="com.rozlicz2.application.client.tools.AppValidatorFactory">
+    <when-type-is class="javax.validation.ValidatorFactory" />
+  </replace-with>
+	
 
 	<!-- Specify the paths for translatable code -->
 	<source path='client' />

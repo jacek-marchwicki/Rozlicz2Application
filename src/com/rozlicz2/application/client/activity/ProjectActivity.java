@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.Configuration;
 import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.validation.client.Validation;
+import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.ResettableEventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.rozlicz2.application.client.ClientFactory;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.rozlicz2.application.client.event.ExpensesChangedEvent;
 import com.rozlicz2.application.client.event.ProjectChangedEvent;
 import com.rozlicz2.application.client.place.ExpensePlace;
@@ -34,17 +40,14 @@ public class ProjectActivity extends AbstractActivity implements
 		ProjectView.Presenter {
 
 	private ResettableEventBus childEventBus;
-	private final ClientFactory clientFactory;
-	private final ProjectPlace place;
+	private ProjectPlace place;
+	private PlaceController placeController;
 	private ProjectProxy project;
-	private ProjectRequestContext projectRequest;
-	private ProjectView projectView;
-	private final ListwidgetRequestFactory rf;
 
-	public ProjectActivity(ProjectPlace place, ClientFactory clientFactory) {
-		this.place = place;
-		this.clientFactory = clientFactory;
-		rf = clientFactory.getRf();
+	private ProjectView projectView;
+	private ListwidgetRequestFactory rf;
+
+	public ProjectActivity() {
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public class ProjectActivity extends AbstractActivity implements
 			}
 		});
 		ExpensePlace place = new ExpensePlace(expense);
-		clientFactory.getPlaceController().goTo(place);
+		placeController.goTo(place);
 	}
 
 	protected void drawExpenses(List<ExpenseProxy> expenses) {
@@ -75,7 +78,7 @@ public class ProjectActivity extends AbstractActivity implements
 	@Override
 	public void editExpense(ExpenseProxy expense) {
 		ExpensePlace place = new ExpensePlace(expense);
-		clientFactory.getPlaceController().goTo(place);
+		placeController.goTo(place);
 	}
 
 	private void findProjectById(final EventBus eventBus) {
@@ -85,9 +88,7 @@ public class ProjectActivity extends AbstractActivity implements
 					@Override
 					public void onSuccess(ProjectProxy response) {
 						if (response == null) {
-							// project not found
-							clientFactory.getPlaceController().goTo(
-									new NotFoundPlace());
+							placeController.goTo(new NotFoundPlace());
 						}
 						ProjectChangedEvent projectChangedEvent = new ProjectChangedEvent(
 								response);
@@ -109,24 +110,34 @@ public class ProjectActivity extends AbstractActivity implements
 
 	@Override
 	public void onCancel() {
-		// maybe remove handlers
+		projectView.setLocked(false);
 	}
 
 	@Override
 	public void onStop() {
+		projectView.setLocked(false);
 		childEventBus.removeHandlers();
 	}
 
 	protected void projectChanged(ProjectProxy readOnlyProject) {
-		projectRequest = rf.getProjectRequest();
+		ProjectRequestContext projectRequest = rf.getProjectRequest();
 		project = projectRequest.edit(readOnlyProject);
-		projectView.getDriver().edit(project);
+		projectView.getDriver().edit(project, projectRequest);
+		projectView.setLocked(false);
 	}
 
 	@Override
 	public void save() {
-		project = projectView.getDriver().flush();
-		projectRequest.save(project).fire(new Receiver<Void>() {
+		validate();
+		if (projectView.getDriver().hasErrors())
+			return;
+		projectView.setLocked(true);
+		ProjectRequestContext projectContext = (ProjectRequestContext) projectView
+				.getDriver().flush();
+
+		Request<ProjectProxy> projectPersistRequest = projectContext
+				.saveAndReturn(project);
+		projectPersistRequest.fire(new Receiver<ProjectProxy>() {
 
 			@Override
 			public void onConstraintViolation(
@@ -135,10 +146,30 @@ public class ProjectActivity extends AbstractActivity implements
 			}
 
 			@Override
-			public void onSuccess(Void response) {
+			public void onSuccess(ProjectProxy readOnlyProject) {
+				projectChanged(readOnlyProject);
 			}
 		});
 
+	}
+
+	public void setPlace(ProjectPlace place) {
+		this.place = place;
+	}
+
+	@Inject
+	public void setPlaceController(PlaceController placeController) {
+		this.placeController = placeController;
+	}
+
+	@Inject
+	public void setProjectView(ProjectView projectView) {
+		this.projectView = projectView;
+	}
+
+	@Inject
+	public void setRf(ListwidgetRequestFactory rf) {
+		this.rf = rf;
 	}
 
 	@Override
@@ -170,8 +201,8 @@ public class ProjectActivity extends AbstractActivity implements
 					}
 				});
 
-		projectView = clientFactory.getProjectView();
 		projectView.setPresenter(this);
+		projectView.setLocked(true);
 		drawExpenses(new ArrayList<ExpenseProxy>());
 
 		ProjectProxy readOnlyProject = place.getProject();
@@ -182,5 +213,21 @@ public class ProjectActivity extends AbstractActivity implements
 		}
 
 		panel.setWidget(projectView.asWidget());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void validate() {
+		projectView.getDriver().flush();
+		Configuration<?> configuration = Validation.byDefaultProvider()
+				.configure();
+		ValidatorFactory factory = configuration.buildValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<ProjectProxy>> validate = validator
+				.validate(project);
+
+		Iterable<?> violations = validate;
+		projectView.getDriver().setConstraintViolations(
+				(Iterable<ConstraintViolation<?>>) violations);
 	}
 }

@@ -1,4 +1,4 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.widgets;
 
 import com.google.gwt.editor.client.LeafValueEditor;
 import com.google.gwt.event.logical.shared.HasValueChangeHandlers;

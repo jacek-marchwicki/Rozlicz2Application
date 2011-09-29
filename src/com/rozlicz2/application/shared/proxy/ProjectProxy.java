@@ -8,6 +8,7 @@ import com.rozlicz2.application.shared.entity.Project;
 
 @ProxyFor(value = Project.class, locator = ObjectifyLocator.class)
 public interface ProjectProxy extends ProjectListProxy {
+
 	public List<ParticipantEntityProxy> getParticipants();
 
 	public void setId(String name);

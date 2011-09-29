@@ -2,19 +2,20 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" output="test-classes" path="test"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (2)"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-javadoc.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-sources.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
 	<classpathentry kind="src" path=".apt_generated">
 		<attributes>
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
 	<classpathentry kind="lib" path="lib/requestfactory-apt.jar"/>
 	<classpathentry kind="lib" path="lib/requestfactory-client-src.jar"/>
 	<classpathentry kind="lib" path="lib/requestfactory-client.jar"/>
@@ -35,6 +36,14 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-spring-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-struts2-plugin-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-throwingproviders-3.0.jar"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (2)"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-log4j12-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/javassist-3.12.1.GA.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hibernate-validator-4.2.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-validator-4.2.0.Final-sources.jar"/>
+	<classpathentry kind="lib" path="lib/gin-1.5-post-gwt-2.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

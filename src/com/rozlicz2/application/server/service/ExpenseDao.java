@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.inject.Inject;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.rozlicz2.application.shared.entity.Expense;
 import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
@@ -117,14 +118,23 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 	}
 
 	public void save(Expense list) {
+		saveAndReturn(list);
+	}
+
+	public Expense saveAndReturn(Expense list) {
 		String projectId = list.getProjectId();
 		if (projectId == null)
-			return;
+			return null;
 		ProjectList findUser = projectListDao.findUser(projectId);
 		if (findUser == null)
-			return;
+			return null;
 		calculateSum(list);
-		put(list);
+		Key<Expense> key = put(list);
+		try {
+			return this.get(key);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	private void updateExpenseParticipants(Expense expense,
@@ -184,6 +194,7 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 
 		expense.setPayments(newPayments);
 		calculateSum(expense);
+		put(expense);
 	}
 
 }

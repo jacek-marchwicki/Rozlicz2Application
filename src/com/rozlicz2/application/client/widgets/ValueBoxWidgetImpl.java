@@ -1,4 +1,4 @@
-package com.rozlicz2.application.client.view;
+package com.rozlicz2.application.client.widgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;

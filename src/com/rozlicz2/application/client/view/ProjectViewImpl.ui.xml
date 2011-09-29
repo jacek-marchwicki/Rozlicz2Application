@@ -1,19 +1,28 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:v="urn:import:com.rozlicz2.application.client.view"
-	xmlns:p1="urn:import:com.google.gwt.user.cellview.client">
-	
-	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
-	
+	xmlns:p1="urn:import:com.google.gwt.user.cellview.client" xmlns:e="urn:import:com.google.gwt.editor.ui.client"
+	xmlns:w="urn:import:com.rozlicz2.application.client.widgets">
+
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationConstants"
+		field="i18n"></ui:with>
+
 	<ui:style>
 		.important {
 			font-weight: bold;
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<v:EditableLabelWidget caption="{i18n.projectName}" ui:field="nameEditor"></v:EditableLabelWidget>
-		<h2><ui:text from="{i18n.expensesList}"></ui:text></h2> 
-		<v:ProjectViewImpl.ExpensesEditor ui:field="expensesEditor"></v:ProjectViewImpl.ExpensesEditor>
+		
+		<w:EditableLabelWidget caption="{i18n.projectName}"
+					ui:field="nameEditor"></w:EditableLabelWidget>
+
+		<h2>
+			<ui:text from="{i18n.expensesList}"></ui:text>
+		</h2>
+		<v:ProjectViewImpl.ExpensesEditor
+			ui:field="expensesEditor"></v:ProjectViewImpl.ExpensesEditor>
 		<g:Button ui:field="createExpenseButton" text="{i18n.newExpense}"></g:Button>
 	</g:HTMLPanel>
 </ui:UiBinder> 

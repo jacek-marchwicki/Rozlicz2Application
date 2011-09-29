@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -17,12 +16,18 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
+import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
 
@@ -30,7 +35,7 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 		Editor<ProjectProxy> {
 
 	interface Driver extends
-			SimpleBeanEditorDriver<ProjectProxy, ProjectViewImpl> {
+			RequestFactoryEditorDriver<ProjectProxy, ProjectViewImpl> {
 	}
 
 	public static class ExpenditureCell extends AbstractCell<ExpenseProxy> {
@@ -76,8 +81,23 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	interface ProjectViewImplUiBinder extends UiBinder<Widget, ProjectViewImpl> {
 	}
 
+	private static PopupPanel glassPanel;
+
 	private static ProjectViewImplUiBinder uiBinder = GWT
 			.create(ProjectViewImplUiBinder.class);
+
+	private static void setGlassPanelVisible(boolean visible) {
+		if (glassPanel == null) {
+			glassPanel = new DecoratedPopupPanel(false, true);
+			glassPanel.setWidget(new Label("Loading..."));
+		}
+
+		if (visible) {
+			glassPanel.center();
+		} else {
+			glassPanel.hide();
+		}
+	}
 
 	@UiField
 	Button createExpenseButton;
@@ -115,7 +135,7 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	}
 
 	@Override
-	public SimpleBeanEditorDriver<ProjectProxy, ?> getDriver() {
+	public RequestFactoryEditorDriver<ProjectProxy, ?> getDriver() {
 		return driver;
 	}
 
@@ -126,6 +146,11 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 
 	@UiHandler("nameEditor")
 	public void onNameEditorChange(ValueChangeEvent<String> event) {
+		presenter.validate();
+	}
+
+	@UiHandler("nameEditor")
+	public void onNameEditorSave(SaveEvent event) {
 		presenter.save();
 	}
 
@@ -137,6 +162,11 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	public void setExpenses(List<ExpenseProxy> expenses) {
 		expensesEditor.setRowData(expenses);
 		expensesEditor.setRowCount(expenses.size());
+	}
+
+	@Override
+	public void setLocked(boolean locked) {
+		setGlassPanelVisible(locked);
 	}
 
 	@Override

@@ -4,17 +4,24 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
+import com.rozlicz2.application.client.widgets.ConsumersTableWidget;
+import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.PaymentOptionWidget;
+import com.rozlicz2.application.client.widgets.PaymentsTableWidget;
+import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
@@ -24,14 +31,29 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 		Editor<ExpenseProxy> {
 
 	interface Driver extends
-			SimpleBeanEditorDriver<ExpenseProxy, ExpenseViewImpl> {
+			RequestFactoryEditorDriver<ExpenseProxy, ExpenseViewImpl> {
 	}
 
 	interface ExpenseViewImplUiBinder extends UiBinder<Widget, ExpenseViewImpl> {
 	}
 
+	private static PopupPanel glassPanel;
+
 	private static ExpenseViewImplUiBinder uiBinder = GWT
 			.create(ExpenseViewImplUiBinder.class);
+
+	private static void setGlassPanelVisible(boolean visible) {
+		if (glassPanel == null) {
+			glassPanel = new DecoratedPopupPanel(false, true);
+			glassPanel.setWidget(new Label("Loading..."));
+		}
+
+		if (visible) {
+			glassPanel.center();
+		} else {
+			glassPanel.hide();
+		}
+	}
 
 	@UiField
 	ConsumersTableWidget consumersEditor;
@@ -62,7 +84,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	}
 
 	@Override
-	public SimpleBeanEditorDriver<ExpenseProxy, ?> getDriver() {
+	public RequestFactoryEditorDriver<ExpenseProxy, ?> getDriver() {
 		return driver;
 	}
 
@@ -78,7 +100,12 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	}
 
 	@UiHandler("nameEditor")
-	public void onNameChange(ValueChangeEvent<String> e) {
+	public void onNameEditorChange(ValueChangeEvent<String> e) {
+		presenter.validate();
+	}
+
+	@UiHandler("nameEditor")
+	public void onNameEditorSave(SaveEvent e) {
 		presenter.save();
 	}
 
@@ -91,6 +118,11 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	public void onPaymentsChange(
 			ValueChangeEvent<List<ExpensePaymentEntityProxy>> e) {
 		presenter.save();
+	}
+
+	@Override
+	public void setLocked(boolean locked) {
+		setGlassPanelVisible(locked);
 	}
 
 	@Override
