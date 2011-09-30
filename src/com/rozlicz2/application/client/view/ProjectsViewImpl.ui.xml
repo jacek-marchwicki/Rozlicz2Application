@@ -21,6 +21,7 @@
 		</p1:CellList>
 		<h2>Statistics</h2>
 		<g:Label ui:field="projectsNumberLabel"></g:Label>
+		<g:Button ui:field="errorGeneratorButton" text="Error generator"></g:Button>
 	</g:HTMLPanel>
 
 </ui:UiBinder> 

@@ -62,8 +62,8 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 
 	@UiField
 	LockWidget lockWidget;
-
 	private ProjectsView.Presenter presenter;
+
 	@UiField
 	Label projectsNumberLabel;
 
@@ -95,6 +95,12 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 			}
 		});
 		return cellList;
+	}
+
+	@UiHandler("errorGeneratorButton")
+	public void onErrorGeneratorButtonClicked(ClickEvent e) {
+		// TODO to remove
+		throw new RuntimeException("Sample excpetion");
 	}
 
 	protected void onSelectedObject(ProjectListProxy selectedObject) {
