@@ -99,8 +99,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 
 	@UiHandler("errorGeneratorButton")
 	public void onErrorGeneratorButtonClicked(ClickEvent e) {
-		// TODO to remove
-		throw new RuntimeException("Sample excpetion");
+		this.presenter.generateError();
 	}
 
 	protected void onSelectedObject(ProjectListProxy selectedObject) {

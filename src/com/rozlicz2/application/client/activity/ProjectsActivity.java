@@ -13,6 +13,7 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.rozlicz2.application.client.event.ProjectsListEvent;
+import com.rozlicz2.application.client.mvp.UncaughtExceptionEvent;
 import com.rozlicz2.application.client.place.ProjectPlace;
 import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectsView;
@@ -62,6 +63,14 @@ public class ProjectsActivity extends AbstractActivity implements
 	public void editProject(ProjectListProxy key) {
 		ProjectPlace place = new ProjectPlace(key.getId());
 		placeController.goTo(place);
+	}
+
+	@Override
+	public void generateError() {
+		// TODO to remove
+		Throwable e = new Throwable("this is some error");
+		UncaughtExceptionEvent exception = new UncaughtExceptionEvent(e);
+		eventBus.fireEvent(exception);
 	}
 
 	@Override

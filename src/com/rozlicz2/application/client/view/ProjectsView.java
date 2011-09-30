@@ -10,6 +10,8 @@ public interface ProjectsView extends IsWidget {
 		void createProject();
 
 		void editProject(ProjectListProxy key);
+
+		void generateError();
 	}
 
 	void setLocked(boolean locked);
