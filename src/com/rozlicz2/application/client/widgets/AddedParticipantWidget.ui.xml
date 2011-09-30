@@ -33,7 +33,7 @@
 		}
 		@if user.agent safari {
 			.htmlPanel {		
-				background: -webkit-gradient(linear,left top,left bottom,from(#F0F0F0),to(#E4E4E4));
+				background: literal('-webkit-gradient(linear,left top,left bottom,from(#F0F0F0),to(#E4E4E4))');
 			}
 		}
 		@if user.agent opera {
