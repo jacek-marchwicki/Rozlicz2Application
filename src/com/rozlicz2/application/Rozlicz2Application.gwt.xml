@@ -15,7 +15,7 @@
 	<inherits name="com.google.gwt.json.JSON" />
 	<inherits name="com.googlecode.objectify.Objectify" />
 	<inherits name='org.hibernate.validator.HibernateValidator' />
-	
+
 
 	<inherits name='com.google.web.bindery.requestfactory.RequestFactory' />
 
@@ -30,6 +30,11 @@
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='com.rozlicz2.application.client.Rozlicz2Application' />
+
+	<replace-with
+		class="com.rozlicz2.application.client.tools.AppValidatorFactory">
+		<when-type-is class="javax.validation.ValidatorFactory" />
+	</replace-with>
 
 	<replace-with
 		class="com.rozlicz2.application.client.tools.CustomValidationMessagesResolver">

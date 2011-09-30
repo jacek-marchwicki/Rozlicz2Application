@@ -105,8 +105,8 @@ public class ExpenseActivity extends AbstractActivity implements
 		expenseView.setLocked(true);
 		ExpenseRequestContext requestContext = (ExpenseRequestContext) expenseView
 				.getDriver().flush();
-		Request<ExpenseProxy> saveAndReturn = requestContext
-				.saveAndReturn(expense);
+		Request<ExpenseProxy> saveAndReturn = requestContext.saveAndReturn(
+				expense).with("payments", "consumers");
 		saveAndReturn.fire(new Receiver<ExpenseProxy>() {
 			@Override
 			public void onConstraintViolation(
@@ -182,6 +182,8 @@ public class ExpenseActivity extends AbstractActivity implements
 	@Override
 	public void validate() {
 		expenseView.getDriver().flush();
+		if (expenseView.getDriver().hasErrors())
+			return;
 		Configuration<?> configuration = Validation.byDefaultProvider()
 				.configure();
 		ValidatorFactory factory = configuration.buildValidatorFactory();

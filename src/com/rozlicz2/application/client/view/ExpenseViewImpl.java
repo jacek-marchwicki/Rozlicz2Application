@@ -99,7 +99,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@UiHandler("paymentsEditor")
 	public void onPaymentsChange(
 			ValueChangeEvent<List<ExpensePaymentEntityProxy>> e) {
-		presenter.save();
+		presenter.validate();
 	}
 
 	@Override

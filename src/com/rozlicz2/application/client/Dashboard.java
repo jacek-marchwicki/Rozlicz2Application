@@ -62,8 +62,8 @@ public class Dashboard extends Composite {
 		emailLabel.setText(email);
 
 		rf.initialize(eventBus);
-
-		GWT.setUncaughtExceptionHandler(uncaughtExceptionHandler);
+		if (GWT.isProdMode())
+			GWT.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 
 		ActivityManager popupActivityManager = new ActivityManager(
 				popupActivityMapper, eventBus);
