@@ -10,11 +10,11 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.ResettableEventBus;
 import com.rozlicz2.application.client.mvp.UncaughtExceptionEvent;
-import com.rozlicz2.application.client.place.ErrorView;
+import com.rozlicz2.application.client.view.ErrorView;
 
 public class ErrorActivity extends AbstractActivity {
 
-	private static final int ERROR_TIMEOUT = 1000;
+	private static final int ERROR_TIMEOUT = 5000;
 	private final Set<ErrorView.ErrorDisplay> errors = new HashSet<ErrorView.ErrorDisplay>();
 	private ErrorView errorView;
 

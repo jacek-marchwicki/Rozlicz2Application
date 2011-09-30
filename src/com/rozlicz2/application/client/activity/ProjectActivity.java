@@ -11,7 +11,6 @@ import javax.validation.ValidatorFactory;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.ResettableEventBus;
@@ -22,17 +21,11 @@ import com.rozlicz2.application.client.event.ProjectChangedEvent;
 import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
-import com.rozlicz2.application.client.resources.ApplicationConstants;
 import com.rozlicz2.application.client.view.ProjectView;
-import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
-import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
-import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
-import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ExpenseRequestContext;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ProjectRequestContext;
-import com.rozlicz2.application.shared.tools.IdGenerator;
 
 public class ProjectActivity extends AbstractActivity implements
 		ProjectView.Presenter {
@@ -52,23 +45,22 @@ public class ProjectActivity extends AbstractActivity implements
 
 	@Override
 	public void createExpense() {
-		ExpenseRequestContext expenseRequest = rf.getExpenseRequest();
-		ExpenseProxy expense = expenseRequest.create(ExpenseProxy.class);
-		expense.setId(IdGenerator.nextId());
-		expense.setName(ApplicationConstants.constants.newExpense());
-		expense.setPayments(new ArrayList<ExpensePaymentEntityProxy>());
-		expense.setConsumers(new ArrayList<ExpenseConsumerEntityProxy>());
-		expense.setProjectId(place.getProjectId());
-		expense.setPaymentOption(PaymentOption.EVERYBODY);
-		expenseRequest.save(expense).fire(new Receiver<Void>() {
-
-			@Override
-			public void onSuccess(Void response) {
-				Window.alert("Created");
-			}
-		});
-		ExpensePlace place = new ExpensePlace(expense);
-		placeController.goTo(place);
+		throw new RuntimeException("ala ma kota");
+		/*
+		 * ExpenseRequestContext expenseRequest = rf.getExpenseRequest();
+		 * ExpenseProxy expense = expenseRequest.create(ExpenseProxy.class);
+		 * expense.setId(IdGenerator.nextId());
+		 * expense.setName(ApplicationConstants.constants.newExpense());
+		 * expense.setPayments(new ArrayList<ExpensePaymentEntityProxy>());
+		 * expense.setConsumers(new ArrayList<ExpenseConsumerEntityProxy>());
+		 * expense.setProjectId(place.getProjectId());
+		 * expense.setPaymentOption(PaymentOption.EVERYBODY);
+		 * expenseRequest.save(expense).fire(new Receiver<Void>() {
+		 * 
+		 * @Override public void onSuccess(Void response) {
+		 * Window.alert("Created"); } }); ExpensePlace place = new
+		 * ExpensePlace(expense); placeController.goTo(place);
+		 */
 	}
 
 	protected void drawExpenses(List<ExpenseProxy> expenses) {

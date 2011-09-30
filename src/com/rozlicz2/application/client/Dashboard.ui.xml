@@ -105,7 +105,12 @@
 		.forfree {
 			display: block;
 			font-size: 14px;
-		}		
+		}	
+		.errorPanel {
+			position: fixed;
+			top: 0;
+			width: 100%;
+		}
 	</ui:style>
 	<g:HTMLPanel>
 		<div class="{style.h1h1}">
@@ -129,6 +134,7 @@
 			</div>
 		</div>
 		<g:SimplePanel ui:field="popupWidget"></g:SimplePanel>
+		<g:SimplePanel ui:field="errorPanel" styleName="{style.errorPanel}"></g:SimplePanel>
 	</g:HTMLPanel>
 			
 </ui:UiBinder> 

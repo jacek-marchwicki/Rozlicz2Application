@@ -14,11 +14,17 @@ public interface ApplicationResources extends ClientBundle {
 
 		String errorLabelClass();
 
+		String errorLabelShowClass();
+
+		String errorViewClass();
+
+		String errorViewImageClass();
+
+		String errorViewItemClass();
+
 		String fullScreenClass();
 
 		String grayBackgroundClass();
-
-		String errorLabelShowClass();
 
 		String labelClass();
 
@@ -39,6 +45,9 @@ public interface ApplicationResources extends ClientBundle {
 
 	@Source("default.txt")
 	public TextResource defaultText();
+
+	@Source("images/error.png")
+	public ImageResource errorImage();
 
 	@Source("images/facebook.png")
 	public ImageResource facebook();

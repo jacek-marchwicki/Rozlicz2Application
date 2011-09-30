@@ -1,4 +1,4 @@
-package com.rozlicz2.application.client.place;
+package com.rozlicz2.application.client.view;
 
 import java.util.Set;
 
@@ -18,6 +18,6 @@ public interface ErrorView extends IsWidget {
 		}
 	}
 
-	void setErrors(Set<ErrorView.ErrorDisplay> errors);
+	void setErrors(Set<ErrorDisplay> errors);
 
 }

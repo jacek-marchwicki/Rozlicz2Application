@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.rozlicz2.application.client.activity.ErrorActivity;
 import com.rozlicz2.application.client.mvp.AppActivityMapper;
 import com.rozlicz2.application.client.mvp.AppPlaceHistoryMapper;
 import com.rozlicz2.application.client.mvp.PopupActivityMapper;
@@ -41,6 +42,9 @@ public class Dashboard extends Composite {
 	Label emailLabel;
 
 	@UiField
+	SimplePanel errorPanel;
+
+	@UiField
 	SimplePanel popupWidget;
 
 	@Inject
@@ -49,7 +53,8 @@ public class Dashboard extends Composite {
 			PopupActivityMapper popupActivityMapper,
 			AppActivityMapper appActivityMapper,
 			AppPlaceHistoryMapper historyMapper,
-			UncaughtExceptionHandler uncaughtExceptionHandler) {
+			UncaughtExceptionHandler uncaughtExceptionHandler,
+			ErrorActivity errorActivity) {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		String email = getUserEmailFromHtml();
@@ -68,6 +73,8 @@ public class Dashboard extends Composite {
 		ActivityManager activityManager = new ActivityManager(
 				appActivityMapper, eventBus);
 		activityManager.setDisplay(appWidget);
+
+		errorActivity.start(errorPanel, null);
 
 		// Start PlaceHistoryHandler with our PlaceHistoryMapper
 		PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(
