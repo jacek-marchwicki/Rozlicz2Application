@@ -10,6 +10,8 @@ public interface ApplicationResources extends ClientBundle {
 	interface ApplicationCss extends CssResource {
 		String clearClass();
 
+		String editableWidgetLabelError();
+
 		String errorClass();
 
 		String errorLabelClass();

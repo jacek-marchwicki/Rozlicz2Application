@@ -23,7 +23,7 @@ import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
-import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.EditableTextWidget;
 import com.rozlicz2.application.client.widgets.LockWidget;
 import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
@@ -94,7 +94,7 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	LockWidget lockWidget;
 
 	@UiField
-	EditableLabelWidget nameEditor;
+	EditableTextWidget nameEditor;
 
 	private Presenter presenter;
 

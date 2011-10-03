@@ -1,39 +1,45 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:with type="com.rozlicz2.application.client.resources.ApplicationResources" field="res"></ui:with>
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationResources"
+		field="res"></ui:with>
 	<ui:style>
 		.label {
 			font-weight: bold;
 			font-size: 1.5em;
 			float: left;
 		}
-		.focusPanel{
+		
+		.focusPanel {
 			cursor: pointer;
 		}
+		
 		.edit {
 			font-size: 0.8em;
 			margin-left: 6px;
 			float: left;
-			
 		}
+		
 		.saveButton {
 			color: #ffffff;
-			background: #019138;	
+			background: #019138;
 			font-weight: bold;
 			border: 1px solid #E4E4E4;
 			float: left;
 			padding: 1px 10px 1px 10px;
 			margin-left: 15px;
 			border-radius: 4px;
-			-webkit-transition: background 0.3s ease-in-out;	
+			-webkit-transition: background 0.3s ease-in-out;
 		}
+		
 		.saveButton[disabled] {
 			background: #E4E4E4;
 		}
+		
 		.cancelButton {
 			color: #ffffff;
-			background: #D73828;	
+			background: #D73828;
 			border: 1px solid #E4E4E4;
 			float: left;
 			padding: 1px 10px 1px 10px;
@@ -58,19 +64,22 @@
 			letter-spacing: 0.2em;
 			margin-left: 10px;
 		}
-		
+		.textDiv {
+			min-height: 2em;
+		}
 	</ui:style>
 	<g:HTMLPanel>
-		<g:FocusPanel ui:field="focusPanel" styleName="{style.focusPanel}">
-			<g:HTMLPanel>
-				<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
-				<g:Label ui:field="editAnchorLabel" styleName="{style.edit}" text="[edit]"></g:Label>
-			</g:HTMLPanel>
-		</g:FocusPanel>
-		
-		<g:TextBox ui:field="textBox" styleName="{style.textBox}"></g:TextBox>
-		<g:Button ui:field="saveButton" text="Save" styleName="{style.saveButton}"></g:Button>
-		<g:Button ui:field="cancelButton" text="Cancel" styleName="{style.cancelButton}"></g:Button>
+		<div class="{style.textDiv}">
+			<g:FocusPanel ui:field="focusPanel" styleName="{style.focusPanel}">
+				<g:HTMLPanel>
+					<g:Label ui:field="textLabel" styleName="{style.label}"></g:Label>
+					<g:Label ui:field="editAnchorLabel" styleName="{style.edit}"
+						text="[edit]"></g:Label>
+				</g:HTMLPanel>
+			</g:FocusPanel>
+
+			<g:TextBox ui:field="textBox" styleName="{style.textBox}"></g:TextBox>
+		</div>
 		<g:Label ui:field="errorLabel" styleName="{res.css.errorLabelClass}"></g:Label>
 		<g:Label visible="false" ui:field="captionLabel" styleName="{style.captionLabel}"></g:Label>
 		<div style="clear: both"></div>

@@ -16,8 +16,8 @@
 	<g:HTMLPanel>
 		<w:LockWidget ui:field="lockWidget"></w:LockWidget>
 		
-		<w:EditableLabelWidget caption="{i18n.projectName}"
-					ui:field="nameEditor"></w:EditableLabelWidget>
+		<w:EditableTextWidget caption="{i18n.projectName}"
+					ui:field="nameEditor"></w:EditableTextWidget>
 
 		<h2>
 			<ui:text from="{i18n.expensesList}"></ui:text>

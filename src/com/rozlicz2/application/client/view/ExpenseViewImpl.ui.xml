@@ -13,7 +13,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<w:LockWidget ui:field="lockWidget"></w:LockWidget>
-		<w:EditableLabelWidget caption="{i18n.expenseName}" ui:field="nameEditor"></w:EditableLabelWidget>
+		<w:EditableTextWidget caption="{i18n.expenseName}" ui:field="nameEditor"></w:EditableTextWidget>
 		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
 		<w:PaymentsTableWidget ui:field="paymentsEditor"></w:PaymentsTableWidget>
 		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>

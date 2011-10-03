@@ -15,11 +15,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.client.widgets.ConsumersTableWidget;
-import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.EditableTextWidget;
 import com.rozlicz2.application.client.widgets.LockWidget;
 import com.rozlicz2.application.client.widgets.PaymentOptionWidget;
 import com.rozlicz2.application.client.widgets.PaymentsTableWidget;
-import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
@@ -46,7 +45,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	LockWidget lockWidget;
 
 	@UiField
-	EditableLabelWidget nameEditor;
+	EditableTextWidget nameEditor;
 
 	@UiField
 	PaymentOptionWidget paymentOptionEditor;
@@ -84,11 +83,6 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@UiHandler("nameEditor")
 	public void onNameEditorChange(ValueChangeEvent<String> e) {
 		presenter.validate();
-	}
-
-	@UiHandler("nameEditor")
-	public void onNameEditorSave(SaveEvent e) {
-		presenter.save();
 	}
 
 	@UiHandler("paymentOptionEditor")
