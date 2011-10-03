@@ -3,6 +3,7 @@ package com.rozlicz2.application.client.widgets;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.IsEditor;
 import com.google.gwt.editor.client.adapters.EditorSource;
 import com.google.gwt.editor.client.adapters.ListEditor;
@@ -13,19 +14,15 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.rozlicz2.application.client.widgets.events.HasSaveHandlers;
-import com.rozlicz2.application.client.widgets.events.SaveEvent;
-import com.rozlicz2.application.client.widgets.events.SaveHandler;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 
 public class PaymentsTableWidget extends Composite
 		implements
-		IsEditor<ListEditor<ExpensePaymentEntityProxy, ExpensePaymentEntityWidget>>,
-		HasValueChangeHandlers<List<ExpensePaymentEntityProxy>>,
-		HasSaveHandlers {
+		IsEditor<ListEditor<ExpensePaymentEntityProxy, PaymentsTableWidget.ExpensePaymentEntityWidget>>,
+		HasValueChangeHandlers<List<ExpensePaymentEntityProxy>> {
 
 	private final class EditorSourceExtension extends
 			EditorSource<ExpensePaymentEntityWidget> {
@@ -33,21 +30,56 @@ public class PaymentsTableWidget extends Composite
 		@Override
 		public ExpensePaymentEntityWidget create(int index) {
 			ExpensePaymentEntityWidget editor = new ExpensePaymentEntityWidget();
-			editor.addValueChangeHandler(new ValueChangeHandlerImplementation());
-			flowPanel.insert(editor, index);
+			this.setIndex(editor, index);
+			editor.getHasValueChangeHandlers().addValueChangeHandler(
+					new ValueChangeHandlerImplementation());
 			return editor;
 		}
 
 		@Override
 		public void dispose(ExpensePaymentEntityWidget subEditor) {
-			subEditor.removeFromParent();
+			subEditor.getNameEditor().removeFromParent();
+			subEditor.getValueEditor().removeFromParent();
+			// TODO may cause unexpected appirence widgets
 		}
 
 		@Override
 		public void setIndex(ExpensePaymentEntityWidget editor, int index) {
-			flowPanel.insert(editor, index);
+			flexTable.setWidget(index + 1, 0, editor.getNameEditor());
+			flexTable.setWidget(index + 1, 1, editor.getValueEditor());
 		}
 
+	}
+
+	public static class ExpensePaymentEntityWidget implements
+			Editor<ExpensePaymentEntityProxy> {
+
+		/*
+		 * Must be public cause is handled by editor framework
+		 */
+		public final Label nameEditor;
+
+		/*
+		 * Must be public cause is handled by editor framework
+		 */
+		public final CurrencyWidget valueEditor;
+
+		public ExpensePaymentEntityWidget() {
+			nameEditor = new Label();
+			valueEditor = new CurrencyWidget();
+		}
+
+		public HasValueChangeHandlers<Double> getHasValueChangeHandlers() {
+			return valueEditor;
+		}
+
+		public Widget getNameEditor() {
+			return nameEditor;
+		}
+
+		public Widget getValueEditor() {
+			return valueEditor;
+		}
 	}
 
 	interface PaymentsTableWidgetUiBinder extends
@@ -55,10 +87,9 @@ public class PaymentsTableWidget extends Composite
 	}
 
 	private final class ValueChangeHandlerImplementation implements
-			ValueChangeHandler<ExpensePaymentEntityProxy> {
+			ValueChangeHandler<Double> {
 		@Override
-		public void onValueChange(
-				ValueChangeEvent<ExpensePaymentEntityProxy> event) {
+		public void onValueChange(ValueChangeEvent<Double> event) {
 			ValueChangeEvent.fire(PaymentsTableWidget.this,
 					listEditor.getList());
 		}
@@ -71,7 +102,7 @@ public class PaymentsTableWidget extends Composite
 	Label errorLabel;
 
 	@UiField
-	FlowPanel flowPanel;
+	FlexTable flexTable;
 
 	ListEditor<ExpensePaymentEntityProxy, ExpensePaymentEntityWidget> listEditor;
 
@@ -79,12 +110,9 @@ public class PaymentsTableWidget extends Composite
 
 	public PaymentsTableWidget() {
 		initWidget(uiBinder.createAndBindUi(this));
+		flexTable.setText(0, 0, "Name");
+		flexTable.setText(0, 1, "Value");
 		listEditor = ListEditor.of(source);
-	}
-
-	@Override
-	public HandlerRegistration addSaveHandler(SaveHandler handler) {
-		return addHandler(handler, SaveEvent.getType());
 	}
 
 	@Override
@@ -94,7 +122,7 @@ public class PaymentsTableWidget extends Composite
 	}
 
 	@Override
-	public ListEditor<ExpensePaymentEntityProxy, ExpensePaymentEntityWidget> asEditor() {
+	public ListEditor<ExpensePaymentEntityProxy, PaymentsTableWidget.ExpensePaymentEntityWidget> asEditor() {
 		return listEditor;
 	}
 }

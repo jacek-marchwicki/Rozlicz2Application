@@ -46,9 +46,9 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 			double toDivide = sum;
 			int proportionals = 0;
 			for (ExpenseConsumerEntity consumer : consumers) {
-				if (!consumer.isConsumer())
+				if (!consumer.getIsConsumer())
 					continue;
-				if (consumer.isProportional()) {
+				if (consumer.getIsProportional()) {
 					proportionals++;
 					continue;
 				}
@@ -56,9 +56,9 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 			}
 			double proportionalValue = toDivide / proportionals;
 			for (ExpenseConsumerEntity consumer : consumers) {
-				if (!consumer.isConsumer())
+				if (!consumer.getIsConsumer())
 					continue;
-				if (!consumer.isProportional())
+				if (!consumer.getIsProportional())
 					continue;
 				consumer.setValue(proportionalValue);
 			}

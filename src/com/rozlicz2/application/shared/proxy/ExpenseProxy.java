@@ -2,6 +2,9 @@ package com.rozlicz2.application.shared.proxy;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.rozlicz2.application.server.locator.ObjectifyLocator;
@@ -12,8 +15,11 @@ import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 public interface ExpenseProxy extends EntityProxy {
 	public List<ExpenseConsumerEntityProxy> getConsumers();
 
+	@Size(max = 32, min = 32, message = "{custom.internal.error}")
 	String getId();
 
+	@NotNull(message = "{custom.internal.error}")
+	@Size(min = 4, max = 100, message = "{custom.name.size.message}")
 	String getName();
 
 	public PaymentOption getPaymentOption();

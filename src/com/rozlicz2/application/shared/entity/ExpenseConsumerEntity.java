@@ -15,11 +15,11 @@ public class ExpenseConsumerEntity extends BaseEntity {
 		return value;
 	}
 
-	public Boolean isConsumer() {
+	public Boolean getIsConsumer() {
 		return isConsumer;
 	}
 
-	public Boolean isProportional() {
+	public Boolean getIsProportional() {
 		return isProportional;
 	}
 

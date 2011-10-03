@@ -77,7 +77,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@UiHandler("consumersEditor")
 	public void onConsumersChange(
 			ValueChangeEvent<List<ExpenseConsumerEntityProxy>> e) {
-		presenter.save();
+		presenter.validate();
 	}
 
 	@UiHandler("nameEditor")
@@ -87,7 +87,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 
 	@UiHandler("paymentOptionEditor")
 	public void onPaymentOptionChange(ValueChangeEvent<PaymentOption> e) {
-		presenter.save();
+		presenter.validate();
 	}
 
 	@UiHandler("paymentsEditor")

@@ -25,7 +25,6 @@ import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriv
 import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.client.widgets.EditableTextWidget;
 import com.rozlicz2.application.client.widgets.LockWidget;
-import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
 
@@ -133,11 +132,6 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	@UiHandler("nameEditor")
 	public void onNameEditorChange(ValueChangeEvent<String> event) {
 		presenter.validate();
-	}
-
-	@UiHandler("nameEditor")
-	public void onNameEditorSave(SaveEvent event) {
-		presenter.save();
 	}
 
 	protected void onSelectedObject(ExpenseProxy selectedObject) {
