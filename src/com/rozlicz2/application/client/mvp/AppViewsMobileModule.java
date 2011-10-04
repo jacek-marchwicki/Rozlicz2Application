@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import com.rozlicz2.application.client.view.AddParticipantView;
 import com.rozlicz2.application.client.view.AddParticipantViewImpl;
 import com.rozlicz2.application.client.view.DashboardView;
-import com.rozlicz2.application.client.view.DashboardViewImpl;
+import com.rozlicz2.application.client.view.DashboardViewMobileImpl;
 import com.rozlicz2.application.client.view.ErrorView;
 import com.rozlicz2.application.client.view.ErrorViewImpl;
 import com.rozlicz2.application.client.view.ExpenseView;
@@ -17,7 +17,7 @@ import com.rozlicz2.application.client.view.ProjectViewImpl;
 import com.rozlicz2.application.client.view.ProjectsView;
 import com.rozlicz2.application.client.view.ProjectsViewImpl;
 
-public class AppViewsModule extends AbstractGinModule {
+public class AppViewsMobileModule extends AbstractGinModule {
 
 	@Override
 	protected void configure() {
@@ -28,7 +28,8 @@ public class AppViewsModule extends AbstractGinModule {
 		bind(ProjectView.class).to(ProjectViewImpl.class).in(Singleton.class);
 		bind(ProjectsView.class).to(ProjectsViewImpl.class).in(Singleton.class);
 		bind(ErrorView.class).to(ErrorViewImpl.class).in(Singleton.class);
-		bind(DashboardView.class).to(DashboardViewImpl.class).in(
+		bind(DashboardView.class).to(DashboardViewMobileImpl.class).in(
 				Singleton.class);
 	}
+
 }

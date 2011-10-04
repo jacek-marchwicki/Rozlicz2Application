@@ -8,6 +8,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
+import com.rozlicz2.application.client.Starter;
 import com.rozlicz2.application.client.tools.ServerValidator;
 import com.rozlicz2.application.client.tools.ServerValidatorImpl;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
@@ -31,6 +32,7 @@ public class AppModule extends AbstractGinModule {
 				Singleton.class);
 		bind(UncaughtExceptionHandler.class).to(
 				AppUncaughtExceptionHandler.class).in(Singleton.class);
+		bind(Starter.class).in(Singleton.class);
 	}
 
 }

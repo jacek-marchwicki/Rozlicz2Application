@@ -5,7 +5,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.rozlicz2.application.client.mvp.AppDesktopGinjector;
 import com.rozlicz2.application.client.mvp.AppGinjector;
+import com.rozlicz2.application.client.mvp.AppMobileGinjector;
 import com.rozlicz2.application.client.resources.ApplicationResources;
 
 /**
@@ -13,12 +15,35 @@ import com.rozlicz2.application.client.resources.ApplicationResources;
  */
 public class Rozlicz2Application implements EntryPoint {
 
-	/*
-	 * private final GreetingServiceAsync greetingService = GWT
-	 * .create(GreetingService.class);
-	 */
+	public static interface MyApp {
+		public void Start(RootPanel rootPanel);
+	}
 
-	private final AppGinjector appGinjector = GWT.create(AppGinjector.class);;
+	public static class MyAppDesktop implements MyApp {
+		private final AppGinjector appGinjector = GWT
+				.create(AppDesktopGinjector.class);
+
+		@Override
+		public void Start(RootPanel rootPanel) {
+			// TODO Auto-generated method stub
+			Starter main = appGinjector.getMain();
+			main.start(rootPanel);
+		}
+	}
+
+	public static class MyAppMobile implements MyApp {
+		private final AppGinjector appGinjector = GWT
+				.create(AppMobileGinjector.class);
+
+		@Override
+		public void Start(RootPanel rootPanel) {
+			// TODO Auto-generated method stub
+			Starter main = appGinjector.getMain();
+			main.start(rootPanel);
+		}
+	}
+
+	MyApp myApp = GWT.create(MyApp.class);
 
 	private void hideLoader() {
 		Element loadingElement = DOM.getElementById("loading");
@@ -26,15 +51,12 @@ public class Rozlicz2Application implements EntryPoint {
 		parent.removeChild(loadingElement);
 	}
 
-	/**
-	 * This is the entry point method.
-	 */
 	@Override
 	public void onModuleLoad() {
 		ApplicationResources.INSTANCE.css().ensureInjected();
 
-		Dashboard dashboard = appGinjector.getDashboard();
-		RootPanel.get("application").add(dashboard);
+		myApp.Start(RootPanel.get("application"));
+
 		hideLoader();
 	}
 }
