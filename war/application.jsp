@@ -37,7 +37,9 @@
 			src="rozlicz2application/rozlicz2application.nocache.js"></script>
 <%
 	}
+	else
 %>
+		<link rel="stylesheet" href="/stylesheets/main.css" type="text/css" />
 </head>
 
 <body>
@@ -61,8 +63,28 @@
 		String googleUrl = userService.createGoogleLoginURL(redirect_url);
 		String facebookUrl = userService.createFacebookLoginURL(redirect_url);
 %>
-	<a href="<%= facebookUrl%>">Login via facebook</a>
-	<a href="<%= googleUrl%>">Login via GoogleAccount</a>
+		<div id="h1h1">
+		<div id="h1h2">
+		</div>
+	</div>
+	<div id="h2h1">
+		<h1 id="h2h2">
+			<div id="logo">
+				rozlicz<span class="green"><span class="two">2</span>.pl</span>
+			</div>
+			<div id="content-right">
+				rozliczaj się ze wszystkiego* <span>*za darmo</span>
+			</div>
+		</h1>
+	</div>
+	<div id="content">
+
+		<div id="body">
+			<a href="<%= facebookUrl%>"><img alt="Login via Facebook" src="images/facebook.png"></img></a>
+			<a href="<%= googleUrl%>"><img alt="Login via Google Account" src="images/google.png"></img></a>
+		</div>
+	</div>
+
 <%
 	}
 %>
