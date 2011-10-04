@@ -80,8 +80,14 @@
 	<div id="content">
 
 		<div id="body">
-			<a href="<%= facebookUrl%>"><img alt="Login via Facebook" src="images/facebook.png"></img></a>
-			<a href="<%= googleUrl%>"><img alt="Login via Google Account" src="images/google.png"></img></a>
+			
+			<div style="width: 300px; margin-left: auto; margin-right: auto;">
+				<h4 style="text-align: center">Skorzystaj z jednego z poniższych serwisów aby się zalogować!</h4>
+				<div style="width: 150px; margin-left: auto; margin-right: auto;">
+					<a href="<%= facebookUrl%>"><img alt="Login via Facebook" src="images/facebook.png"></img></a>
+					<a href="<%= googleUrl%>"><img alt="Login via Google Account" src="images/google.png"></img></a>
+				</div>
+			</div>
 		</div>
 	</div>
 
