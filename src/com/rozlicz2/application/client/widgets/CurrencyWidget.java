@@ -7,6 +7,8 @@ public class CurrencyWidget extends EditableUniversalWidget<Double> {
 
 	@Override
 	protected Double convertFromString(String string) {
+		if (string == null)
+			return null;
 		Double value = null;
 		try {
 			value = NumberFormat.getDecimalFormat().parse(string);

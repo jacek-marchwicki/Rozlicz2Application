@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.EditorDelegate;
+import com.google.gwt.editor.client.ValueAwareEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -25,7 +27,7 @@ import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 
 public class ExpenseViewImpl extends Composite implements ExpenseView,
-		Editor<ExpenseProxy> {
+		Editor<ExpenseProxy>, ValueAwareEditor<ExpenseProxy> {
 
 	interface Driver extends
 			RequestFactoryEditorDriver<ExpenseProxy, ExpenseViewImpl> {
@@ -65,6 +67,11 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	}
 
 	@Override
+	public void flush() {
+
+	}
+
+	@Override
 	public RequestFactoryEditorDriver<ExpenseProxy, ?> getDriver() {
 		return driver;
 	}
@@ -88,12 +95,29 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@UiHandler("paymentOptionEditor")
 	public void onPaymentOptionChange(ValueChangeEvent<PaymentOption> e) {
 		presenter.validate();
+		consumersEditor.setVisible(e.getValue().equals(
+				PaymentOption.SELECTED_USERS));
 	}
 
 	@UiHandler("paymentsEditor")
 	public void onPaymentsChange(
 			ValueChangeEvent<List<ExpensePaymentEntityProxy>> e) {
 		presenter.validate();
+	}
+
+	@Override
+	public void onPropertyChange(String... paths) {
+
+	}
+
+	@UiHandler("saveButton")
+	public void onSaveButtonClick(ClickEvent e) {
+		presenter.save();
+	}
+
+	@Override
+	public void setDelegate(EditorDelegate<ExpenseProxy> delegate) {
+
 	}
 
 	@Override
@@ -109,6 +133,12 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@Override
 	public void setSum(Double sum) {
 		sumLabel.setText(LocalizedMessages.messages.paymentsSum(sum));
+	}
+
+	@Override
+	public void setValue(ExpenseProxy value) {
+		consumersEditor.setVisible(value.getPaymentOption().equals(
+				PaymentOption.SELECTED_USERS));
 	}
 
 }

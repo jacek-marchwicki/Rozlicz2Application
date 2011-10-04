@@ -8,9 +8,9 @@ import com.rozlicz2.application.shared.entity.ExpenseConsumerEntity;
 public interface ExpenseConsumerEntityProxy extends ValueProxy {
 	String getId();
 
-	public Boolean getIsConsumer();
+	public Boolean isConsumer();
 
-	public Boolean getIsProportional();
+	public Boolean isProportional();
 
 	String getName();
 

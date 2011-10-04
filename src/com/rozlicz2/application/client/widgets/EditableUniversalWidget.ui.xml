@@ -7,8 +7,13 @@
 	<ui:style>
 		.label {
 			font-weight: bold;
-			font-size: 1.5em;
+			font-size: 1em;
 			float: left;
+			color: #0773DD;
+		}
+		.disabledLabel {
+			font-weight: bold;
+			font-size: 1em;
 		}
 		
 		.focusPanel {
@@ -16,41 +21,16 @@
 		}
 		
 		.edit {
-			font-size: 0.8em;
-			margin-left: 6px;
+			font-size: 0.5em;
+			margin-left: 0.5em;
 			float: left;
-		}
-		
-		.saveButton {
-			color: #ffffff;
-			background: #019138;
-			font-weight: bold;
-			border: 1px solid #E4E4E4;
-			float: left;
-			padding: 1px 10px 1px 10px;
-			margin-left: 15px;
-			border-radius: 4px;
-			-webkit-transition: background 0.3s ease-in-out;
-		}
-		
-		.saveButton[disabled] {
-			background: #E4E4E4;
-		}
-		
-		.cancelButton {
-			color: #ffffff;
-			background: #D73828;
-			border: 1px solid #E4E4E4;
-			float: left;
-			padding: 1px 10px 1px 10px;
-			margin-left: 0px;
-			border-radius: 4px;
+			color: #0773DD;
 		}
 		
 		.textBox {
 			float: left;
-			font-size: 1em;
-			width: 40%;
+			font-size: 0.8em;
+			width: 12em;
 			border: 1px solid #E4E4E4;
 			border-radius: 4px;
 			-webkit-transition: color, background 0.3s ease-in-out;
@@ -58,14 +38,14 @@
 		
 		.captionLabel {
 			clear: both;
-			font-family: Gill Sans, Verdana;
-			font-size: 0.9em;
+			font-size: 0.6em;
 			line-height: 1em;
 			letter-spacing: 0.2em;
-			margin-left: 10px;
+			margin-left: 1em;
+			font-weight: normal;
 		}
 		.textDiv {
-			min-height: 2em;
+			min-height: 1.5em;
 		}
 	</ui:style>
 	<g:HTMLPanel>
@@ -77,6 +57,8 @@
 						text="[edit]"></g:Label>
 				</g:HTMLPanel>
 			</g:FocusPanel>
+			
+			<g:Label ui:field="disabledLabel" styleName="{style.disabledLabel}"></g:Label>
 
 			<g:TextBox ui:field="textBox" styleName="{style.textBox}"></g:TextBox>
 		</div>

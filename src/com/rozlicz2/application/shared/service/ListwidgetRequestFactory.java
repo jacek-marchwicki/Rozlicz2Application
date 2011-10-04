@@ -25,33 +25,31 @@ public interface ListwidgetRequestFactory extends RequestFactory {
 	@Service(value = ExpenseDao.class, locator = DaoServiceLocator.class)
 	interface ExpenseRequestContext extends RequestContext {
 
-		Request<ExpenseProxy> find(String id);
+		Request<ExpenseProxy> uFind(String id);
 
-		Request<List<ExpenseProxy>> findByProjectId(String projectId);
+		Request<List<ExpenseProxy>> uFindByProjectId(String projectId);
 
-		Request<Void> save(ExpenseProxy expense);
+		Request<Void> uSave(ExpenseProxy expense);
 
-		Request<ExpenseProxy> saveAndReturn(ExpenseProxy expense);
+		Request<ExpenseProxy> uSaveAndReturn(ExpenseProxy expense);
 
 	}
 
 	@Service(value = ProjectListDao.class, locator = DaoServiceLocator.class)
 	interface ProjectListRequestContext extends RequestContext {
-		Request<List<ProjectListProxy>> listAll();
-
-		Request<Void> removeList(ProjectListProxy list);
+		Request<List<ProjectListProxy>> uListAll();
 	}
 
 	@Service(value = ProjectDao.class, locator = DaoServiceLocator.class)
 	interface ProjectRequestContext extends RequestContext {
 
-		Request<ProjectProxy> find(String id);
+		Request<ProjectProxy> uFind(String id);
 
-		Request<Void> removeList(ProjectProxy list);
+		Request<Void> uRemoveList(ProjectProxy list);
 
-		Request<Void> save(ProjectProxy list);
+		Request<Void> uSave(ProjectProxy list);
 
-		Request<ProjectProxy> saveAndReturn(ProjectProxy newList);
+		Request<ProjectProxy> uSaveAndReturn(ProjectProxy newList);
 	}
 
 	ContactRequestContext getContactRequest();

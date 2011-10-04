@@ -64,7 +64,7 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	private void getExpenseById(final EventBus eventBus, String expenseId) {
-		rf.getExpenseRequest().find(expenseId).with("payments", "consumers")
+		rf.getExpenseRequest().uFind(expenseId).with("payments", "consumers")
 				.fire(new Receiver<ExpenseProxy>() {
 
 					@Override
@@ -105,7 +105,7 @@ public class ExpenseActivity extends AbstractActivity implements
 		expenseView.setLocked(true);
 		ExpenseRequestContext requestContext = (ExpenseRequestContext) expenseView
 				.getDriver().flush();
-		Request<ExpenseProxy> saveAndReturn = requestContext.saveAndReturn(
+		Request<ExpenseProxy> saveAndReturn = requestContext.uSaveAndReturn(
 				expense).with("payments", "consumers");
 		saveAndReturn.fire(new Receiver<ExpenseProxy>() {
 			@Override

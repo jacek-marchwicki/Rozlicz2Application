@@ -1,12 +1,15 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationResources"
+		field="res"></ui:with>
 	<ui:style>
-
+		
 	</ui:style>
 	<g:HTMLPanel>
-		<g:FlexTable ui:field="flexTable"></g:FlexTable>
+		<g:FlexTable ui:field="flexTable" styleName="{res.css.flexTableClass}"></g:FlexTable>
 		<g:Label ui:field="errorLabel"></g:Label>
 	</g:HTMLPanel>
-	
+
 </ui:UiBinder> 

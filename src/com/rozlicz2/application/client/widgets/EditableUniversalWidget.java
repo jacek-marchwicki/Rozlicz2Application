@@ -43,38 +43,30 @@ public abstract class EditableUniversalWidget<T> extends Composite implements
 		Style widgetStyle();
 	}
 
-	@CssResource.ImportedWithPrefix("gwt-CellList")
 	public interface Style extends CssResource {
 		String DEFAULT_CSS = "com/rozlicz2/application/client/widgets/EditableUniversalWidget.css";
 
 		String errorClass();
 	}
 
-	private static Resources DEFAULT_RESOURCES;
-
 	private static EditableUniversalWidgetUiBinder uiBinder = GWT
 			.create(EditableUniversalWidgetUiBinder.class);
-
-	private static Resources getDefaultResources() {
-		if (DEFAULT_RESOURCES == null) {
-			DEFAULT_RESOURCES = GWT.create(Resources.class);
-		}
-		return DEFAULT_RESOURCES;
-	}
 
 	@UiField
 	Label captionLabel;
 	protected EditorDelegate<T> delegate;
 	@UiField
+	Label disabledLabel;
+
+	@UiField
 	Label editAnchorLabel;
 
+	private boolean editing = false;
+	private boolean enabled = true;
 	@UiField
 	Label errorLabel;
-
 	@UiField
 	FocusPanel focusPanel;
-	private boolean isEditing;
-	private final Style style;
 
 	@UiField
 	TextBox textBox;
@@ -83,13 +75,9 @@ public abstract class EditableUniversalWidget<T> extends Composite implements
 	Label textLabel;
 
 	public EditableUniversalWidget() {
-		this(getDefaultResources());
-	}
-
-	public EditableUniversalWidget(Resources resources) {
-		this.style = resources.widgetStyle();
 		initWidget(uiBinder.createAndBindUi(this));
-		isEditing = false;
+		editing = false;
+		setVisibility();
 	}
 
 	@Override
@@ -110,15 +98,9 @@ public abstract class EditableUniversalWidget<T> extends Composite implements
 
 	protected abstract String convertToText(T value);
 
-	private void doEditable(boolean isEditing) {
-		this.isEditing = isEditing;
-		textBox.setVisible(isEditing);
-		focusPanel.setVisible(!isEditing);
-		textLabel.setVisible(!isEditing);
-	}
-
 	private void edit() {
-		doEditable(true);
+		this.editing = true;
+		setVisibility();
 		textBox.setFocus(true);
 		textBox.selectAll();
 	}
@@ -133,21 +115,21 @@ public abstract class EditableUniversalWidget<T> extends Composite implements
 
 	@UiHandler("textBox")
 	void onChange(ValueChangeEvent<String> e) {
-		if (!isEditing)
+		if (!editing)
 			return;
 		changed();
 	}
 
 	@UiHandler("editAnchorLabel")
 	void onEdit(ClickEvent e) {
-		if (isEditing)
+		if (editing)
 			return;
 		edit();
 	}
 
 	@UiHandler("focusPanel")
 	public void onFocusPanelFocus(FocusEvent event) {
-		if (isEditing)
+		if (editing)
 			return;
 		edit();
 	}
@@ -163,22 +145,23 @@ public abstract class EditableUniversalWidget<T> extends Composite implements
 
 	@UiHandler("textBox")
 	void onKeyUpEvent(KeyUpEvent e) {
-		if (!isEditing)
+		if (!editing)
 			return;
 		changed();
 	}
 
 	@UiHandler("textBox")
 	public void onTextBoxBlur(BlurEvent event) {
-		if (!isEditing)
+		if (!editing)
 			return;
 		T value = convertFromString(textBox.getText());
 		if (value == null) {
-			textLabel.setText(textBox.getText());
+			setText(textBox.getText());
 		} else {
-			textLabel.setText(convertToText(value));
+			setText(convertToText(value));
 		}
-		doEditable(false);
+		editing = false;
+		setVisibility();
 	}
 
 	public void setCaption(String caption) {
@@ -195,6 +178,16 @@ public abstract class EditableUniversalWidget<T> extends Composite implements
 		this.delegate = delegate;
 	}
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+		setVisibility();
+	}
+
+	private void setText(String text) {
+		textLabel.setText(text);
+		disabledLabel.setText(text);
+	}
+
 	@Override
 	public void setValue(T value) {
 		setValue(value, false);
@@ -202,12 +195,20 @@ public abstract class EditableUniversalWidget<T> extends Composite implements
 
 	@Override
 	public void setValue(T value, boolean fireEvents) {
-		textLabel.setText(convertToText(value));
+		setText(convertToText(value));
 		textBox.setText(convertToEditableText(value));
-		doEditable(false);
 		if (fireEvents) {
 			ValueChangeEvent.fire(this, value);
 		}
+	}
+
+	private void setVisibility() {
+		textBox.setVisible(editing);
+		focusPanel.setVisible(!editing);
+		textLabel.setVisible(!editing);
+		editAnchorLabel.setVisible(!editing && enabled);
+		focusPanel.setVisible(enabled);
+		disabledLabel.setVisible(!enabled);
 	}
 
 	public void showError(String error) {

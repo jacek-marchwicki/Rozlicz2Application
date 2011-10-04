@@ -3,6 +3,58 @@ body {
 	margin: 0px;
 	font-family: Gill Sans, Verdana, Sans-serif;
 }
+h1, h2, h3, h4 {
+	margin: 0 0 0.8em 0;
+}
+@sprite input[type="checkbox"] {
+	gwt-image: 'checkbox';
+	-khtml-appearance: none;
+}
+@sprite input[type="checkbox"]:checked {
+	gwt-image: 'checkboxChecked';
+	-khtml-appearance: none;
+}
+@sprite input[type="checkbox"]:CHECKED:HOVER {
+	gwt-image: 'checkboxCheckedHover';
+	-khtml-appearance: none;
+}
+@sprite input[type="checkbox"]:HOVER {
+	gwt-image: 'checkboxHover';
+	-khtml-appearance: none;
+}
+@sprite input[type="checkbox"]:DISABLED {
+	gwt-image: 'checkboxDisabled';
+	-khtml-appearance: none;
+}
+@sprite input[type="checkbox"]:DISABLED:HOVER {
+	gwt-image: 'checkboxDisabled';
+	-khtml-appearance: none;
+}
+
+@sprite input[type="radio"] {
+	gwt-image: 'radio';
+	-khtml-appearance: none;
+}
+@sprite input[type="radio"]:checked {
+	gwt-image: 'radioChecked';
+	-khtml-appearance: none;
+}
+@sprite input[type="radio"]:CHECKED:HOVER {
+	gwt-image: 'radioCheckedHover';
+	-khtml-appearance: none;
+}
+@sprite input[type="radio"]:HOVER {
+	gwt-image: 'radioHover';
+	-khtml-appearance: none;
+}
+@sprite input[type="radio"]:DISABLED {
+	gwt-image: 'radioDisabled';
+	-khtml-appearance: none;
+}
+@sprite input[type="radio"]:DISABLED:HOVER {
+	gwt-image: 'radioDisabled';
+	-khtml-appearance: none;
+}
 /* @sprite body {
 	gwt-image: 'facebook';
 } */
@@ -75,7 +127,7 @@ h1,h2,h3 {
 
 .errorLabelClass {
 	clear: both;
-	font-size: 0.8em;
+	font-size: 0.6em;
 	overflow:hidden;
 	color: #D73828;
 	-webkit-transition: visibility 0s linear 0.5s,height 0.5s linear,opacity 0.2s linear;
@@ -86,7 +138,8 @@ h1,h2,h3 {
 
 
 .errorLabelShowClass {
-	height:1.5em  !important;
+	height: 1.7em  !important;
+	overflow: visible;
 	visibility: visible  !important;
 	opacity: 1  !important;
 }
@@ -150,4 +203,38 @@ h1,h2,h3 {
 .editableWidgetLabelError {
 	color: #D73828;
 }
+.saveButtonClass {
+	padding: 10px 20px;
+	border: 1px solid #005C23;
+	border-radius: 3px;
+	color: white;
+	font-weight: bold;
+	background: literal('-webkit-gradient(linear,left top,left bottom,from(#00B545),to(#019138))');
+	margin: 0 0 1em 0;
+}
+.saveButtonClass:ACTIVE {
+	background: literal('-webkit-gradient(linear,left top,left bottom,from(#019138),to(#00B545))');
+}
+.saveButtonClass:HOVER {
+	border: 1px solid black;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+.flexTableClass {
+	border-collapse: collapse;
+	margin-bottom: 20px;
+	border: 1px solid #C7C7C7;
+	width: 100%;
+}
+.flexTableHeaderClass {
+	background: #DEDEDE;
+	font-weight: bold;
+	padding: 10px;
+}
+.flexTableOddClass {
+	background: #FAFAFA;
+	padding: 10px;
+}
+.flexTableEvenClass {
+	background: #F5F5F5;
+	padding: 10px;
 }

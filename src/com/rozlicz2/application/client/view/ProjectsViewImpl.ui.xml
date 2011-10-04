@@ -1,26 +1,29 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:w="urn:import:com.rozlicz2.application.client.widgets"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:w="urn:import:com.rozlicz2.application.client.widgets"
 	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
 	ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
 	ui:generateLocales="default" xmlns:p1="urn:import:com.google.gwt.user.cellview.client">
-	
-	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
-	
+
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationConstants"
+		field="i18n"></ui:with>
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationResources"
+		field="res"></ui:with>
+
 	<ui:style>
 		
 	</ui:style>
-	<g:HTMLPanel>	
+	<g:HTMLPanel>
 		<w:LockWidget ui:field="lockWidget"></w:LockWidget>
-		<g:Button ui:field="createButton" text="{i18n.newProject}">
-			<!-- <ui:attribute name='text' description='Information about creating a project' /> -->
-		</g:Button>
 		<h2>Projects list</h2>
-		<p1:CellList ui:field="cellList">
-		</p1:CellList>
-		<h2>Statistics</h2>
+		<g:Button ui:field="createButton1" text="{i18n.newProject}"
+			styleName="{res.css.saveButtonClass}"></g:Button>
+		<p1:CellList ui:field="cellList"></p1:CellList>
 		<g:Label ui:field="projectsNumberLabel"></g:Label>
+		<g:Button ui:field="createButton2" text="{i18n.newProject}"
+			styleName="{res.css.saveButtonClass}"></g:Button>
 		<g:Button ui:field="errorGeneratorButton" text="Error generator"></g:Button>
 	</g:HTMLPanel>
 

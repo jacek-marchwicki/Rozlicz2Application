@@ -17,6 +17,9 @@ public class ProjectList extends DatastoreObject {
 	@NotNull(groups = { ServerGroup.class })
 	private Key<AppUser> owner;
 
+	@NotNull(groups = { ServerGroup.class })
+	private Double sum;
+
 	public ProjectList() {
 	}
 
@@ -24,6 +27,7 @@ public class ProjectList extends DatastoreObject {
 		super(project);
 		this.name = project.name;
 		this.owner = project.owner;
+		this.sum = project.sum;
 	}
 
 	public String getName() {
@@ -34,11 +38,19 @@ public class ProjectList extends DatastoreObject {
 		return owner;
 	}
 
+	public Double getSum() {
+		return sum;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public void setOwner(Key<AppUser> owner) {
 		this.owner = owner;
+	}
+
+	public void setSum(Double sum) {
+		this.sum = sum;
 	}
 }

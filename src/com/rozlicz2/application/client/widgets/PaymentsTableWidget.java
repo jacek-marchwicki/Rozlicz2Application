@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.rozlicz2.application.client.resources.ApplicationResources;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 
 public class PaymentsTableWidget extends Composite
@@ -26,6 +27,11 @@ public class PaymentsTableWidget extends Composite
 
 	private final class EditorSourceExtension extends
 			EditorSource<ExpensePaymentEntityWidget> {
+
+		private final String evenCellClass = ApplicationResources.INSTANCE
+				.css().flexTableEvenClass();
+		private final String oddCellClass = ApplicationResources.INSTANCE.css()
+				.flexTableOddClass();
 
 		@Override
 		public ExpensePaymentEntityWidget create(int index) {
@@ -47,6 +53,16 @@ public class PaymentsTableWidget extends Composite
 		public void setIndex(ExpensePaymentEntityWidget editor, int index) {
 			flexTable.setWidget(index + 1, 0, editor.getNameEditor());
 			flexTable.setWidget(index + 1, 1, editor.getValueEditor());
+			String cellClass;
+			if (index % 2 == 0) {
+				cellClass = evenCellClass;
+			} else
+				cellClass = oddCellClass;
+			flexTable.getFlexCellFormatter().setStyleName(index + 1, 0,
+					cellClass);
+			flexTable.getFlexCellFormatter().setStyleName(index + 1, 1,
+					cellClass);
+
 		}
 
 	}
@@ -104,6 +120,9 @@ public class PaymentsTableWidget extends Composite
 	@UiField
 	FlexTable flexTable;
 
+	private final String headerClass = ApplicationResources.INSTANCE.css()
+			.flexTableHeaderClass();
+
 	ListEditor<ExpensePaymentEntityProxy, ExpensePaymentEntityWidget> listEditor;
 
 	private final EditorSource<ExpensePaymentEntityWidget> source = new EditorSourceExtension();
@@ -112,6 +131,8 @@ public class PaymentsTableWidget extends Composite
 		initWidget(uiBinder.createAndBindUi(this));
 		flexTable.setText(0, 0, "Name");
 		flexTable.setText(0, 1, "Value");
+		flexTable.getFlexCellFormatter().setStyleName(0, 0, headerClass);
+		flexTable.getFlexCellFormatter().setStyleName(0, 1, headerClass);
 		listEditor = ListEditor.of(source);
 	}
 

@@ -16,4 +16,6 @@ public interface ProjectProxy extends ProjectListProxy {
 	public void setName(String name);
 
 	public void setParticipants(List<ParticipantEntityProxy> participants);
+
+	public void setSum(Double sum);
 }

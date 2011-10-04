@@ -2,8 +2,8 @@ package com.rozlicz2.application.shared.entity;
 
 
 public class ExpenseConsumerEntity extends BaseEntity {
-	private Boolean isConsumer;
-	private Boolean isProportional;
+	private Boolean consumer;
+	private Boolean proportional;
 	private String name;
 	private Double value;
 
@@ -15,16 +15,16 @@ public class ExpenseConsumerEntity extends BaseEntity {
 		return value;
 	}
 
-	public Boolean getIsConsumer() {
-		return isConsumer;
+	public Boolean isConsumer() {
+		return consumer;
 	}
 
-	public Boolean getIsProportional() {
-		return isProportional;
+	public Boolean isProportional() {
+		return proportional;
 	}
 
 	public void setConsumer(Boolean isConsumer) {
-		this.isConsumer = isConsumer;
+		this.consumer = isConsumer;
 	}
 
 	public void setName(String name) {
@@ -32,7 +32,7 @@ public class ExpenseConsumerEntity extends BaseEntity {
 	}
 
 	public void setProportional(Boolean isProportional) {
-		this.isProportional = isProportional;
+		this.proportional = isProportional;
 	}
 
 	public void setValue(Double value) {

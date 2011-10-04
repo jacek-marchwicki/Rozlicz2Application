@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.NoSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
+import com.rozlicz2.application.client.resources.CellListResources;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.client.widgets.LockWidget;
 import com.rozlicz2.application.shared.proxy.ProjectListProxy;
@@ -29,7 +30,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 		interface Template extends SafeHtmlTemplates {
 
 			@SafeHtmlTemplates.Template("<div>{0}</div><div>{1}</div>")
-			SafeHtml productCellTemplate(String name, String price);
+			SafeHtml productCellTemplate(String name, SafeHtml price);
 		}
 
 		private static Template template;
@@ -45,7 +46,9 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 				ProjectListProxy value, SafeHtmlBuilder sb) {
 			if (value != null) {
 				String name = value.getName();
-				sb.append(template.productCellTemplate(name, "123,13 PLN"));
+				Double sum = value.getSum();
+				SafeHtml sumString = LocalizedMessages.messages.price(sum);
+				sb.append(template.productCellTemplate(name, sumString));
 			}
 		}
 	}
@@ -71,15 +74,20 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	@UiHandler("createButton")
-	void handleCreateButtonClick(ClickEvent e) {
+	@UiHandler("createButton1")
+	void handleCreateButton1Click(ClickEvent e) {
+		presenter.createProject();
+	}
+
+	@UiHandler("createButton2")
+	void handleCreateButton2Click(ClickEvent e) {
 		presenter.createProject();
 	}
 
 	@UiFactory
 	CellList<ProjectListProxy> makeCellList() {
 		CellList<ProjectListProxy> cellList = new CellList<ProjectListProxy>(
-				new ProductCell());
+				new ProductCell(), CellListResources.INSTANCE);
 
 		final NoSelectionModel<ProjectListProxy> selectionModel = new NoSelectionModel<ProjectListProxy>();
 		cellList.setSelectionModel(selectionModel);

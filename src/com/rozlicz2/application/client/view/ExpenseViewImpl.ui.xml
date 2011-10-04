@@ -2,25 +2,29 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:w="urn:import:com.rozlicz2.application.client.widgets"
 	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
-	
-	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
-		<ui:with type="com.rozlicz2.application.client.resources.ApplicationResources" field="res"></ui:with>
+
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationConstants"
+		field="i18n"></ui:with>
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationResources"
+		field="res"></ui:with>
 	
 	<ui:style>
-		.important {
-			font-weight: bold;
+		.paymentOptionEditor {
+			margin: 0 0 1em 0;
 		}
 	</ui:style>
 	<g:HTMLPanel>
 		<w:LockWidget ui:field="lockWidget"></w:LockWidget>
-		<w:EditableTextWidget caption="{i18n.expenseName}" ui:field="nameEditor"></w:EditableTextWidget>
+		<h1><w:EditableTextWidget caption="{i18n.expenseName}" ui:field="nameEditor"></w:EditableTextWidget></h1>
 		<h2><ui:text from="{i18n.expensePaidBy}"></ui:text>:</h2>
 		<w:PaymentsTableWidget ui:field="paymentsEditor"></w:PaymentsTableWidget>
-		<g:Button ui:field="addParticipantButton" text="{i18n.addParticipant}"></g:Button>
+		<g:Button ui:field="addParticipantButton" styleName="{res.css.saveButtonClass}" text="{i18n.addParticipant}"></g:Button>
 		<g:Label ui:field="sumLabel" text="" />
 		<h2><ui:text from="{i18n.expenseParticipants}"></ui:text>:</h2>
-		<g:Label styleName="{res.css.labelClass}" text="{i18n.expenseParticipants}"></g:Label>
-		<w:PaymentOptionWidget ui:field="paymentOptionEditor"></w:PaymentOptionWidget>
+		<w:PaymentOptionWidget styleName="{style.paymentOptionEditor}" ui:field="paymentOptionEditor"></w:PaymentOptionWidget>
 		<w:ConsumersTableWidget ui:field="consumersEditor"></w:ConsumersTableWidget>
+		<g:Button ui:field="saveButton" styleName="{res.css.saveButtonClass}" text="{i18n.save}"/>
 	</g:HTMLPanel>
 </ui:UiBinder> 
