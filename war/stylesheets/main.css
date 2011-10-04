@@ -62,9 +62,8 @@ body {
 	width: 750px;
 	padding: 20px 0px 0px 0px;
 	
-	background: whiteSmoke;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
+	border-left: 1px solid #E4E4E4;
+	border-right: 1px solid #E4E4E4;
 }
 
 #content-right {
