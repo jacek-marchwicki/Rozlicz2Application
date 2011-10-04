@@ -28,7 +28,7 @@ body {
 }
 
 #h2h1 {
-	background: #f0f0f0;
+	background: whiteSmoke;
 	height: 90px;
 	border-bottom: 1px solid #E4E4E4;
 }
@@ -61,6 +61,10 @@ body {
 	clear: both;
 	width: 750px;
 	padding: 20px 0px 0px 0px;
+	
+	background: whiteSmoke;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
 }
 
 #content-right {
