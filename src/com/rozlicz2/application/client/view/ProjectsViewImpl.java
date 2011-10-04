@@ -135,9 +135,4 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 				.numberOfProjects(numberOfProjects));
 	}
 
-	@Override
-	public void setUserName(String userName) {
-		// TODO Auto-generated method stub
-	}
-
 }

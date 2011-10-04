@@ -144,8 +144,9 @@ h1,h2,h3 {
 	opacity: 1  !important;
 }
 
-.lockWidgetClass {
-	position: absolute;
+
+.lockWidgetClass{    
+    position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
@@ -160,16 +161,11 @@ h1,h2,h3 {
 	opacity: 0.7;
 	visibility: visible;
 }
-.loadingImageClass {
-	display: block;
-	position: absolute;
-	left: -50%;
-	top: -50%;
-}
-.loadingImageDivClass {
-	position: absolute;
-	left: 50%;
-	top: 50%;
+@sprite .loadingImageClass {
+	gwt-image: "loading";
+    background-position: center;
+    height: 100%;
+    width: 100%;
 }
 @def LEFT_TOP literal('left top');
 @def LEFT_BOTTOM literal('left bottom');
@@ -188,7 +184,7 @@ h1,h2,h3 {
 	width: 200px;
 	border: 1px solid #B52121;
 	border-bottom: 1px solid #941C1C;
-	background: literal('-webkit-gradient(linear,left top,left bottom,from(#FF2929),to(#B52121))');
+	background: literal('-webkit-gradient(linear,left top,left bottom,from(#D46E63),to(#D73828))');
 	padding: 10px;
 	-webkit-border-radius: 3px;
 	-webkit-transition: top 0.5s linear;

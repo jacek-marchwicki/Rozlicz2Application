@@ -21,6 +21,4 @@ public interface ProjectsView extends IsWidget {
 	void setProjectsList(List<ProjectListProxy> list);
 
 	void setProjectsNumber(int numberOfProjects);
-
-	void setUserName(String userName);
 }

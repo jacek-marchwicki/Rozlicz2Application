@@ -5,6 +5,11 @@
 	border: 1px solid #C7C7C7;
 	width: 100%;
 }
+@if formfactor mobile {
+	.cellListWidget {
+		border: 0;
+	}
+}
 
 .cellListEvenItem {
 	cursor: pointer;
@@ -13,11 +18,27 @@
 	zoom: 1;
 }
 
+@if formfactor mobile {
+	.cellListEvenItem {
+		background: literal('-webkit-gradient(linear,left top,left bottom,from(#FAFAFA),to(#E4E4E4))');
+		border: 1px solid #CCC;	
+		border-radius: 3px;
+	}
+}
+
 .cellListOddItem {
 	cursor: pointer;
 	background: #FAFAFA;
 	padding: 1em;
 	zoom: 1;
+}
+
+@if formfactor mobile {
+	.cellListOddItem {
+		background: literal('-webkit-gradient(linear,left top,left bottom,from(#FAFAFA),to(#E4E4E4))');
+		border: 1px solid #CCC;	
+		border-radius: 3px;
+	}
 }
 
 .cellListKeyboardSelectedItem {
@@ -28,10 +49,26 @@
 	overflow: visible;
 }
 
+@if formfactor mobile {
+	.cellListKeyboardSelectedItem {
+		background: literal('-webkit-gradient(linear,left top,left bottom,from(#DEDEDE),to(#E4E4E4))');
+		border: 1px solid #CCC;	
+		border-radius: 3px;
+	}
+}
+
 .cellListSelectedItem {
 	background: #DEDEDE;
 	font-weight: bold;
 	padding: 1em;
 	height: auto;
 	overflow: visible;
+}
+
+@if formfactor mobile {
+	.cellListSelectedItem {
+		background: literal('-webkit-gradient(linear,left top,left bottom,from(#DEDEDE),to(#E4E4E4))');
+		border: 1px solid #CCC;	
+		border-radius: 3px;
+	}
 }

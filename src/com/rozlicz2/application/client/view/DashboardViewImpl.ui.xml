@@ -1,13 +1,17 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:a="urn:import:com.rozlicz2.application.client">
-	<ui:with type="com.rozlicz2.application.client.resources.LocalizedMessages" field="msgs"></ui:with>
-	<ui:with type="com.rozlicz2.application.client.resources.ApplicationConstants" field="i18n"></ui:with>
+	<ui:with type="com.rozlicz2.application.client.resources.LocalizedMessages"
+		field="msgs"></ui:with>
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationConstants"
+		field="i18n"></ui:with>
 	<ui:style>
 		.emailLabel {
 			display: inline-block;
 			margin-right: 20px;
 		}
+		
 		.logoutAnchor {
 			color: #ffffff;
 			display: inline-block;
@@ -15,97 +19,87 @@
 			font-size: 1em;
 			-webkit-transition: all .2s ease-in-out;
 		}
+		
 		.logoutAnchor:VISITED {
 			color: #ffffff;
 		}
+		
 		.logoutAnchor:HOVER {
 			color: #ffffff;
 			-webkit-transform: scale(1.1);
 			text-decoration: underline;
 		}
+		
 		.h1h1 {
-			height: 35px;
 			background: #000000;
-			padding: 0px;
-			margin: 0px;
+			padding: 0;
+			margin: 0;
 		}
+		
 		.h1h2 {
 			margin: 0px auto 0px auto;
 			color: #ffffff;
 			text-align: right;
-			padding: 0px;
+			padding: 0.5em;
 			width: 750px;
-			height: 35px;
-			line-height: 35px;
 		}
 		
 		.h2h1 {
 			background: #f0f0f0;
-			height: 90px;
 			border-bottom: 1px solid #E4E4E4;
 		}
 		
 		.h2h2 {
-			margin: 0px auto 0px auto;
-			padding: 10px 0px 10px 0px;
+			background: #f0f0f0;
+			border-bottom: 1px solid #E4E4E4;
+			font-size: 3.5em;
+			padding: 0.15em 0 0.15em 0;
+			position: relative;
 			width: 750px;
-			height: 70px;
-			font-weight: normal;
+			margin: 0 auto;
 		}
 		
 		.content {
 			background: #ffffff;
-			position: absolute;
-			top: 126px;
-			left: 50%;
-			bottom: 0px;
+			padding: 1em 0 2em 0;
 		}
 		
 		.body {
-			position: absolute;
-			margin: 0px;
+			margin: 0 auto;
 			padding: 0px;
-			left: -375px;
-			top: 0px;
-			
-			clear: both;
 			width: 750px;
-			padding: 20px 0 0 0;
 		}
 		
 		.content-right {
-			text-align: right;
-			float: left;
-			width: 400px;
-			height: 65px;
+			position: absolute;
+			right: 0px;
 			color: #0773dd;
-			padding: 5px 0px 0px 0px;
-			font-size: 24px;
+			font-size: 0.4em;
 		}
 		
 		.logo {
-			font-size: 56px;
 			color: #d73828;
-			float: left;
-			width: 350px;
-			height: 70px;
-			display:block;
 			text-decoration: none;
 		}
+		
 		.logo:HOVER {
 			text-decoration: none;
 			color: #d73828;
 		}
+		
 		.two {
-			font-size: 45px;
+			font-size: 0.85em;
 		}
+		
 		.green {
 			color: #019138;
 		}
+		
 		.forfree {
 			display: block;
 			font-size: 14px;
-		}	
+		}
+		
 		.errorPanel {
 			position: fixed;
 			top: 0;
@@ -115,18 +109,23 @@
 	<g:HTMLPanel>
 		<div class="{style.h1h1}">
 			<div class="{style.h1h2}">
-				<g:Label ui:field="emailLabel" styleName="{style.emailLabel}"></g:Label><g:Anchor styleName="{style.logoutAnchor}" href="/logout" text="{i18n.logout}"></g:Anchor>
+				<g:Label ui:field="emailLabel" styleName="{style.emailLabel}"></g:Label>
+				<g:Anchor styleName="{style.logoutAnchor}" href="/logout"
+					text="{i18n.logout}"></g:Anchor>
 			</div>
 		</div>
 		<div class="{style.h2h1}">
-			<h1 class="{style.h2h2}">
-				<g:InlineHyperlink targetHistoryToken="#" styleName="{style.logo}">rozlicz<span class="{style.two} {style.green}">2</span>.pl</g:InlineHyperlink>
+			<div class="{style.h2h2}">
 				<div class="{style.content-right}">
 					<ui:msg key="calculateEverything">
-						calculate everything*<span ui:ph="banedSpan" class="{style.forfree}">*for free</span>
+						calculate everything*
+						<span ui:ph="banedSpan" class="{style.forfree}">*for free</span>
 					</ui:msg>
 				</div>
-			</h1>
+				<g:InlineHyperlink targetHistoryToken="#"
+					styleName="{style.logo}">rozlicz<span class="{style.two} {style.green}">2</span>.pl
+				</g:InlineHyperlink>
+			</div>
 		</div>
 		<div class="{style.content}">
 			<div class="{style.body}">
@@ -136,5 +135,5 @@
 		<g:SimplePanel ui:field="popupWidget"></g:SimplePanel>
 		<g:SimplePanel ui:field="errorPanel" styleName="{style.errorPanel}"></g:SimplePanel>
 	</g:HTMLPanel>
-			
+
 </ui:UiBinder> 

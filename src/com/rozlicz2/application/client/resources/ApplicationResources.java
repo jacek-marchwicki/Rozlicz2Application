@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.TextResource;
 
 public interface ApplicationResources extends ClientBundle {
@@ -39,8 +40,6 @@ public interface ApplicationResources extends ClientBundle {
 		String labelClass();
 
 		String loadingImageClass();
-
-		String loadingImageDivClass();
 
 		String lockWidgetClass();
 
@@ -79,6 +78,7 @@ public interface ApplicationResources extends ClientBundle {
 	@Source("images/facebook.png")
 	public ImageResource facebook();
 
+	@ImageOptions()
 	@Source("images/loading.gif")
 	public ImageResource loading();
 
