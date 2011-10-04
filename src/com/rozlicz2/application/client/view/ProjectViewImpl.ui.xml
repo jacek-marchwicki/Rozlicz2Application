@@ -7,6 +7,9 @@
 	<ui:with
 		type="com.rozlicz2.application.client.resources.ApplicationConstants"
 		field="i18n"></ui:with>
+	<ui:with
+		type="com.rozlicz2.application.client.resources.ApplicationResources"
+		field="res"></ui:with>
 
 	<ui:style>
 		.important {
@@ -15,15 +18,19 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<w:LockWidget ui:field="lockWidget"></w:LockWidget>
-		
-		<w:EditableLabelWidget caption="{i18n.projectName}"
-					ui:field="nameEditor"></w:EditableLabelWidget>
 
+		<h1>
+			<w:EditableTextWidget caption="{i18n.projectName}"
+				ui:field="nameEditor"></w:EditableTextWidget>
+		</h1>
+		<g:Button ui:field="saveButton" styleName="{res.css.saveButtonClass}"
+			text="{i18n.save}" />
 		<h2>
 			<ui:text from="{i18n.expensesList}"></ui:text>
 		</h2>
 		<v:ProjectViewImpl.ExpensesEditor
 			ui:field="expensesEditor"></v:ProjectViewImpl.ExpensesEditor>
-		<g:Button ui:field="createExpenseButton" text="{i18n.newExpense}"></g:Button>
+		<g:Button ui:field="createExpenseButton" styleName="{res.css.saveButtonClass}"
+			text="{i18n.newExpense}"></g:Button>
 	</g:HTMLPanel>
 </ui:UiBinder> 

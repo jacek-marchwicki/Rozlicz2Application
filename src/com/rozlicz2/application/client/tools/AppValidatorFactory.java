@@ -8,6 +8,8 @@ import com.google.gwt.validation.client.AbstractGwtValidatorFactory;
 import com.google.gwt.validation.client.GwtValidation;
 import com.google.gwt.validation.client.impl.AbstractGwtValidator;
 import com.rozlicz2.application.shared.entity.Project;
+import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
+import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectListProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
@@ -15,7 +17,8 @@ import com.rozlicz2.application.shared.proxy.ProjectProxy;
 public class AppValidatorFactory extends AbstractGwtValidatorFactory {
 
 	@GwtValidation(value = { ProjectProxy.class, ExpenseProxy.class,
-			ProjectListProxy.class, Project.class }, groups = { Default.class })
+			ProjectListProxy.class, Project.class,
+			ExpenseConsumerEntityProxy.class, ExpensePaymentEntityProxy.class }, groups = { Default.class })
 	public interface GwtValidator extends Validator {
 	}
 

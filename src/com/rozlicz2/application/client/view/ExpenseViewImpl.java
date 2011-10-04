@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.EditorDelegate;
+import com.google.gwt.editor.client.ValueAwareEditor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -15,18 +17,17 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
 import com.rozlicz2.application.client.widgets.ConsumersTableWidget;
-import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.EditableTextWidget;
 import com.rozlicz2.application.client.widgets.LockWidget;
 import com.rozlicz2.application.client.widgets.PaymentOptionWidget;
 import com.rozlicz2.application.client.widgets.PaymentsTableWidget;
-import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 
 public class ExpenseViewImpl extends Composite implements ExpenseView,
-		Editor<ExpenseProxy> {
+		Editor<ExpenseProxy>, ValueAwareEditor<ExpenseProxy> {
 
 	interface Driver extends
 			RequestFactoryEditorDriver<ExpenseProxy, ExpenseViewImpl> {
@@ -46,7 +47,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	LockWidget lockWidget;
 
 	@UiField
-	EditableLabelWidget nameEditor;
+	EditableTextWidget nameEditor;
 
 	@UiField
 	PaymentOptionWidget paymentOptionEditor;
@@ -66,6 +67,11 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	}
 
 	@Override
+	public void flush() {
+
+	}
+
+	@Override
 	public RequestFactoryEditorDriver<ExpenseProxy, ?> getDriver() {
 		return driver;
 	}
@@ -78,7 +84,7 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@UiHandler("consumersEditor")
 	public void onConsumersChange(
 			ValueChangeEvent<List<ExpenseConsumerEntityProxy>> e) {
-		presenter.save();
+		presenter.validate();
 	}
 
 	@UiHandler("nameEditor")
@@ -86,20 +92,32 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 		presenter.validate();
 	}
 
-	@UiHandler("nameEditor")
-	public void onNameEditorSave(SaveEvent e) {
-		presenter.save();
-	}
-
 	@UiHandler("paymentOptionEditor")
 	public void onPaymentOptionChange(ValueChangeEvent<PaymentOption> e) {
-		presenter.save();
+		presenter.validate();
+		consumersEditor.setVisible(e.getValue().equals(
+				PaymentOption.SELECTED_USERS));
 	}
 
 	@UiHandler("paymentsEditor")
 	public void onPaymentsChange(
 			ValueChangeEvent<List<ExpensePaymentEntityProxy>> e) {
 		presenter.validate();
+	}
+
+	@Override
+	public void onPropertyChange(String... paths) {
+
+	}
+
+	@UiHandler("saveButton")
+	public void onSaveButtonClick(ClickEvent e) {
+		presenter.save();
+	}
+
+	@Override
+	public void setDelegate(EditorDelegate<ExpenseProxy> delegate) {
+
 	}
 
 	@Override
@@ -115,6 +133,12 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@Override
 	public void setSum(Double sum) {
 		sumLabel.setText(LocalizedMessages.messages.paymentsSum(sum));
+	}
+
+	@Override
+	public void setValue(ExpenseProxy value) {
+		consumersEditor.setVisible(value.getPaymentOption().equals(
+				PaymentOption.SELECTED_USERS));
 	}
 
 }

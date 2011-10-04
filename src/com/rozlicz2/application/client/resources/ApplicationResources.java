@@ -10,6 +10,8 @@ public interface ApplicationResources extends ClientBundle {
 	interface ApplicationCss extends CssResource {
 		String clearClass();
 
+		String editableWidgetLabelError();
+
 		String errorClass();
 
 		String errorLabelClass();
@@ -21,6 +23,14 @@ public interface ApplicationResources extends ClientBundle {
 		String errorViewImageClass();
 
 		String errorViewItemClass();
+
+		String flexTableClass();
+
+		String flexTableEvenClass();
+
+		String flexTableHeaderClass();
+
+		String flexTableOddClass();
 
 		String fullScreenClass();
 
@@ -35,10 +45,27 @@ public interface ApplicationResources extends ClientBundle {
 		String lockWidgetClass();
 
 		String lockWidgetShowClass();
+
+		String saveButtonClass();
 	}
 
 	public static final ApplicationResources INSTANCE = GWT
 			.create(ApplicationResources.class);
+
+	@Source("images/checkbox.png")
+	public ImageResource checkbox();
+
+	@Source("images/checkbox-checked.png")
+	public ImageResource checkboxChecked();
+
+	@Source("images/checkbox-checked-hover.png")
+	public ImageResource checkboxCheckedHover();
+
+	@Source("images/checkbox-disabled.png")
+	public ImageResource checkboxDisabled();
+
+	@Source("images/checkbox-hover.png")
+	public ImageResource checkboxHover();
 
 	@Source("application.css")
 	public ApplicationCss css();
@@ -54,6 +81,21 @@ public interface ApplicationResources extends ClientBundle {
 
 	@Source("images/loading.gif")
 	public ImageResource loading();
+
+	@Source("images/radio.png")
+	public ImageResource radio();
+
+	@Source("images/radio-checked.png")
+	public ImageResource radioChecked();
+
+	@Source("images/radio-checked-hover.png")
+	public ImageResource radioCheckedHover();
+
+	@Source("images/radio-disabled.png")
+	public ImageResource radioDisabled();
+
+	@Source("images/radio-hover.png")
+	public ImageResource radioHover();
 
 	@Source("images/remove_user.png")
 	public ImageResource removeUser();

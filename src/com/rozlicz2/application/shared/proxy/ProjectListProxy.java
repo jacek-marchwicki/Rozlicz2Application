@@ -17,4 +17,7 @@ public interface ProjectListProxy extends EntityProxy {
 	@NotNull(message = "{custom.internal.error}")
 	@Size(min = 4, max = 100, message = "{custom.name.size.message}")
 	public String getName();
+
+	@NotNull(message = "{custom.internal.error}")
+	public Double getSum();
 }

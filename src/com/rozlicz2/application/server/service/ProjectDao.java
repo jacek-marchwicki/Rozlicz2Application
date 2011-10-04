@@ -24,8 +24,7 @@ public class ProjectDao extends ObjectifyDao<Project> {
 		this.expenseDao = expenseDao;
 	}
 
-	@Override
-	public Project find(String id) {
+	public Project uFind(String id) {
 		Project find = super.find(id);
 		AppUser currentUser = getCurrentUser();
 		if (currentUser == null)
@@ -39,16 +38,16 @@ public class ProjectDao extends ObjectifyDao<Project> {
 		return null;
 	}
 
-	public void removeList(Project list) {
+	public void uRemoveList(Project list) {
 		this.delete(list);
 		projectListDao.delete(new ProjectList(list));
 	}
 
-	public void save(Project list) {
-		saveAndReturn(list);
+	public void uSave(Project list) {
+		uSaveAndReturn(list);
 	}
 
-	public Project saveAndReturn(Project list) {
+	public Project uSaveAndReturn(Project list) {
 		Project old = super.find(list.getId());
 		AppUser currentUser = getCurrentUser();
 		Key<AppUser> userKey = new Key<AppUser>(AppUser.class,
@@ -56,13 +55,15 @@ public class ProjectDao extends ObjectifyDao<Project> {
 		list.setOwner(userKey);
 		if (list.getParticipants() == null)
 			list.setParticipants(new ArrayList<ParticipantEntity>());
-		Key<Project> key = put(list);
-		projectListDao.put(new ProjectList(list));
 		if (old == null || old.getParticipants() == null
 				|| !old.getParticipants().equals(list.getParticipants())) {
-			expenseDao.refreshParticipantsForProject(list.getParticipants(),
-					list.getId());
+			double sum = expenseDao.refreshParticipantsForProject(
+					list.getParticipants(), list.getId());
+			list.setSum(sum);
 		}
+
+		Key<Project> key = put(list);
+		projectListDao.put(new ProjectList(list));
 		try {
 			return this.get(key);
 		} catch (Exception e) {

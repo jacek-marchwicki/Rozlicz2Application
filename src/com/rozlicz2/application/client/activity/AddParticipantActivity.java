@@ -67,7 +67,7 @@ public class AddParticipantActivity extends AbstractActivity implements
 
 	private void getProjectById(final EventBus eventBus) {
 		ProjectRequestContext projectRequest = rf.getProjectRequest();
-		projectRequest.find(projectId).fire(new Receiver<ProjectProxy>() {
+		projectRequest.uFind(projectId).fire(new Receiver<ProjectProxy>() {
 
 			@Override
 			public void onSuccess(ProjectProxy arg0) {
@@ -107,7 +107,7 @@ public class AddParticipantActivity extends AbstractActivity implements
 			participants.add(participant);
 		}
 		project.setParticipants(participants);
-		projectRequest.save(project).fire(new Receiver<Void>() {
+		projectRequest.uSave(project).fire(new Receiver<Void>() {
 			@Override
 			public void onSuccess(Void arg0) {
 				placeController.goTo(previousPlace);

@@ -28,7 +28,7 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 		this.projectListDao = projectListDao;
 	}
 
-	public void calculateSum(Expense expense) {
+	public double calculateSum(Expense expense) {
 		List<ExpensePaymentEntity> payments = expense.getPayments();
 		List<ExpenseConsumerEntity> consumers = expense.getConsumers();
 		PaymentOption paymentOption = expense.getPaymentOption();
@@ -46,8 +46,10 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 			double toDivide = sum;
 			int proportionals = 0;
 			for (ExpenseConsumerEntity consumer : consumers) {
-				if (!consumer.isConsumer())
+				if (!consumer.isConsumer()) {
+					consumer.setValue(0.0);
 					continue;
+				}
 				if (consumer.isProportional()) {
 					proportionals++;
 					continue;
@@ -85,59 +87,44 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 			}
 			expense.setConsumers(consumers);
 		}
+		return sum;
 	}
 
-	@Override
-	public Expense find(String id) {
+	public List<Expense> findByProjectId(String projectId) {
+		return this.listByProperty("projectId", projectId);
+	}
+
+	public double refreshParticipantsForProject(
+			List<ParticipantEntity> participants, String projectId) {
+		double sum = 0.0;
+		List<Expense> list = this.listByProperty("projectId", projectId);
+		for (Expense expense : list) {
+			sum += updateExpenseParticipants(expense, participants);
+		}
+		return sum;
+	}
+
+	public Expense uFind(String id) {
 		Expense find = super.find(id);
 		if (find == null)
 			return null;
 		String projectId = find.getProjectId();
 		if (projectId == null)
 			return null;
-		ProjectList findUser = projectListDao.findUser(projectId);
+		ProjectList findUser = projectListDao.uFindUser(projectId);
 		if (findUser == null)
 			return null;
 		return find;
 	}
 
-	public List<Expense> findByProjectId(String projectId) {
-		ProjectList projectList = projectListDao.findUser(projectId);
+	public List<Expense> uFindByProjectId(String projectId) {
+		ProjectList projectList = projectListDao.uFindUser(projectId);
 		if (projectList == null)
 			return null;
-		List<Expense> list = this.listByProperty("projectId", projectId);
-		return list;
+		return findByProjectId(projectId);
 	}
 
-	public void refreshParticipantsForProject(
-			List<ParticipantEntity> participants, String projectId) {
-		List<Expense> list = this.listByProperty("projectId", projectId);
-		for (Expense expense : list) {
-			updateExpenseParticipants(expense, participants);
-		}
-	}
-
-	public void save(Expense list) {
-		saveAndReturn(list);
-	}
-
-	public Expense saveAndReturn(Expense list) {
-		String projectId = list.getProjectId();
-		if (projectId == null)
-			return null;
-		ProjectList findUser = projectListDao.findUser(projectId);
-		if (findUser == null)
-			return null;
-		calculateSum(list);
-		Key<Expense> key = put(list);
-		try {
-			return this.get(key);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private void updateExpenseParticipants(Expense expense,
+	private double updateExpenseParticipants(Expense expense,
 			List<ParticipantEntity> participants) {
 		Map<String, ParticipantEntity> participantsMap = new HashMap<String, ParticipantEntity>();
 		for (ParticipantEntity participant : participants) {
@@ -193,8 +180,29 @@ public class ExpenseDao extends ObjectifyDao<Expense> {
 		}
 
 		expense.setPayments(newPayments);
-		calculateSum(expense);
+		double sum = calculateSum(expense);
 		put(expense);
+		return sum;
+	}
+
+	public void uSave(Expense list) {
+		uSaveAndReturn(list);
+	}
+
+	public Expense uSaveAndReturn(Expense list) {
+		String projectId = list.getProjectId();
+		if (projectId == null)
+			return null;
+		ProjectList findUser = projectListDao.uFindUser(projectId);
+		if (findUser == null)
+			return null;
+		calculateSum(list);
+		Key<Expense> key = put(list);
+		try {
+			return this.get(key);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

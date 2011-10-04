@@ -59,7 +59,7 @@ public class ProjectActivity extends AbstractActivity implements
 		expense.setConsumers(new ArrayList<ExpenseConsumerEntityProxy>());
 		expense.setProjectId(place.getProjectId());
 		expense.setPaymentOption(PaymentOption.EVERYBODY);
-		expenseRequest.save(expense).fire();
+		expenseRequest.uSave(expense).fire();
 		ExpensePlace place = new ExpensePlace(expense);
 		placeController.goTo(place);
 
@@ -76,7 +76,7 @@ public class ProjectActivity extends AbstractActivity implements
 	}
 
 	private void findProjectById(final EventBus eventBus) {
-		rf.getProjectRequest().find(place.getProjectId())
+		rf.getProjectRequest().uFind(place.getProjectId())
 				.fire(new Receiver<ProjectProxy>() {
 
 					@Override
@@ -89,7 +89,7 @@ public class ProjectActivity extends AbstractActivity implements
 						eventBus.fireEvent(projectChangedEvent);
 					}
 				});
-		rf.getExpenseRequest().findByProjectId(place.getProjectId())
+		rf.getExpenseRequest().uFindByProjectId(place.getProjectId())
 				.with("payments", "consumers")
 				.fire(new Receiver<List<ExpenseProxy>>() {
 
@@ -129,7 +129,7 @@ public class ProjectActivity extends AbstractActivity implements
 		ProjectRequestContext projectContext = (ProjectRequestContext) projectView
 				.getDriver().flush();
 		if (projectPersistRequest == null)
-			projectPersistRequest = projectContext.saveAndReturn(project);
+			projectPersistRequest = projectContext.uSaveAndReturn(project);
 		projectPersistRequest.fire(new Receiver<ProjectProxy>() {
 			@Override
 			public void onSuccess(ProjectProxy readOnlyProject) {

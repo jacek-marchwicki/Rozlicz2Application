@@ -20,7 +20,7 @@ public interface LocalizedMessages extends Messages {
 	@DefaultMessage("Payments sum: {0}")
 	String paymentsSum(Double sum);
 
-	@DefaultMessage("Price: <b>{0}</b>")
+	@DefaultMessage("Price: <b>{0,number,currency}</b>")
 	SafeHtml price(Double sum);
 
 	@DefaultMessage("Hello: {0}")

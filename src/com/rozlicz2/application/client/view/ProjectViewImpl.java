@@ -22,10 +22,10 @@ import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
+import com.rozlicz2.application.client.resources.CellListResources;
 import com.rozlicz2.application.client.resources.LocalizedMessages;
-import com.rozlicz2.application.client.widgets.EditableLabelWidget;
+import com.rozlicz2.application.client.widgets.EditableTextWidget;
 import com.rozlicz2.application.client.widgets.LockWidget;
-import com.rozlicz2.application.client.widgets.events.SaveEvent;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
 
@@ -72,7 +72,8 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 		};
 
 		public ExpensesEditor() {
-			super(new ExpenditureCell(), keyProvider);
+			super(new ExpenditureCell(), CellListResources.INSTANCE,
+					keyProvider);
 		}
 	}
 
@@ -94,7 +95,7 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	LockWidget lockWidget;
 
 	@UiField
-	EditableLabelWidget nameEditor;
+	EditableTextWidget nameEditor;
 
 	private Presenter presenter;
 
@@ -133,11 +134,6 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 	@UiHandler("nameEditor")
 	public void onNameEditorChange(ValueChangeEvent<String> event) {
 		presenter.validate();
-	}
-
-	@UiHandler("nameEditor")
-	public void onNameEditorSave(SaveEvent event) {
-		presenter.save();
 	}
 
 	protected void onSelectedObject(ExpenseProxy selectedObject) {

@@ -22,7 +22,7 @@ public class Expense extends DatastoreObject {
 	@NotNull(groups = { ServerGroup.class })
 	private String meId;
 	@NotNull
-	@Size(min = 2)
+	@Size(min = 4, max = 100)
 	private String name;
 	@NotNull
 	private PaymentOption paymentOption = PaymentOption.EVERYBODY;

@@ -4,14 +4,12 @@
 	<ui:with
 		type="com.rozlicz2.application.client.resources.ApplicationResources"
 		field="res"></ui:with>
-	<ui:with
-		type="com.rozlicz2.application.client.resources.ApplicationConstants"
-		field="i18n"></ui:with>
-
 	<ui:style>
+		
 	</ui:style>
 	<g:HTMLPanel>
-		<g:TextBox ui:field="textBox"></g:TextBox>
+		<g:FlexTable ui:field="flexTable" styleName="{res.css.flexTableClass}"></g:FlexTable>
 		<g:Label ui:field="errorLabel"></g:Label>
 	</g:HTMLPanel>
+
 </ui:UiBinder> 

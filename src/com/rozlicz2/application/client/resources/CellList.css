@@ -1,0 +1,37 @@
+@CHARSET "UTF-8";
+
+.cellListWidget {
+	margin-bottom: 1em;
+	border: 1px solid #C7C7C7;
+	width: 100%;
+}
+
+.cellListEvenItem {
+	cursor: pointer;
+	background: #F5F5F5;
+	padding: 1em;
+	zoom: 1;
+}
+
+.cellListOddItem {
+	cursor: pointer;
+	background: #FAFAFA;
+	padding: 1em;
+	zoom: 1;
+}
+
+.cellListKeyboardSelectedItem {
+	background: #DEDEDE;
+	font-weight: bold;
+	padding: 1em;
+	height: auto;
+	overflow: visible;
+}
+
+.cellListSelectedItem {
+	background: #DEDEDE;
+	font-weight: bold;
+	padding: 1em;
+	height: auto;
+	overflow: visible;
+}

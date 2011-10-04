@@ -42,7 +42,8 @@ public class ProjectsActivity extends AbstractActivity implements
 		ProjectProxy project = projectRequest.create(ProjectProxy.class);
 		project.setName(ApplicationConstants.constants.newProject());
 		project.setId(IdGenerator.nextId());
-		projectRequest.save(project).fire(new Receiver<Void>() {
+		project.setSum(0.0);
+		projectRequest.uSave(project).fire(new Receiver<Void>() {
 
 			@Override
 			public void onFailure(ServerFailure error) {
@@ -93,7 +94,7 @@ public class ProjectsActivity extends AbstractActivity implements
 	private void receiveData() {
 		ProjectListRequestContext projectListRequest = rf
 				.getProjectListRequest();
-		Request<List<ProjectListProxy>> listAll = projectListRequest.listAll();
+		Request<List<ProjectListProxy>> listAll = projectListRequest.uListAll();
 
 		listAll.fire(new Receiver<List<ProjectListProxy>>() {
 
