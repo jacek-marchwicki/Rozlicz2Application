@@ -99,6 +99,9 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 
 	private Presenter presenter;
 
+	@UiField
+	Button saveButton;
+
 	public ProjectViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 
@@ -136,8 +139,18 @@ public class ProjectViewImpl extends Composite implements ProjectView,
 		presenter.validate();
 	}
 
+	@UiHandler("saveButton")
+	public void onSaveButtonClicked(ClickEvent e) {
+		presenter.save();
+	}
+
 	protected void onSelectedObject(ExpenseProxy selectedObject) {
 		presenter.editExpense(selectedObject);
+	}
+
+	@Override
+	public void savable(boolean savable) {
+		saveButton.setVisible(savable);
 	}
 
 	@Override

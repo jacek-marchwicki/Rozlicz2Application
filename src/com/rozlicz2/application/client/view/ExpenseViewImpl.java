@@ -11,6 +11,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -56,6 +57,9 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	PaymentsTableWidget paymentsEditor;
 
 	private Presenter presenter;
+
+	@UiField
+	Button saveButton;
 
 	@UiField
 	@Editor.Ignore
@@ -113,6 +117,11 @@ public class ExpenseViewImpl extends Composite implements ExpenseView,
 	@UiHandler("saveButton")
 	public void onSaveButtonClick(ClickEvent e) {
 		presenter.save();
+	}
+
+	@Override
+	public void savable(boolean savable) {
+		saveButton.setVisible(savable);
 	}
 
 	@Override

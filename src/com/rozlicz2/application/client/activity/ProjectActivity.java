@@ -43,9 +43,9 @@ public class ProjectActivity extends AbstractActivity implements
 	private PlaceController placeController;
 
 	private ProjectProxy project;
-	private Request<ProjectProxy> projectPersistRequest = null;
-	private ProjectView projectView;
 	private ListwidgetRequestFactory rf;
+	private Request<Void> saveContext = null;
+	private ProjectView view;
 
 	public ProjectActivity() {
 	}
@@ -67,7 +67,7 @@ public class ProjectActivity extends AbstractActivity implements
 	}
 
 	protected void drawExpenses(List<ExpenseProxy> expenses) {
-		projectView.setExpenses(expenses);
+		view.setExpenses(expenses);
 	}
 
 	@Override
@@ -77,8 +77,11 @@ public class ProjectActivity extends AbstractActivity implements
 	}
 
 	private void findProjectById(final EventBus eventBus) {
-		rf.getProjectRequest().uFind(place.getProjectId()).with("participants")
-				.fire(new Receiver<ProjectProxy>() {
+		ProjectRequestContext projectRequest = rf.getProjectRequest();
+		ExpenseRequestContext expenseRequest = rf.getExpenseRequest();
+		expenseRequest = projectRequest.append(expenseRequest);
+		projectRequest.uFind(place.getProjectId()).with("participants")
+				.to(new Receiver<ProjectProxy>() {
 
 					@Override
 					public void onSuccess(ProjectProxy response) {
@@ -90,9 +93,9 @@ public class ProjectActivity extends AbstractActivity implements
 						eventBus.fireEvent(projectChangedEvent);
 					}
 				});
-		rf.getExpenseRequest().uFindByProjectId(place.getProjectId())
+		expenseRequest.uFindByProjectId(place.getProjectId())
 				.with("payments", "consumers")
-				.fire(new Receiver<List<ExpenseProxy>>() {
+				.to(new Receiver<List<ExpenseProxy>>() {
 
 					@Override
 					public void onSuccess(List<ExpenseProxy> response) {
@@ -101,6 +104,7 @@ public class ProjectActivity extends AbstractActivity implements
 						eventBus.fireEvent(event);
 					}
 				});
+		expenseRequest.fire();
 	}
 
 	public List<ExpenseConsumerEntityProxy> getEmptyExpenseConsumer(
@@ -135,39 +139,35 @@ public class ProjectActivity extends AbstractActivity implements
 
 	@Override
 	public void onCancel() {
-		projectView.setLocked(false);
+		view.setLocked(false);
 	}
 
 	@Override
 	public void onStop() {
-		projectView.setLocked(false);
+		view.setLocked(false);
 		childEventBus.removeHandlers();
 	}
 
 	protected void projectChanged(ProjectProxy readOnlyProject) {
 		ProjectRequestContext projectRequest = rf.getProjectRequest();
 		project = projectRequest.edit(readOnlyProject);
-		projectView.getDriver().edit(project, projectRequest);
-		projectView.setLocked(false);
+		view.getDriver().edit(project, projectRequest);
+		view.setLocked(false);
+		view.savable(false);
 	}
 
 	@Override
 	public void save() {
 		validate();
-		if (projectView.getDriver().hasErrors())
+		if (view.getDriver().hasErrors())
 			return;
-		projectView.setLocked(true);
-		ProjectRequestContext projectContext = (ProjectRequestContext) projectView
+		ProjectRequestContext requestContext = (ProjectRequestContext) view
 				.getDriver().flush();
-		if (projectPersistRequest == null)
-			projectPersistRequest = projectContext.uSaveAndReturn(project);
-		projectPersistRequest.fire(new Receiver<ProjectProxy>() {
-			@Override
-			public void onSuccess(ProjectProxy readOnlyProject) {
-				projectChanged(readOnlyProject);
-				projectPersistRequest = null;
-			}
-		});
+		if (requestContext.isChanged()) {
+			saveContext = null;
+			requestContext.fire();
+			projectChanged(project);
+		}
 
 	}
 
@@ -182,7 +182,7 @@ public class ProjectActivity extends AbstractActivity implements
 
 	@Inject
 	public void setProjectView(ProjectView projectView) {
-		this.projectView = projectView;
+		this.view = projectView;
 	}
 
 	@Inject
@@ -224,8 +224,9 @@ public class ProjectActivity extends AbstractActivity implements
 					}
 				});
 
-		projectView.setPresenter(this);
-		projectView.setLocked(true);
+		view.setPresenter(this);
+		view.setLocked(true);
+		view.savable(false);
 		drawExpenses(new ArrayList<ExpenseProxy>());
 
 		ProjectProxy readOnlyProject = place.getProject();
@@ -235,20 +236,32 @@ public class ProjectActivity extends AbstractActivity implements
 			findProjectById(eventBus);
 		}
 
-		panel.setWidget(projectView.asWidget());
+		panel.setWidget(view.asWidget());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void validate() {
-		projectView.getDriver().flush();
+		ProjectRequestContext requestContext = (ProjectRequestContext) view
+				.getDriver().flush();
+		if (view.getDriver().hasErrors()) {
+			view.savable(false);
+			return;
+		}
 
 		Validator validator = factory.getValidator();
 		Set<ConstraintViolation<ProjectProxy>> validate = validator
 				.validate(project);
 
 		Iterable<?> violations = validate;
-		projectView.getDriver().setConstraintViolations(
+		view.getDriver().setConstraintViolations(
 				(Iterable<ConstraintViolation<?>>) violations);
+		if (validate.size() > 0) {
+			view.savable(false);
+			return;
+		}
+		if (saveContext == null)
+			saveContext = requestContext.uSave(project);
+		view.savable(requestContext.isChanged());
 	}
 }

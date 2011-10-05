@@ -22,10 +22,12 @@ public class ObjectifyLocator extends Locator<DatastoreObject, String> {
 	@Override
 	public DatastoreObject find(Class<? extends DatastoreObject> clazz,
 			String id) {
-		/**
-		 * INFO - debug sleep: try { Thread.sleep(1000); } catch
-		 * (InterruptedException e1) { e1.printStackTrace(); }
-		 */
+		// INFO - debug sleep:
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
 
 		@SuppressWarnings("rawtypes")
 		ObjectifyDao daoBase = new ObjectifyDao();

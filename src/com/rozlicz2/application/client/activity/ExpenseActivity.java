@@ -34,15 +34,15 @@ public class ExpenseActivity extends AbstractActivity implements
 	private EventBus eventBus;
 	private ExpenseProxy expense;
 
-	private ExpenseRequestContext expenseRequest;
-
-	private ExpenseView expenseView;
-
 	private ExpensePlace place;
 
 	private PlaceController placeController;
 
 	private ListwidgetRequestFactory rf;
+
+	private Request<Void> saveContext;
+
+	private ExpenseView view;
 
 	public ExpenseActivity() {
 	}
@@ -55,12 +55,13 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	protected void expenseChanged(ExpenseProxy readOnlyExpense) {
-		expenseRequest = rf.getExpenseRequest();
+		ExpenseRequestContext expenseRequest = rf.getExpenseRequest();
 		expense = expenseRequest.edit(readOnlyExpense);
-		expenseView.getDriver().edit(expense, expenseRequest);
+		view.getDriver().edit(expense, expenseRequest);
 		Double sum = readOnlyExpense.getSum();
-		expenseView.setSum(sum);
-		expenseView.setLocked(false);
+		view.setSum(sum);
+		view.setLocked(false);
+		view.savable(false);
 	}
 
 	private void getExpenseById(final EventBus eventBus, String expenseId) {
@@ -88,38 +89,27 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Override
 	public void onCancel() {
-		expenseView.setLocked(false);
+		view.setLocked(false);
 	}
 
 	@Override
 	public void onStop() {
-		expenseView.setLocked(false);
+		view.setLocked(false);
 		childEventBus.removeHandlers();
 	}
 
 	@Override
 	public void save() {
 		validate();
-		if (expenseView.getDriver().hasErrors())
+		if (view.getDriver().hasErrors())
 			return;
-		expenseView.setLocked(true);
-		ExpenseRequestContext requestContext = (ExpenseRequestContext) expenseView
+		ExpenseRequestContext requestContext = (ExpenseRequestContext) view
 				.getDriver().flush();
-		Request<ExpenseProxy> saveAndReturn = requestContext.uSaveAndReturn(
-				expense).with("payments", "consumers");
-		saveAndReturn.fire(new Receiver<ExpenseProxy>() {
-			@Override
-			public void onConstraintViolation(
-					Set<ConstraintViolation<?>> violations) {
-				expenseView.getDriver().setConstraintViolations(violations);
-				expenseView.setLocked(false);
-			}
-
-			@Override
-			public void onSuccess(ExpenseProxy readOnlyExpense) {
-				expenseChanged(readOnlyExpense);
-			}
-		});
+		if (requestContext.isChanged()) {
+			saveContext = null;
+			requestContext.fire();
+			expenseChanged(expense);
+		}
 	}
 
 	@Inject
@@ -129,7 +119,7 @@ public class ExpenseActivity extends AbstractActivity implements
 
 	@Inject
 	public void setExpenseView(ExpenseView expenseView) {
-		this.expenseView = expenseView;
+		this.view = expenseView;
 	}
 
 	public void setPlace(ExpensePlace place) {
@@ -164,8 +154,9 @@ public class ExpenseActivity extends AbstractActivity implements
 					}
 				});
 
-		expenseView.setPresenter(this);
-		expenseView.setLocked(true);
+		view.setPresenter(this);
+		view.setLocked(true);
+		view.savable(false);
 
 		ExpenseProxy readOnlyExpense = place.getExpense();
 		if (readOnlyExpense == null) {
@@ -175,15 +166,18 @@ public class ExpenseActivity extends AbstractActivity implements
 			expenseChanged(readOnlyExpense);
 		}
 
-		panel.setWidget(expenseView.asWidget());
+		panel.setWidget(view.asWidget());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void validate() {
-		expenseView.getDriver().flush();
-		if (expenseView.getDriver().hasErrors())
+		ExpenseRequestContext requestContext = (ExpenseRequestContext) view
+				.getDriver().flush();
+		if (view.getDriver().hasErrors()) {
+			view.savable(false);
 			return;
+		}
 		Configuration<?> configuration = Validation.byDefaultProvider()
 				.configure();
 		ValidatorFactory factory = configuration.buildValidatorFactory();
@@ -192,8 +186,15 @@ public class ExpenseActivity extends AbstractActivity implements
 				.validate(expense);
 
 		Iterable<?> violations = validate;
-		expenseView.getDriver().setConstraintViolations(
+		view.getDriver().setConstraintViolations(
 				(Iterable<ConstraintViolation<?>>) violations);
+		if (validate.size() > 0) {
+			view.savable(false);
+			return;
+		}
+		if (saveContext == null)
+			saveContext = requestContext.uSave(expense);
+		view.savable(requestContext.isChanged());
 	}
 
 }

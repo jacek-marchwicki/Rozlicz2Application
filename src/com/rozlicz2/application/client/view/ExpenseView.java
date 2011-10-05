@@ -16,6 +16,8 @@ public interface ExpenseView extends IsWidget {
 
 	public RequestFactoryEditorDriver<ExpenseProxy, ?> getDriver();
 
+	public void savable(boolean savable);
+
 	public void setLocked(boolean locked);
 
 	public void setPresenter(Presenter presenter);

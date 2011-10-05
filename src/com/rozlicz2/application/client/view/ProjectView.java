@@ -20,6 +20,8 @@ public interface ProjectView extends IsWidget {
 
 	RequestFactoryEditorDriver<ProjectProxy, ?> getDriver();
 
+	void savable(boolean savable);
+
 	void setExpenses(List<ExpenseProxy> expenses);
 
 	void setLocked(boolean locked);
