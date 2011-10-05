@@ -16,12 +16,12 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
-	<classpathentry kind="lib" path="lib/requestfactory-apt.jar"/>
-	<classpathentry kind="lib" path="lib/requestfactory-client-src.jar"/>
-	<classpathentry kind="lib" path="lib/requestfactory-client.jar"/>
-	<classpathentry kind="lib" path="lib/requestfactory-client+src.jar"/>
-	<classpathentry kind="lib" path="lib/requestfactory-server-src.jar"/>
-	<classpathentry kind="lib" path="lib/requestfactory-server+src.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-apt.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-client-src.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-client.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-client+src.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-server-src.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-server+src.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-server.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/javax.inject.jar"/>
@@ -37,13 +37,13 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-struts2-plugin-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/guice-throwingproviders-3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-log4j12-1.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-log4j12-1.6.2-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.6.2-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/slf4j-api-1.6.2-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/log4j-1.2.16.jar"/>
-	<classpathentry kind="lib" path="lib/javassist-3.12.1.GA.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/javassist-3.12.1.GA.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/hibernate-validator-4.2.0.Final.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-validator-4.2.0.Final-sources.jar"/>
-	<classpathentry kind="lib" path="lib/gin-1.5-post-gwt-2.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/hibernate-validator-4.2.0.Final-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gin-1.5-post-gwt-2.2.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
