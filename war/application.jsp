@@ -21,7 +21,7 @@
 <meta name="Robots" content="index,follow" />
 <meta name="viewport" content="initial-scale=1.0" />
 <meta name="viewport" content="user-scalable=false" />
-<title>SZAS-form application</title>
+<title>Rozlicz2!</title>
 <!--[if IE]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
