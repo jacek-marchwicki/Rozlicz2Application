@@ -1,0 +1,626 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007f7dee43ffa6, pid=11961, tid=140178750412544
+#
+# JRE version: 6.0_26-b03
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (20.1-b02 mixed mode linux-amd64 compressed oops)
+# Problematic frame:
+# V  [libjvm.so+0x61afa6]  VM_RedefineClasses::merge_cp_and_rewrite(instanceKlassHandle, instanceKlassHandle, Thread*)+0x166
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000000041115000):  JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=11978, stack(0x00007f7de88f9000,0x00007f7de89fa000)]
+
+siginfo:si_signo=SIGSEGV: si_errno=0, si_code=1 (SEGV_MAPERR), si_addr=0x0000000000000000
+
+Registers:
+RAX=0x0000000000000045, RBX=0x00000000411139c0, RCX=0x00000000bfa69750, RDX=0x0000000000000000
+RSP=0x00007f7de89f8300, RBP=0x00007f7de89f83a0, RSI=0x0000000000000000, RDI=0x0000000000000000
+R8 =0x0000000000000000, R9 =0x00007f7dee8aad18, R10=0x000000000000000c, R11=0x0000000000000000
+R12=0x0000000000000000, R13=0x0000000041115000, R14=0x00007f7de89f8320, R15=0x00007f7de89f8660
+RIP=0x00007f7dee43ffa6, EFLAGS=0x0000000000010246, CSGSFS=0x0000000000000033, ERR=0x0000000000000004
+  TRAPNO=0x000000000000000e
+
+Top of Stack: (sp=0x00007f7de89f8300)
+0x00007f7de89f8300:   0000000041115cc0 0000000041115cc0
+0x00007f7de89f8310:   0000008a41115cd8 0000000000000000
+0x00007f7de89f8320:   0000000041115ce0 0000000041115cd8
+0x00007f7de89f8330:   0000000041115970 0000000041115cd8
+0x00007f7de89f8340:   0000000041115d58 00007f7de89f8ab0
+0x00007f7de89f8350:   0000000041113930 0000000041115580
+0x00007f7de89f8360:   0000000041115650 0000000041115968
+0x00007f7de89f8370:   00000000411155f0 00007f7de89f83f8
+0x00007f7de89f8380:   00007f7de89f8400 0000000041115000
+0x00007f7de89f8390:   00007f7de89f8660 0000000041116be0
+0x00007f7de89f83a0:   00007f7de89f84c0 00007f7dee43eb77
+0x00007f7de89f83b0:   0000000041115000 00007f7de89f83f0
+0x00007f7de89f83c0:   00007f7de89f83f8 00007f7de89f8408
+0x00007f7de89f83d0:   00007f7de89f8410 00007f7de89f8440
+0x00007f7de89f83e0:   00007f7de89f8418 0000000000000001
+0x00007f7de89f83f0:   0000000141115000 0000000041115cc0
+0x00007f7de89f8400:   0000000041115bb0 0000000041115bc8
+0x00007f7de89f8410:   0000000041115bc0 0000000041115bb8
+0x00007f7de89f8420:   0000000041116be0 0000000000000002
+0x00007f7de89f8430:   0000000000000001 0000000000000001
+0x00007f7de89f8440:   00007f7dd8a38b20 00007f7dd8a39313
+0x00007f7de89f8450:   00007f7dd8a39313 00007f7dee6e249b
+0x00007f7de89f8460:   00000000bdc5ac01 00007f7de89f8490
+0x00007f7de89f8470:   0000000041113930 0000000041115580
+0x00007f7de89f8480:   0000000041115590 0000000041115968
+0x00007f7de89f8490:   0000000041115000 00007f7de89f8660
+0x00007f7de89f84a0:   00007f7dee8aa6f8 00007f7de89f8660
+0x00007f7de89f84b0:   0000000000000011 0000000041115000
+0x00007f7de89f84c0:   00007f7de89f84e0 00007f7dee43c290
+0x00007f7de89f84d0:   00007f7dee8b8fb0 0000000041057cc0
+0x00007f7de89f84e0:   00007f7de89f8650 00007f7dee69251b
+0x00007f7de89f84f0:   0000000000000000 00007f7dee04b051 
+
+Instructions: (pc=0x00007f7dee43ffa6)
+0x00007f7dee43ff86:   78 ff ff ff 48 8b 55 88 48 8b 0a 8b 51 3c 85 d2
+0x00007f7dee43ff96:   0f 85 c4 03 00 00 4c 8b 85 78 ff ff ff 8b 41 34
+0x00007f7dee43ffa6:   49 8b 38 89 47 3c 4d 8b a5 00 01 00 00 bf 10 00
+0x00007f7dee43ffb6:   00 00 4c 89 65 b0 4d 8b 74 24 08 4c 89 75 b8 49 
+
+Register to memory mapping:
+
+RAX=0x0000000000000045 is an unknown value
+RBX=0x00000000411139c0 is an unknown value
+RCX=0x00000000bfa69750 is an oop
+
+[error occurred during error reporting (printing register info), id 0xe0000000]
+
+Stack: [0x00007f7de88f9000,0x00007f7de89fa000],  sp=0x00007f7de89f8300,  free space=1020k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [libjvm.so+0x61afa6]  VM_RedefineClasses::merge_cp_and_rewrite(instanceKlassHandle, instanceKlassHandle, Thread*)+0x166
+V  [libjvm.so+0x619b77]  VM_RedefineClasses::load_new_class_versions(Thread*)+0x447
+V  [libjvm.so+0x617290]  VM_RedefineClasses::doit_prologue()+0xa0
+V  [libjvm.so+0x86d51b]  VMThread::execute(VM_Operation*)+0x1cb
+V  [libjvm.so+0x5f586b]  JvmtiEnv::RedefineClasses(int, _jvmtiClassDefinition const*)+0x2b
+V  [libjvm.so+0x592a81]  unsigned+0x131
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x0000000042f21000 JavaThread "Code server for rozlicz2application from Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.21 Safari/535.2 on http://127.0.0.1:8888/application.jsp?gwt.codesvr=127.0.0.1:9997#expense:5cqkftbaq7cjh4wz7skxzveqigfjevmb @ c}`di.$aNz]{G{&+" daemon [_thread_blocked, id=4947, stack(0x00007f7de7b0d000,0x00007f7de7c0e000)]
+  0x0000000047837000 JavaThread "98992890@qtp-1215916460-5" [_thread_blocked, id=4946, stack(0x00007f7de6db1000,0x00007f7de6eb2000)]
+  0x00000000416b6000 JavaThread "pool-1-thread-9" daemon [_thread_blocked, id=4945, stack(0x00007f7de780a000,0x00007f7de790b000)]
+  0x0000000041f9c000 JavaThread "pool-1-thread-8" daemon [_thread_blocked, id=4944, stack(0x00007f7de686e000,0x00007f7de696f000)]
+  0x0000000041636800 JavaThread "2081410603@qtp-1215916460-4" [_thread_blocked, id=4800, stack(0x00007f7de4bf5000,0x00007f7de4cf6000)]
+  0x00000000419f5000 JavaThread "Timer-4" daemon [_thread_blocked, id=4749, stack(0x00007f7de6aaa000,0x00007f7de6bab000)]
+  0x0000000041633800 JavaThread "Timer-3" daemon [_thread_blocked, id=4748, stack(0x00007f7de656b000,0x00007f7de666c000)]
+  0x00000000426ad800 JavaThread "1117860224@qtp-1215916460-1 - Acceptor0 SelectChannelConnector@0.0.0.0:8888" [_thread_in_native, id=4747, stack(0x00007f7de7a0c000,0x00007f7de7b0d000)]
+  0x00007f7de104e800 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=12018, stack(0x00007f7de6369000,0x00007f7de646a000)]
+  0x00007f7de1056000 JavaThread "com.google.inject.internal.util.$Finalizer" daemon [_thread_blocked, id=12016, stack(0x00007f7de646a000,0x00007f7de656b000)]
+  0x0000000042585000 JavaThread "Thread-19" daemon [_thread_blocked, id=12010, stack(0x00007f7de666c000,0x00007f7de676d000)]
+  0x000000004190e000 JavaThread "Thread-18" daemon [_thread_blocked, id=12009, stack(0x00007f7de676d000,0x00007f7de686e000)]
+  0x0000000041197800 JavaThread "Timer-0" daemon [_thread_blocked, id=11997, stack(0x00007f7de7507000,0x00007f7de7608000)]
+  0x00000000412c3800 JavaThread "Code server listener" daemon [_thread_in_native, id=11996, stack(0x00007f7de7608000,0x00007f7de7709000)]
+  0x00000000412c8000 JavaThread "com.google.gwt.thirdparty.guava.common.base.internal.Finalizer" daemon [_thread_blocked, id=11995, stack(0x00007f7de7709000,0x00007f7de780a000)]
+  0x000000004180e000 JavaThread "UnitWriteThread" daemon [_thread_blocked, id=11993, stack(0x00007f7de790b000,0x00007f7de7a0c000)]
+  0x000000004164c000 JavaThread "Thread-2" daemon [_thread_blocked, id=11990, stack(0x00007f7de7c0e000,0x00007f7de7d0f000)]
+  0x00000000417dc000 JavaThread "Thread-1" [_thread_in_native, id=11989, stack(0x00007f7de7d0f000,0x00007f7de7e10000)]
+  0x000000004142f000 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=11985, stack(0x00007f7de8028000,0x00007f7de8129000)]
+  0x0000000041428000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=11984, stack(0x00007f7de8129000,0x00007f7de822a000)]
+  0x000000004141f000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=11983, stack(0x00007f7de822a000,0x00007f7de832b000)]
+  0x000000004111b000 JavaThread "JDWP Command Reader" daemon [_thread_in_native, id=11980, stack(0x00007f7de86f7000,0x00007f7de87f8000)]
+  0x0000000041118800 JavaThread "JDWP Event Helper Thread" daemon [_thread_blocked, id=11979, stack(0x00007f7de87f8000,0x00007f7de88f9000)]
+=>0x0000000041115000 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_in_vm, id=11978, stack(0x00007f7de88f9000,0x00007f7de89fa000)]
+  0x0000000041106000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=11973, stack(0x00007f7de8d3a000,0x00007f7de8e3b000)]
+  0x00000000410e5000 JavaThread "Finalizer" daemon [_thread_blocked, id=11972, stack(0x00007f7de8e3b000,0x00007f7de8f3c000)]
+  0x00000000410e3000 JavaThread "Reference Handler" daemon [_thread_blocked, id=11971, stack(0x00007f7de8f3c000,0x00007f7de903d000)]
+  0x000000004105b800 JavaThread "main" [_thread_blocked, id=11965, stack(0x00007f7deda9f000,0x00007f7dedba0000)]
+
+Other Threads:
+  0x00000000410dc000 VMThread [stack: 0x00007f7de903d000,0x00007f7de913e000] [id=11970]
+  0x000000004143a000 WatcherThread [stack: 0x00007f7de7f27000,0x00007f7de8028000] [id=11986]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 204736K, used 164K [0x00000000eaab0000, 0x00000000fdc00000, 0x0000000100000000)
+  eden space 204672K, 0% used [0x00000000eaab0000,0x00000000eaad9090,0x00000000f7290000)
+  from space 64K, 0% used [0x00000000f7290000,0x00000000f7290000,0x00000000f72a0000)
+  to   space 53824K, 0% used [0x00000000fa770000,0x00000000fa770000,0x00000000fdc00000)
+ PSOldGen        total 699072K, used 149965K [0x00000000c0000000, 0x00000000eaab0000, 0x00000000eaab0000)
+  object space 699072K, 21% used [0x00000000c0000000,0x00000000c9273678,0x00000000eaab0000)
+ PSPermGen       total 83968K, used 83967K [0x00000000bae00000, 0x00000000c0000000, 0x00000000c0000000)
+  object space 83968K, 99% used [0x00000000bae00000,0x00000000bffffee0,0x00000000c0000000)
+
+Code Cache  [0x00007f7de9c1b000, 0x00007f7dea4eb000, 0x00007f7decc1b000)
+ total_blobs=2166 nmethods=1723 adapters=404 free_code_cache=41365184 largest_free_block=133056
+
+Dynamic libraries:
+40000000-40009000 r-xp 00000000 08:05 436621                             /usr/lib/jvm/java-6-sun-1.6.0.26/jre/bin/java
+40108000-4010a000 rwxp 00008000 08:05 436621                             /usr/lib/jvm/java-6-sun-1.6.0.26/jre/bin/java
+4104b000-49271000 rwxp 00000000 00:00 0                                  [heap]
+bae00000-c0000000 rwxp 00000000 00:00 0 
+c0000000-eaab0000 rwxp 00000000 00:00 0 
+eaab0000-fdc00000 rwxp 00000000 00:00 0 
+fdc00000-100000000 ---p 00000000 00:00 0 
+7f7dd8000000-7f7dd9375000 rwxp 00000000 00:00 0 
+7f7dd9375000-7f7ddc000000 ---p 00000000 00:00 0 
+7f7de0000000-7f7de4000000 rwxp 00000000 00:00 0 
+7f7de4551000-7f7de4552000 r-xs 00000000 08:07 7393                       /var/cache/fontconfig/26de28bc8622bbc1fb67fd234c21975f-le64.cache-3
+7f7de4552000-7f7de4553000 r-xs 00000000 08:07 19645                      /var/cache/fontconfig/c05880de57d1f5e948fdfacc138775d9-le64.cache-3
+7f7de4553000-7f7de455c000 r-xs 00000000 08:07 7680                       /var/cache/fontconfig/945677eb7aeaf62f1d50efc3fb3ec7d8-le64.cache-3
+7f7de455c000-7f7de455e000 r-xs 00000000 08:07 19593                      /var/cache/fontconfig/99e8ed0e538f840c565b6ed5dad60d56-le64.cache-3
+7f7de455e000-7f7de4561000 r-xs 00000000 08:07 15156                      /var/cache/fontconfig/f24b2111ab8703b4e963115a8cf14259-le64.cache-3
+7f7de4561000-7f7de4564000 r-xs 00000000 08:07 19579                      /var/cache/fontconfig/e383d7ea5fbe662a33d9b44caf393297-le64.cache-3
+7f7de4564000-7f7de456b000 r-xs 00000000 08:07 19564                      /var/cache/fontconfig/401a5dd6b567794a1d18dd9342dfa604-le64.cache-3
+7f7de456b000-7f7de456d000 r-xs 00000000 08:07 19127                      /var/cache/fontconfig/2cd17615ca594fa2959ae173292e504c-le64.cache-3
+7f7de456d000-7f7de456e000 r-xs 00000000 08:07 16851                      /var/cache/fontconfig/e7071f4a29fa870f4323321c154eba04-le64.cache-3
+7f7de456e000-7f7de4571000 r-xs 00000000 08:07 12517                      /var/cache/fontconfig/b5ea634b0fb353b8ea17632d1f9ef766-le64.cache-3
+7f7de4571000-7f7de4575000 r-xs 00000000 08:07 18995                      /var/cache/fontconfig/6eb3985aa4124903f6ff08ba781cd364-le64.cache-3
+7f7de4575000-7f7de4576000 r-xs 00000000 08:07 18985                      /var/cache/fontconfig/4c73fe0c47614734b17d736dbde7580a-le64.cache-3
+7f7de4576000-7f7de4577000 r-xs 00000000 08:07 18981                      /var/cache/fontconfig/0d8c3b2ac0904cb8a57a757ad11a4a08-le64.cache-3
+7f7de4577000-7f7de4578000 r-xs 00000000 08:07 18974                      /var/cache/fontconfig/6a53c69dea097a2d716e069445527da8-le64.cache-3
+7f7de4578000-7f7de457d000 r-xs 00000000 08:07 18964                      /var/cache/fontconfig/062808c12e6e608270f93bb230aed730-le64.cache-3
+7f7de457d000-7f7de4583000 r-xs 00000000 08:07 15260                      /var/cache/fontconfig/a755afe4a08bf5b97852ceb7400b47bc-le64.cache-3
+7f7de4583000-7f7de4588000 r-xs 00000000 08:07 18431                      /var/cache/fontconfig/515ca1ebc4b18308bea979be5704f9db-le64.cache-3
+7f7de4588000-7f7de4591000 r-xs 00000000 08:07 18407                      /var/cache/fontconfig/6d41288fd70b0be22e8c3a91e032eec0-le64.cache-3
+7f7de4591000-7f7de4594000 r-xs 00000000 08:07 18370                      /var/cache/fontconfig/de156ccd2eddbdc19d37a45b8b2aac9c-le64.cache-3
+7f7de4594000-7f7de459f000 r-xs 00000000 08:07 18246                      /var/cache/fontconfig/e3de0de479f42330eadf588a55fb5bf4-le64.cache-3
+7f7de459f000-7f7de45af000 r-xs 00000000 08:07 18088                      /var/cache/fontconfig/0f34bcd4b6ee430af32735b75db7f02b-le64.cache-3
+7f7de45af000-7f7de45dd000 r-xs 00000000 08:07 17946                      /var/cache/fontconfig/365b55f210c0a22e9a19e35191240f32-le64.cache-3
+7f7de45dd000-7f7de45e7000 r-xs 00000000 08:07 16119                      /var/cache/fontconfig/d52a8644073d54c13679302ca1180695-le64.cache-3
+7f7de4af4000-7f7de4af7000 ---p 00000000 00:00 0 
+7f7de4af7000-7f7de4bf5000 rwxp 00000000 00:00 0 
+7f7de4bf5000-7f7de4bf8000 ---p 00000000 00:00 0 
+7f7de4bf8000-7f7de4cf6000 rwxp 00000000 00:00 0 
+7f7de4cf6000-7f7de4cf9000 ---p 00000000 00:00 0 
+7f7de4cf9000-7f7de4df7000 rwxp 00000000 00:00 0 
+7f7de4df7000-7f7de4dfa000 ---p 00000000 00:00 0 
+7f7de4dfa000-7f7de4ef8000 rwxp 00000000 00:00 0 
+7f7de4ef8000-7f7de4f71000 r-xp 00000000 08:05 436754                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libfontmanager.so
+7f7de4f71000-7f7de5070000 ---p 00079000 08:05 436754                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libfontmanager.so
+7f7de5070000-7f7de5085000 rwxp 00078000 08:05 436754                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libfontmanager.so
+7f7de5085000-7f7de5096000 rwxp 00000000 00:00 0 
+7f7de5096000-7f7de509b000 r-xp 00000000 08:05 153554                     /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f7de509b000-7f7de529a000 ---p 00005000 08:05 153554                     /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f7de529a000-7f7de529b000 r-xp 00004000 08:05 153554                     /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f7de529b000-7f7de529c000 rwxp 00005000 08:05 153554                     /usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+7f7de529c000-7f7de529e000 r-xp 00000000 08:05 153544                     /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f7de529e000-7f7de549d000 ---p 00002000 08:05 153544                     /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f7de549d000-7f7de549e000 r-xp 00001000 08:05 153544                     /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f7de549e000-7f7de549f000 rwxp 00002000 08:05 153544                     /usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+7f7de549f000-7f7de54ba000 r-xp 00000000 08:05 153564                     /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f7de54ba000-7f7de56b9000 ---p 0001b000 08:05 153564                     /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f7de56b9000-7f7de56ba000 r-xp 0001a000 08:05 153564                     /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f7de56ba000-7f7de56bb000 rwxp 0001b000 08:05 153564                     /usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+7f7de56bb000-7f7de56ca000 r-xp 00000000 08:05 143016                     /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f7de56ca000-7f7de58c9000 ---p 0000f000 08:05 143016                     /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f7de58c9000-7f7de58ca000 r-xp 0000e000 08:05 143016                     /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f7de58ca000-7f7de58cb000 rwxp 0000f000 08:05 143016                     /usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+7f7de58cb000-7f7de58d0000 r-xp 00000000 08:05 23001                      /usr/lib/libXtst.so.6.1.0
+7f7de58d0000-7f7de5acf000 ---p 00005000 08:05 23001                      /usr/lib/libXtst.so.6.1.0
+7f7de5acf000-7f7de5ad0000 r-xp 00004000 08:05 23001                      /usr/lib/libXtst.so.6.1.0
+7f7de5ad0000-7f7de5ad1000 rwxp 00005000 08:05 23001                      /usr/lib/libXtst.so.6.1.0
+7f7de5ad1000-7f7de5c06000 r-xp 00000000 08:05 199724                     /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f7de5c06000-7f7de5e06000 ---p 00135000 08:05 199724                     /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f7de5e06000-7f7de5e07000 r-xp 00135000 08:05 199724                     /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f7de5e07000-7f7de5e0b000 rwxp 00136000 08:05 199724                     /usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+7f7de5e0b000-7f7de5e1c000 r-xp 00000000 08:05 199753                     /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f7de5e1c000-7f7de601b000 ---p 00011000 08:05 199753                     /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f7de601b000-7f7de601c000 r-xp 00010000 08:05 199753                     /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f7de601c000-7f7de601d000 rwxp 00011000 08:05 199753                     /usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+7f7de601d000-7f7de6020000 r-xs 00000000 08:07 17994                      /var/cache/fontconfig/d60319d88cac85ba9e1a07bd06cfbb8c-le64.cache-3
+7f7de6020000-7f7de6033000 r-xs 00000000 08:07 21786                      /var/cache/fontconfig/e13b20fdb08344e0e664864cc2ede53d-le64.cache-3
+7f7de6033000-7f7de6038000 r-xs 00000000 08:07 11428                      /var/cache/fontconfig/7ef2298fde41cc6eeb7af42e48b7d293-le64.cache-3
+7f7de6038000-7f7de604c000 r-xs 00000000 08:07 7818                       /var/cache/fontconfig/865f88548240fee46819705c6468c165-le64.cache-3
+7f7de604c000-7f7de608e000 r-xp 00000000 08:05 436744                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/xawt/libmawt.so
+7f7de608e000-7f7de618d000 ---p 00042000 08:05 436744                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/xawt/libmawt.so
+7f7de618d000-7f7de6199000 rwxp 00041000 08:05 436744                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/xawt/libmawt.so
+7f7de6199000-7f7de619a000 rwxp 00000000 00:00 0 
+7f7de619a000-7f7de622c000 r-xp 00000000 08:05 436767                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libawt.so
+7f7de622c000-7f7de632b000 ---p 00092000 08:05 436767                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libawt.so
+7f7de632b000-7f7de6345000 rwxp 00091000 08:05 436767                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libawt.so
+7f7de6345000-7f7de6369000 rwxp 00000000 00:00 0 
+7f7de6369000-7f7de636c000 ---p 00000000 00:00 0 
+7f7de636c000-7f7de646a000 rwxp 00000000 00:00 0 
+7f7de646a000-7f7de646d000 ---p 00000000 00:00 0 
+7f7de646d000-7f7de656b000 rwxp 00000000 00:00 0 
+7f7de656b000-7f7de656e000 ---p 00000000 00:00 0 
+7f7de656e000-7f7de666c000 rwxp 00000000 00:00 0 
+7f7de666c000-7f7de666f000 ---p 00000000 00:00 0 
+7f7de666f000-7f7de676d000 rwxp 00000000 00:00 0 
+7f7de676d000-7f7de6770000 ---p 00000000 00:00 0 
+7f7de6770000-7f7de686e000 rwxp 00000000 00:00 0 
+7f7de686e000-7f7de6871000 ---p 00000000 00:00 0 
+7f7de6871000-7f7de696f000 rwxp 00000000 00:00 0 
+7f7de696f000-7f7de6976000 r-xp 00000000 08:05 436726                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnio.so
+7f7de6976000-7f7de6a75000 ---p 00007000 08:05 436726                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnio.so
+7f7de6a75000-7f7de6a77000 rwxp 00006000 08:05 436726                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnio.so
+7f7de6a77000-7f7de6a7a000 r-xs 00000000 08:07 17982                      /var/cache/fontconfig/ddd4086aec35a5275babba44bb759c3c-le64.cache-3
+7f7de6a7a000-7f7de6a84000 r-xs 00000000 08:07 16098                      /var/cache/fontconfig/089dead882dea3570ffc31a9898cfb69-le64.cache-3
+7f7de6a84000-7f7de6a88000 r-xs 00000000 08:07 17928                      /var/cache/fontconfig/fac9d1061ce4dddb2143955f84876fd7-le64.cache-3
+7f7de6a88000-7f7de6aaa000 r-xp 00000000 08:05 50360                      /usr/share/locale-langpack/pl/LC_MESSAGES/libc.mo
+7f7de6aaa000-7f7de6aad000 ---p 00000000 00:00 0 
+7f7de6aad000-7f7de6bab000 rwxp 00000000 00:00 0 
+7f7de6bab000-7f7de6bac000 r-xs 00001000 08:0a 2239240                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/jsr107cache-1.1.jar
+7f7de6bac000-7f7de6bad000 r-xs 00001000 08:0a 2242483                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/appengine-jsr107cache-1.5.2.jar
+7f7de6bad000-7f7de6bc7000 r-xs 001be000 08:0a 2239233                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/datanucleus-core-1.1.5.jar
+7f7de6bc7000-7f7de6bd2000 r-xs 001bd000 08:0a 2239238                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/appengine-api-labs-1.5.4.jar
+7f7de6bd2000-7f7de6c49000 r-xs 0121b000 08:0a 2239236                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/appengine-api-1.0-sdk-1.5.4.jar
+7f7de6c49000-7f7de6c4f000 r-xs 0002a000 08:0a 2239232                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/jdo2-api-2.3-eb.jar
+7f7de6c4f000-7f7de6cb8000 r-xs 004c6000 08:0a 2242453                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/gwt-servlet.jar
+7f7de6cb8000-7f7de6cbb000 r-xs 0000a000 08:0a 2239221                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/geronimo-jpa_3.0_spec-1.1.1.jar
+7f7de6cbb000-7f7de6cbf000 r-xs 00022000 08:0a 2239219                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/datanucleus-jpa-1.1.5.jar
+7f7de6cbf000-7f7de6cc1000 r-xs 00004000 08:0a 1455175                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/tools/jsp/repackaged-appengine-jakarta-jstl-1.1.2.jar
+7f7de6cc1000-7f7de6cce000 r-xs 00153000 08:0a 1455177                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/tools/jsp/repackaged-appengine-jasper-jdt-6.0.29.jar
+7f7de6cce000-7f7de6cd7000 r-xs 00059000 08:0a 1455176                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/tools/jsp/repackaged-appengine-jakarta-standard-1.1.2.jar
+7f7de6cd7000-7f7de6ce2000 r-xs 001bd000 08:0a 1455157                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/impl/appengine-api-labs.jar
+7f7de6ce2000-7f7de6ce9000 r-xs 00094000 08:05 436583                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/jsse.jar
+7f7de6ce9000-7f7de6d3a000 r-xs 00a50000 08:0a 1455160                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/impl/appengine-local-runtime.jar
+7f7de6d3a000-7f7de6db1000 r-xs 0121b000 08:0a 1455159                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/impl/appengine-api.jar
+7f7de6db1000-7f7de6db4000 ---p 00000000 00:00 0 
+7f7de6db4000-7f7de6eb2000 rwxp 00000000 00:00 0 
+7f7de6eb2000-7f7de6ec9000 r-xp 00000000 08:05 143035                     /lib/x86_64-linux-gnu/libresolv-2.13.so
+7f7de6ec9000-7f7de70c9000 ---p 00017000 08:05 143035                     /lib/x86_64-linux-gnu/libresolv-2.13.so
+7f7de70c9000-7f7de70ca000 r-xp 00017000 08:05 143035                     /lib/x86_64-linux-gnu/libresolv-2.13.so
+7f7de70ca000-7f7de70cb000 rwxp 00018000 08:05 143035                     /lib/x86_64-linux-gnu/libresolv-2.13.so
+7f7de70cb000-7f7de70cd000 rwxp 00000000 00:00 0 
+7f7de70cd000-7f7de70d4000 r-xp 00000000 08:05 142761                     /lib/x86_64-linux-gnu/libnss_dns-2.13.so
+7f7de70d4000-7f7de72d3000 ---p 00007000 08:05 142761                     /lib/x86_64-linux-gnu/libnss_dns-2.13.so
+7f7de72d3000-7f7de72d4000 r-xp 00006000 08:05 142761                     /lib/x86_64-linux-gnu/libnss_dns-2.13.so
+7f7de72d4000-7f7de72d5000 rwxp 00007000 08:05 142761                     /lib/x86_64-linux-gnu/libnss_dns-2.13.so
+7f7de72d7000-7f7de7304000 r-xs 006a8000 08:0a 1455158                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/impl/appengine-api-stubs.jar
+7f7de7304000-7f7de7306000 r-xp 00000000 08:05 29776                      /lib/libnss_mdns4_minimal.so.2
+7f7de7306000-7f7de7505000 ---p 00002000 08:05 29776                      /lib/libnss_mdns4_minimal.so.2
+7f7de7505000-7f7de7506000 r-xp 00001000 08:05 29776                      /lib/libnss_mdns4_minimal.so.2
+7f7de7506000-7f7de7507000 rwxp 00002000 08:05 29776                      /lib/libnss_mdns4_minimal.so.2
+7f7de7507000-7f7de750a000 ---p 00000000 00:00 0 
+7f7de750a000-7f7de7608000 rwxp 00000000 00:00 0 
+7f7de7608000-7f7de760b000 ---p 00000000 00:00 0 
+7f7de760b000-7f7de7709000 rwxp 00000000 00:00 0 
+7f7de7709000-7f7de770c000 ---p 00000000 00:00 0 
+7f7de770c000-7f7de780a000 rwxp 00000000 00:00 0 
+7f7de780a000-7f7de780d000 ---p 00000000 00:00 0 
+7f7de780d000-7f7de790b000 rwxp 00000000 00:00 0 
+7f7de790b000-7f7de790e000 ---p 00000000 00:00 0 
+7f7de790e000-7f7de7a0c000 rwxp 00000000 00:00 0 
+7f7de7a0c000-7f7de7a0f000 ---p 00000000 00:00 0 
+7f7de7a0f000-7f7de7b0d000 rwxp 00000000 00:00 0 
+7f7de7b0d000-7f7de7b10000 ---p 00000000 00:00 0 
+7f7de7b10000-7f7de7c0e000 rwxp 00000000 00:00 0 
+7f7de7c0e000-7f7de7c11000 ---p 00000000 00:00 0 
+7f7de7c11000-7f7de7d0f000 rwxp 00000000 00:00 0 
+7f7de7d0f000-7f7de7d12000 ---p 00000000 00:00 0 
+7f7de7d12000-7f7de7e10000 rwxp 00000000 00:00 0 
+7f7de7e10000-7f7de7e23000 r-xp 00000000 08:05 436739                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnet.so
+7f7de7e23000-7f7de7f24000 ---p 00013000 08:05 436739                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnet.so
+7f7de7f24000-7f7de7f27000 rwxp 00014000 08:05 436739                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnet.so
+7f7de7f27000-7f7de7f28000 ---p 00000000 00:00 0 
+7f7de7f28000-7f7de8028000 rwxp 00000000 00:00 0 
+7f7de8028000-7f7de802b000 ---p 00000000 00:00 0 
+7f7de802b000-7f7de8129000 rwxp 00000000 00:00 0 
+7f7de8129000-7f7de812c000 ---p 00000000 00:00 0 
+7f7de812c000-7f7de822a000 rwxp 00000000 00:00 0 
+7f7de822a000-7f7de822d000 ---p 00000000 00:00 0 
+7f7de822d000-7f7de832b000 rwxp 00000000 00:00 0 
+7f7de832b000-7f7de832e000 r-xs 00052000 08:0a 1455153                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/agent/appengine-agentimpl.jar
+7f7de832e000-7f7de8330000 r-xs 00007000 08:0a 1455152                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/agent/appengine-agent.jar
+7f7de8330000-7f7de8334000 r-xs 0001d000 08:0a 2239282                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/gin-1.5-post-gwt-2.2.jar
+7f7de8334000-7f7de833c000 r-xs 0004a000 08:0a 2239338                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/hibernate-validator-4.2.0.Final-sources.jar
+7f7de833c000-7f7de8345000 r-xs 00051000 08:0a 2242386                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/hibernate-validator-4.2.0.Final.jar
+7f7de8345000-7f7de834e000 r-xs 00095000 08:0a 2239374                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/javassist-3.12.1.GA.jar
+7f7de834e000-7f7de8357000 r-xs 0006d000 08:0a 2242387                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/log4j-1.2.16.jar
+7f7de8357000-7f7de8359000 r-xs 0000a000 08:0a 2239380                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/slf4j-api-1.6.2-sources.jar
+7f7de8359000-7f7de835b000 r-xs 00005000 08:0a 2242388                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/slf4j-api-1.6.2.jar
+7f7de835b000-7f7de835c000 r-xs 00002000 08:0a 2239386                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/slf4j-log4j12-1.6.2-sources.jar
+7f7de835c000-7f7de835d000 r-xs 00002000 08:0a 2242389                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/slf4j-log4j12-1.6.2.jar
+7f7de835d000-7f7de835e000 r-xs 00005000 08:0a 2242437                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-throwingproviders-3.0.jar
+7f7de835e000-7f7de8360000 r-xs 00003000 08:0a 2242435                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-struts2-plugin-3.0.jar
+7f7de8360000-7f7de8362000 r-xs 00001000 08:0a 2242434                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-spring-3.0.jar
+7f7de8362000-7f7de8364000 r-xs 0000e000 08:0a 2242433                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-servlet-3.0.jar
+7f7de8364000-7f7de8366000 r-xs 00005000 08:0a 2242432                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-persist-3.0.jar
+7f7de8366000-7f7de8368000 r-xs 00007000 08:0a 2242431                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-multibindings-3.0.jar
+7f7de8368000-7f7de8369000 r-xs 00001000 08:0a 2242430                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-jndi-3.0.jar
+7f7de8369000-7f7de836b000 r-xs 00001000 08:0a 2242429                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-jmx-3.0.jar
+7f7de836b000-7f7de836d000 r-xs 0000b000 08:0a 2242428                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-grapher-3.0.jar
+7f7de836d000-7f7de836e000 r-xs 00008000 08:0a 2242427                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-assistedinject-3.0.jar
+7f7de836e000-7f7de8370000 r-xs 00000000 08:0a 2242425                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/aopalliance.jar
+7f7de8370000-7f7de8371000 r-xs 00000000 08:0a 2242446                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/javax.inject.jar
+7f7de8371000-7f7de8380000 r-xs 0009f000 08:0a 2242426                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/guice-3.0.jar
+7f7de8380000-7f7de8389000 r-xs 00050000 08:0a 2242448                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/requestfactory-server.jar
+7f7de8389000-7f7de8394000 r-xs 00087000 08:0a 2239346                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/requestfactory-server+src.jar
+7f7de8394000-7f7de8398000 r-xs 00036000 08:0a 2239348                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/requestfactory-server-src.jar
+7f7de8398000-7f7de83a2000 r-xs 0006b000 08:0a 2239272                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/requestfactory-client+src.jar
+7f7de83a2000-7f7de83a9000 r-xs 00041000 08:0a 2239321                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/requestfactory-client.jar
+7f7de83a9000-7f7de83ac000 r-xs 0002a000 08:0a 2239312                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/requestfactory-client-src.jar
+7f7de83ac000-7f7de83af000 r-xs 00014000 08:0a 2239265                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/lib/requestfactory-apt.jar
+7f7de83af000-7f7de83b2000 r-xs 00012000 08:0a 2242445                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/gwt-servlet-deps.jar
+7f7de83b2000-7f7de83b8000 r-xs 0002e000 08:0a 2242447                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/objectify-3.0.1.jar
+7f7de83b8000-7f7de83bc000 r-xs 0005d000 08:0a 2239255                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/visural-common-0.4.3.jar
+7f7de83bc000-7f7de83bf000 r-xs 0001f000 08:0a 2239254                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/visural-common-0.4.3-sources.jar
+7f7de83bf000-7f7de83c8000 r-xs 00084000 08:0a 2239253                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/visural-common-0.4.3-javadoc.jar
+7f7de83c8000-7f7de83c9000 r-xs 00006000 08:0a 421232                     /home/marchewa/gwt/eclipse-jee-indigo/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar
+7f7de83c9000-7f7de83cf000 r-xs 00030000 08:0a 578236                     /home/marchewa/gwt/eclipse-jee-indigo/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705/junit.jar
+7f7de83cf000-7f7de8426000 r-xs 00955000 08:0a 1455155                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/appengine-tools-api.jar
+7f7de8426000-7f7de849d000 r-xs 0121b000 08:0a 1455185                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/appengine-api-1.0-sdk-1.5.4.jar
+7f7de849d000-7f7de8611000 r-xs 0198d000 08:0a 1203673                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.r37v201108301710/gwt-2.4.0/gwt-dev.jar
+7f7de8611000-7f7de86f7000 r-xs 00b59000 08:0a 1203679                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.r37v201108301710/gwt-2.4.0/gwt-user.jar
+7f7de86f7000-7f7de86fa000 ---p 00000000 00:00 0 
+7f7de86fa000-7f7de87f8000 rwxp 00000000 00:00 0 
+7f7de87f8000-7f7de87fb000 ---p 00000000 00:00 0 
+7f7de87fb000-7f7de88f9000 rwxp 00000000 00:00 0 
+7f7de88f9000-7f7de88fc000 ---p 00000000 00:00 0 
+7f7de88fc000-7f7de89fa000 rwxp 00000000 00:00 0 
+7f7de89fa000-7f7de8a06000 r-xp 00000000 08:05 142765                     /lib/x86_64-linux-gnu/libnss_files-2.13.so
+7f7de8a06000-7f7de8c05000 ---p 0000c000 08:05 142765                     /lib/x86_64-linux-gnu/libnss_files-2.13.so
+7f7de8c05000-7f7de8c06000 r-xp 0000b000 08:05 142765                     /lib/x86_64-linux-gnu/libnss_files-2.13.so
+7f7de8c06000-7f7de8c07000 rwxp 0000c000 08:05 142765                     /lib/x86_64-linux-gnu/libnss_files-2.13.so
+7f7de8c07000-7f7de8c08000 r-xs 00000000 08:07 12508                      /var/cache/fontconfig/4794a0821666d79190d59a36cb4f44b5-le64.cache-3
+7f7de8c08000-7f7de8c09000 r-xs 00001000 08:0a 2239209                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/appengine-jsr107cache-1.5.4.jar
+7f7de8c09000-7f7de8c0f000 r-xs 00047000 08:0a 2239211                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/datanucleus-appengine-1.0.9.final.jar
+7f7de8c0f000-7f7de8c11000 r-xs 00012000 08:0a 1455156                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/impl/agent/appengine-agentruntime.jar
+7f7de8c11000-7f7de8c15000 r-xs 000cb000 08:05 436587                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/ext/localedata.jar
+7f7de8c15000-7f7de8c18000 r-xs 00027000 08:05 436585                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/ext/sunjce_provider.jar
+7f7de8c18000-7f7de8c1c000 r-xs 00035000 08:05 436635                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/ext/sunpkcs11.jar
+7f7de8c1c000-7f7de8c36000 r-xs 001be000 08:0a 1455190                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/orm/datanucleus-core-1.1.5.jar
+7f7de8c36000-7f7de8c39000 r-xp 00000000 08:05 436724                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libdt_socket.so
+7f7de8c39000-7f7de8d38000 ---p 00003000 08:05 436724                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libdt_socket.so
+7f7de8d38000-7f7de8d3a000 rwxp 00002000 08:05 436724                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libdt_socket.so
+7f7de8d3a000-7f7de8d3d000 ---p 00000000 00:00 0 
+7f7de8d3d000-7f7de8e3b000 rwxp 00000000 00:00 0 
+7f7de8e3b000-7f7de8e3e000 ---p 00000000 00:00 0 
+7f7de8e3e000-7f7de8f3c000 rwxp 00000000 00:00 0 
+7f7de8f3c000-7f7de8f3f000 ---p 00000000 00:00 0 
+7f7de8f3f000-7f7de903d000 rwxp 00000000 00:00 0 
+7f7de903d000-7f7de903e000 ---p 00000000 00:00 0 
+7f7de903e000-7f7de9441000 rwxp 00000000 00:00 0 
+7f7de9441000-7f7de95d9000 r-xs 03029000 08:05 436863                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/rt.jar
+7f7de95d9000-7f7de95da000 ---p 00000000 00:00 0 
+7f7de95da000-7f7de96da000 rwxp 00000000 00:00 0 
+7f7de96da000-7f7de96db000 ---p 00000000 00:00 0 
+7f7de96db000-7f7de9931000 rwxp 00000000 00:00 0 
+7f7de9931000-7f7de995a000 rwxp 00000000 00:00 0 
+7f7de995a000-7f7de9aaf000 rwxp 00000000 00:00 0 
+7f7de9aaf000-7f7de9b48000 rwxp 00000000 00:00 0 
+7f7de9b48000-7f7de9b5a000 ---p 00000000 00:00 0 
+7f7de9b5a000-7f7de9b7f000 rwxp 00000000 00:00 0 
+7f7de9b7f000-7f7de9c1b000 rwxp 00000000 00:00 0 
+7f7de9c1b000-7f7dea4eb000 rwxp 00000000 00:00 0 
+7f7dea4eb000-7f7decc1b000 rwxp 00000000 00:00 0 
+7f7decc1b000-7f7decc29000 r-xp 00000000 08:05 436761                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libzip.so
+7f7decc29000-7f7decd2b000 ---p 0000e000 08:05 436761                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libzip.so
+7f7decd2b000-7f7decd2e000 rwxp 00010000 08:05 436761                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libzip.so
+7f7decd2e000-7f7decd2f000 rwxp 00000000 00:00 0 
+7f7decd2f000-7f7decd38000 r-xp 00000000 08:05 436752                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libinstrument.so
+7f7decd38000-7f7dece37000 ---p 00009000 08:05 436752                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libinstrument.so
+7f7dece37000-7f7dece39000 rwxp 00008000 08:05 436752                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libinstrument.so
+7f7dece39000-7f7ded1fd000 r-xp 00000000 08:05 2538                       /usr/lib/locale/locale-archive
+7f7ded1fd000-7f7ded200000 r-xp 00000000 08:05 436749                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnpt.so
+7f7ded200000-7f7ded2ff000 ---p 00003000 08:05 436749                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnpt.so
+7f7ded2ff000-7f7ded300000 rwxp 00002000 08:05 436749                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libnpt.so
+7f7ded300000-7f7ded336000 r-xp 00000000 08:05 436748                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libjdwp.so
+7f7ded336000-7f7ded435000 ---p 00036000 08:05 436748                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libjdwp.so
+7f7ded435000-7f7ded43f000 rwxp 00035000 08:05 436748                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libjdwp.so
+7f7ded43f000-7f7ded456000 r-xp 00000000 08:05 142640                     /lib/x86_64-linux-gnu/libnsl-2.13.so
+7f7ded456000-7f7ded655000 ---p 00017000 08:05 142640                     /lib/x86_64-linux-gnu/libnsl-2.13.so
+7f7ded655000-7f7ded656000 r-xp 00016000 08:05 142640                     /lib/x86_64-linux-gnu/libnsl-2.13.so
+7f7ded656000-7f7ded657000 rwxp 00017000 08:05 142640                     /lib/x86_64-linux-gnu/libnsl-2.13.so
+7f7ded657000-7f7ded659000 rwxp 00000000 00:00 0 
+7f7ded659000-7f7ded682000 r-xp 00000000 08:05 436760                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libjava.so
+7f7ded682000-7f7ded781000 ---p 00029000 08:05 436760                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libjava.so
+7f7ded781000-7f7ded788000 rwxp 00028000 08:05 436760                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libjava.so
+7f7ded788000-7f7ded795000 r-xp 00000000 08:05 436738                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libverify.so
+7f7ded795000-7f7ded894000 ---p 0000d000 08:05 436738                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libverify.so
+7f7ded894000-7f7ded897000 rwxp 0000c000 08:05 436738                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/libverify.so
+7f7ded897000-7f7ded89e000 r-xp 00000000 08:05 143036                     /lib/x86_64-linux-gnu/librt-2.13.so
+7f7ded89e000-7f7deda9d000 ---p 00007000 08:05 143036                     /lib/x86_64-linux-gnu/librt-2.13.so
+7f7deda9d000-7f7deda9e000 r-xp 00006000 08:05 143036                     /lib/x86_64-linux-gnu/librt-2.13.so
+7f7deda9e000-7f7deda9f000 rwxp 00007000 08:05 143036                     /lib/x86_64-linux-gnu/librt-2.13.so
+7f7deda9f000-7f7dedaa2000 ---p 00000000 00:00 0 
+7f7dedaa2000-7f7dedba0000 rwxp 00000000 00:00 0 
+7f7dedba0000-7f7dedc24000 r-xp 00000000 08:05 142403                     /lib/x86_64-linux-gnu/libm-2.13.so
+7f7dedc24000-7f7dede23000 ---p 00084000 08:05 142403                     /lib/x86_64-linux-gnu/libm-2.13.so
+7f7dede23000-7f7dede24000 r-xp 00083000 08:05 142403                     /lib/x86_64-linux-gnu/libm-2.13.so
+7f7dede24000-7f7dede25000 rwxp 00084000 08:05 142403                     /lib/x86_64-linux-gnu/libm-2.13.so
+7f7dede25000-7f7dee73f000 r-xp 00000000 08:05 436764                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/server/libjvm.so
+7f7dee73f000-7f7dee841000 ---p 0091a000 08:05 436764                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/server/libjvm.so
+7f7dee841000-7f7dee9f6000 rwxp 0091c000 08:05 436764                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/server/libjvm.so
+7f7dee9f6000-7f7deea30000 rwxp 00000000 00:00 0 
+7f7deea30000-7f7deebba000 r-xp 00000000 08:05 142335                     /lib/x86_64-linux-gnu/libc-2.13.so
+7f7deebba000-7f7deedb9000 ---p 0018a000 08:05 142335                     /lib/x86_64-linux-gnu/libc-2.13.so
+7f7deedb9000-7f7deedbd000 r-xp 00189000 08:05 142335                     /lib/x86_64-linux-gnu/libc-2.13.so
+7f7deedbd000-7f7deedbe000 rwxp 0018d000 08:05 142335                     /lib/x86_64-linux-gnu/libc-2.13.so
+7f7deedbe000-7f7deedc4000 rwxp 00000000 00:00 0 
+7f7deedc4000-7f7deedc6000 r-xp 00000000 08:05 142401                     /lib/x86_64-linux-gnu/libdl-2.13.so
+7f7deedc6000-7f7deefc6000 ---p 00002000 08:05 142401                     /lib/x86_64-linux-gnu/libdl-2.13.so
+7f7deefc6000-7f7deefc7000 r-xp 00002000 08:05 142401                     /lib/x86_64-linux-gnu/libdl-2.13.so
+7f7deefc7000-7f7deefc8000 rwxp 00003000 08:05 142401                     /lib/x86_64-linux-gnu/libdl-2.13.so
+7f7deefc8000-7f7deefe0000 r-xp 00000000 08:05 142774                     /lib/x86_64-linux-gnu/libpthread-2.13.so
+7f7deefe0000-7f7def1e0000 ---p 00018000 08:05 142774                     /lib/x86_64-linux-gnu/libpthread-2.13.so
+7f7def1e0000-7f7def1e1000 r-xp 00018000 08:05 142774                     /lib/x86_64-linux-gnu/libpthread-2.13.so
+7f7def1e1000-7f7def1e2000 rwxp 00019000 08:05 142774                     /lib/x86_64-linux-gnu/libpthread-2.13.so
+7f7def1e2000-7f7def1e6000 rwxp 00000000 00:00 0 
+7f7def1e6000-7f7def207000 r-xp 00000000 08:05 142326                     /lib/x86_64-linux-gnu/ld-2.13.so
+7f7def207000-7f7def208000 r-xs 00003000 08:0a 2239218                    /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
+7f7def208000-7f7def209000 r-xs 00001000 08:0a 1455188                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/jsr107cache-1.1.jar
+7f7def209000-7f7def214000 r-xs 001bd000 08:0a 1455186                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/appengine-api-labs-1.5.4.jar
+7f7def214000-7f7def21a000 r-xs 0002a000 08:0a 1455194                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/orm/jdo2-api-2.3-eb.jar
+7f7def21a000-7f7def21d000 r-xs 0000a000 08:0a 1455192                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/orm/geronimo-jpa_3.0_spec-1.1.1.jar
+7f7def21d000-7f7def221000 r-xs 00022000 08:0a 1455191                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/orm/datanucleus-jpa-1.1.5.jar
+7f7def221000-7f7def235000 r-xs 0012e000 08:0a 1455167                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/jsp/repackaged-appengine-ant-1.7.1.jar
+7f7def235000-7f7def292000 rwxp 00000000 00:00 0 
+7f7def292000-7f7def2c7000 r-xs 00000000 08:07 4200                       /var/cache/nscd/passwd
+7f7def2c7000-7f7def2ca000 rwxp 00000000 00:00 0 
+7f7def2ca000-7f7def2d1000 r-xp 00000000 08:05 436735                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/jli/libjli.so
+7f7def2d1000-7f7def3d2000 ---p 00007000 08:05 436735                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/jli/libjli.so
+7f7def3d2000-7f7def3d4000 rwxp 00008000 08:05 436735                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/jli/libjli.so
+7f7def3d4000-7f7def3d5000 rwxp 00000000 00:00 0 
+7f7def3d5000-7f7def3d7000 r-xs 00001000 08:05 436586                     /usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/ext/dnsns.jar
+7f7def3d7000-7f7def3d8000 r-xs 00003000 08:0a 1455193                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/orm/geronimo-jta_1.1_spec-1.1.1.jar
+7f7def3d8000-7f7def3de000 r-xs 00047000 08:0a 1455189                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/orm/datanucleus-appengine-1.0.9.final.jar
+7f7def3de000-7f7def3df000 r-xs 00001000 08:0a 1455187                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/user/appengine-jsr107cache-1.5.4.jar
+7f7def3df000-7f7def3e2000 r-xs 0005f000 08:0a 1455163                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/appengine-local-runtime-shared.jar
+7f7def3e2000-7f7def3e4000 r-xs 00019000 08:0a 1455170                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/jsp/repackaged-appengine-jasper-el-6.0.29.jar
+7f7def3e4000-7f7def3ec000 r-xs 0007b000 08:0a 1455169                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/jsp/repackaged-appengine-jasper-6.0.29.jar
+7f7def3ec000-7f7def3ed000 r-xs 00006000 08:0a 1455171                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/jsp/repackaged-appengine-tomcat-juli-6.0.29.jar
+7f7def3ed000-7f7def3ef000 r-xs 00002000 08:0a 1455168                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/jsp/repackaged-appengine-ant-launcher-1.7.1.jar
+7f7def3ef000-7f7def3f1000 r-xs 00014000 08:0a 1455172                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/servlet-api.jar
+7f7def3f1000-7f7def3f3000 r-xs 00011000 08:0a 1455165                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/jsp-api.jar
+7f7def3f3000-7f7def3f5000 r-xs 00006000 08:0a 1455164                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/shared/el-api.jar
+7f7def3f5000-7f7def3f8000 r-xs 00009000 08:0a 1203691                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.r37v201108301710/gwt-2.4.0/validation-api-1.0.0.GA.jar
+7f7def3f8000-7f7def3fa000 r-xs 0000e000 08:0a 1203690                    /home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.gwt.eclipse.sdkbundle_2.4.0.r37v201108301710/gwt-2.4.0/validation-api-1.0.0.GA-sources.jar
+7f7def3fa000-7f7def402000 rwxs 00000000 08:09 711315                     /tmp/hsperfdata_marchewa/11961
+7f7def402000-7f7def403000 rwxp 00000000 00:00 0 
+7f7def403000-7f7def404000 r-xp 00000000 00:00 0 
+7f7def404000-7f7def406000 rwxp 00000000 00:00 0 
+7f7def406000-7f7def407000 r-xp 00020000 08:05 142326                     /lib/x86_64-linux-gnu/ld-2.13.so
+7f7def407000-7f7def409000 rwxp 00021000 08:05 142326                     /lib/x86_64-linux-gnu/ld-2.13.so
+7fff00165000-7fff00189000 rwxp 00000000 00:00 0                          [stack]
+7fff001ff000-7fff00200000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:45803 -javaagent:/home/marchewa/gwt/eclipse-jee-indigo/plugins/com.google.appengine.eclipse.sdkbundle_1.5.4.r37v201109211906/appengine-java-sdk-1.5.4/lib/agent/appengine-agent.jar -Xmx1024m -Dfile.encoding=UTF-8 
+java_command: com.google.gwt.dev.DevMode -startupUrl Rozlicz2Application.html -war /home/marchewa/3made/realizacje/rozlicz2/workspace/Rozlicz2Application/war -remoteUI 54803:104486993815304 -logLevel INFO -codeServerPort 9997 -port 8888 -server com.google.appengine.tools.development.gwt.AppEngineLauncher com.rozlicz2.application.Rozlicz2Application
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/usr/lib/jvm/java-6-sun/
+PATH=/home/marchewa/app/apache-maven-3.0-beta-2/bin::/home/marchewa/.rvm/gems/ruby-1.8.7-p334/bin:/home/marchewa/.rvm/gems/ruby-1.8.7-p334@global/bin:/home/marchewa/.rvm/rubies/ruby-1.8.7-p334/bin:/home/marchewa/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/home/marchewa/android/android-sdk/tools:/home/marchewa/Temporary/depot_tools:/home/marchewa/android/cyanogenmod/bin:/home/marchewa/usr/bin:/home/marchewa/roo/tools/gwt-2.1.0.M1/bin:/home/marchewa/hadoop/hadoop-0.21.0/bin:/home/marchewa/gwt/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.3.0.r36v201105191508/gwt-2.3.0/:/home/marchewa/android/android-sdk/platform-tools:/home/marchewa/linux/napisy
+USERNAME=marchewa
+LD_LIBRARY_PATH=/usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64/server:/usr/lib/jvm/java-6-sun-1.6.0.26/jre/lib/amd64:/usr/lib/jvm/java-6-sun-1.6.0.26/jre/../lib/amd64:/lib::/home/marchewa/usr/lib
+SHELL=/bin/bash
+DISPLAY=:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x85f800], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x85f800], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x70e300], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: [libjvm.so+0x70e300], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGXFSZ: [libjvm.so+0x70e300], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x70e300], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x711110], sa_mask[0]=0x00000004, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x710d10], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: [libjvm.so+0x710d10], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTERM: [libjvm.so+0x710d10], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGQUIT: [libjvm.so+0x710d10], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:squeeze/sid
+
+uname:Linux 2.6.38-11-generic #50-Ubuntu SMP Mon Sep 12 21:17:25 UTC 2011 x86_64
+libc:glibc 2.13 NPTL 2.13 
+rlimit: STACK 8192k, CORE 0k, NPROC infinity, NOFILE 4096, AS infinity
+load average:0,73 0,62 0,63
+
+/proc/meminfo:
+MemTotal:        4049952 kB
+MemFree:           92744 kB
+Buffers:          205668 kB
+Cached:           378620 kB
+SwapCached:       186752 kB
+Active:          2373336 kB
+Inactive:        1117520 kB
+Active(anon):    2140872 kB
+Inactive(anon):   883020 kB
+Active(file):     232464 kB
+Inactive(file):   234500 kB
+Unevictable:          48 kB
+Mlocked:              48 kB
+SwapTotal:       4297352 kB
+SwapFree:        3206732 kB
+Dirty:              1912 kB
+Writeback:             0 kB
+AnonPages:       2823432 kB
+Mapped:            67052 kB
+Shmem:            117304 kB
+Slab:             250584 kB
+SReclaimable:     212572 kB
+SUnreclaim:        38012 kB
+KernelStack:        5680 kB
+PageTables:        66244 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     6322328 kB
+Committed_AS:    7901616 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:      564736 kB
+VmallocChunk:   34359109032 kB
+HardwareCorrupted:     0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:       99136 kB
+DirectMap2M:     4085760 kB
+
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 6 model 15 stepping 13, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Duo CPU     T5870  @ 2.00GHz
+stepping	: 13
+cpu MHz		: 2000.000
+cache size	: 2048 KB
+physical id	: 0
+siblings	: 2
+core id		: 0
+cpu cores	: 2
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx lm constant_tsc arch_perfmon pebs bts rep_good nopl aperfmperf pni dtes64 monitor ds_cpl est tm2 ssse3 cx16 xtpr pdcm lahf_lm ida dts
+bogomips	: 3989.84
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+processor	: 1
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 15
+model name	: Intel(R) Core(TM)2 Duo CPU     T5870  @ 2.00GHz
+stepping	: 13
+cpu MHz		: 1200.000
+cache size	: 2048 KB
+physical id	: 0
+siblings	: 2
+core id		: 1
+cpu cores	: 2
+apicid		: 1
+initial apicid	: 1
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 10
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx lm constant_tsc arch_perfmon pebs bts rep_good nopl aperfmperf pni dtes64 monitor ds_cpl est tm2 ssse3 cx16 xtpr pdcm lahf_lm ida dts
+bogomips	: 3990.03
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 36 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 4049952k(92744k free), swap 4297352k(3206732k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (20.1-b02) for linux-amd64 JRE (1.6.0_26-b03), built on May  4 2011 01:13:47 by "java_re" with gcc 3.2.2 (SuSE Linux)
+
+time: Wed Oct  5 10:38:06 2011
+elapsed time: 727 seconds
+

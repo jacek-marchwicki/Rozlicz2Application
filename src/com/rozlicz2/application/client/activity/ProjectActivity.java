@@ -27,6 +27,7 @@ import com.rozlicz2.application.shared.entity.Expense.PaymentOption;
 import com.rozlicz2.application.shared.proxy.ExpenseConsumerEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpensePaymentEntityProxy;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
+import com.rozlicz2.application.shared.proxy.ParticipantEntityProxy;
 import com.rozlicz2.application.shared.proxy.ProjectProxy;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ExpenseRequestContext;
@@ -55,8 +56,8 @@ public class ProjectActivity extends AbstractActivity implements
 		ExpenseProxy expense = expenseRequest.create(ExpenseProxy.class);
 		expense.setId(IdGenerator.nextId());
 		expense.setName(ApplicationConstants.constants.newExpense());
-		expense.setPayments(new ArrayList<ExpensePaymentEntityProxy>());
-		expense.setConsumers(new ArrayList<ExpenseConsumerEntityProxy>());
+		expense.setPayments(getEmptyExpensePayment(expenseRequest));
+		expense.setConsumers(getEmptyExpenseConsumer(expenseRequest));
 		expense.setProjectId(place.getProjectId());
 		expense.setPaymentOption(PaymentOption.EVERYBODY);
 		expenseRequest.uSave(expense).fire();
@@ -76,7 +77,7 @@ public class ProjectActivity extends AbstractActivity implements
 	}
 
 	private void findProjectById(final EventBus eventBus) {
-		rf.getProjectRequest().uFind(place.getProjectId())
+		rf.getProjectRequest().uFind(place.getProjectId()).with("participants")
 				.fire(new Receiver<ProjectProxy>() {
 
 					@Override
@@ -100,6 +101,36 @@ public class ProjectActivity extends AbstractActivity implements
 						eventBus.fireEvent(event);
 					}
 				});
+	}
+
+	public List<ExpenseConsumerEntityProxy> getEmptyExpenseConsumer(
+			ExpenseRequestContext expenseRequest) {
+		ArrayList<ExpenseConsumerEntityProxy> list = new ArrayList<ExpenseConsumerEntityProxy>();
+		for (ParticipantEntityProxy participant : project.getParticipants()) {
+			ExpenseConsumerEntityProxy consumer = expenseRequest
+					.create(ExpenseConsumerEntityProxy.class);
+			consumer.setId(participant.getId());
+			consumer.setName(participant.getName());
+			consumer.setConsumer(true);
+			consumer.setProportional(true);
+			consumer.setValue(0.0);
+			list.add(consumer);
+		}
+		return list;
+	}
+
+	public List<ExpensePaymentEntityProxy> getEmptyExpensePayment(
+			ExpenseRequestContext expenseRequest) {
+		ArrayList<ExpensePaymentEntityProxy> list = new ArrayList<ExpensePaymentEntityProxy>();
+		for (ParticipantEntityProxy participant : project.getParticipants()) {
+			ExpensePaymentEntityProxy payment = expenseRequest
+					.create(ExpensePaymentEntityProxy.class);
+			payment.setId(participant.getId());
+			payment.setName(participant.getName());
+			payment.setValue(0.0);
+			list.add(payment);
+		}
+		return list;
 	}
 
 	@Override

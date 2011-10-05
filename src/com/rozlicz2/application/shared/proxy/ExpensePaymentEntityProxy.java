@@ -19,5 +19,9 @@ public interface ExpensePaymentEntityProxy extends ValueProxy {
 	@Min(value = 0, message = "{custom.expense.payment.not.null}")
 	Double getValue();
 
+	void setId(String id);
+
+	void setName(String name);
+
 	void setValue(Double value);
 }
