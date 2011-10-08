@@ -59,6 +59,10 @@
 			margin: 0 auto;
 		}
 		
+		.gravatarImage {
+			vertical-align: middle;
+		}
+		
 		.content {
 			background: #ffffff;
 			padding: 1em 0 2em 0;
@@ -109,6 +113,7 @@
 	<g:HTMLPanel>
 		<div class="{style.h1h1}">
 			<div class="{style.h1h2}">
+				<g:Image ui:field="gravatarImage" styleName="{style.gravatarImage}"></g:Image>
 				<g:Label ui:field="emailLabel" styleName="{style.emailLabel}"></g:Label>
 				<g:Anchor styleName="{style.logoutAnchor}" href="/logout"
 					text="{i18n.logout}"></g:Anchor>

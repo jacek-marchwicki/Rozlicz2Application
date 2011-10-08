@@ -5,10 +5,12 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.rozlicz2.application.client.tools.MD5Util;
 
 public class DashboardViewImpl extends Composite implements DashboardView {
 
@@ -33,6 +35,9 @@ public class DashboardViewImpl extends Composite implements DashboardView {
 	SimplePanel errorPanel;
 
 	@UiField
+	Image gravatarImage;
+
+	@UiField
 	SimplePanel popupWidget;
 
 	@Inject
@@ -42,6 +47,10 @@ public class DashboardViewImpl extends Composite implements DashboardView {
 		String email = getUserEmailFromHtml();
 		assert email != null;
 		emailLabel.setText(email);
+
+		String gravatarImageUrl = getUserGravatarImageUrl(email, 24);
+		gravatarImage.setUrl(gravatarImageUrl);
+
 	}
 
 	@Override
@@ -57,5 +66,14 @@ public class DashboardViewImpl extends Composite implements DashboardView {
 	@Override
 	public AcceptsOneWidget getPopupWidget() {
 		return popupWidget;
+	}
+
+	private String getUserGravatarImageUrl(String email, int size) {
+
+		String hash = MD5Util.md5Hex(email);
+		String url = "http://www.gravatar.com/avatar/" + hash + "?s=" + size;
+
+		return url;
+
 	}
 }
