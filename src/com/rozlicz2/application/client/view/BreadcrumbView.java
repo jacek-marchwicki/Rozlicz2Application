@@ -15,13 +15,20 @@ public class BreadcrumbView extends Composite {
 			.create(BreadcrumbViewUiBinder.class);
 
 	@UiField
-	Label activityNameLabel;
+	Label activityLabel;
+
+	@UiField
+	Label previousLabel;
 
 	public BreadcrumbView() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	public void setName(String name) {
-		activityNameLabel.setText(name);
+		activityLabel.setText(name);
+	}
+
+	public void setPreviousLabel(String name) {
+		previousLabel.setText("<< " + name);
 	}
 }

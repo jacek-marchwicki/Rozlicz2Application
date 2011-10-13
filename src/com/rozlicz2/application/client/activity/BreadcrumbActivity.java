@@ -52,6 +52,7 @@ public class BreadcrumbActivity extends AbstractActivity {
 		if (place instanceof ProjectPlace) {
 			view.setName("Current project"
 					+ ((ProjectPlace) place).getProjectId());
+			view.setPreviousLabel("Projects list");
 		} else {
 			view.setName("Not yet defined");
 		}

@@ -5,6 +5,7 @@
 		
 	</ui:style>
 	<g:HTMLPanel>
-	<g:Label ui:field="activityNameLabel"></g:Label>
+		<g:Label ui:field="previousLabel"></g:Label>
+		<g:Label ui:field="activityLabel"></g:Label>
 	</g:HTMLPanel>
 </ui:UiBinder> 
