@@ -170,7 +170,9 @@ public class ProjectActivity extends AbstractActivity implements
 		if (requestContext.isChanged()) {
 			saveContext = null;
 			requestContext.fire();
-			projectChanged(project);
+			ProjectChangedEvent projectChangedEvent = new ProjectChangedEvent(
+					project);
+			childEventBus.fireEvent(projectChangedEvent);
 		}
 
 	}

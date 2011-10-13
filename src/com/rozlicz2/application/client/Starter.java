@@ -9,9 +9,11 @@ import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.rozlicz2.application.client.activity.BreadcrumbActivity;
 import com.rozlicz2.application.client.activity.ErrorActivity;
 import com.rozlicz2.application.client.mvp.AppActivityMapper;
 import com.rozlicz2.application.client.mvp.AppPlaceHistoryMapper;
+import com.rozlicz2.application.client.mvp.BreadcrumbActivityMapper;
 import com.rozlicz2.application.client.mvp.PopupActivityMapper;
 import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.client.view.DashboardView;
@@ -29,7 +31,9 @@ public class Starter {
 			AppActivityMapper appActivityMapper,
 			AppPlaceHistoryMapper historyMapper,
 			UncaughtExceptionHandler uncaughtExceptionHandler,
-			ErrorActivity errorActivity, DashboardView dashboard) {
+			ErrorActivity errorActivity, DashboardView dashboard,
+			BreadcrumbActivity breadcrumbActivity,
+			BreadcrumbActivityMapper breadcrumbActivityMapper) {
 
 		this.dashboard = dashboard;
 		rf.initialize(eventBus);
@@ -41,12 +45,14 @@ public class Starter {
 
 		ActivityManager activityManager = new ActivityManager(
 				appActivityMapper, eventBus);
-
+		ActivityManager breadcrumbManager = new ActivityManager(
+				breadcrumbActivityMapper, eventBus);
 		historyHandler = new PlaceHistoryHandler(historyMapper);
 		historyHandler.register(placeController, eventBus, defaultPlace);
 
 		popupActivityManager.setDisplay(dashboard.getPopupWidget());
 		activityManager.setDisplay(dashboard.getAppWidget());
+		breadcrumbManager.setDisplay(dashboard.getBreadcrumbPanel());
 		errorActivity.start(dashboard.getErrorPanel(), null);
 	}
 

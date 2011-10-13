@@ -107,6 +107,7 @@
 			</g:InlineHyperlink>
 		</div>
 		<div class="{style.content}">
+			<g:SimplePanel ui:field="breadcrumbPanel"></g:SimplePanel>
 			<g:SimplePanel ui:field="appWidget"></g:SimplePanel>
 		</div>
 		<g:SimplePanel ui:field="popupWidget"></g:SimplePanel>

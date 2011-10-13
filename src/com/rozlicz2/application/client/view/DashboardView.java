@@ -7,6 +7,8 @@ public interface DashboardView extends IsWidget {
 
 	public AcceptsOneWidget getAppWidget();
 
+	public AcceptsOneWidget getBreadcrumbPanel();
+
 	public AcceptsOneWidget getErrorPanel();
 
 	public AcceptsOneWidget getPopupWidget();

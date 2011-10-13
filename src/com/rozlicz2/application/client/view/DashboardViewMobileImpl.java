@@ -26,6 +26,9 @@ public class DashboardViewMobileImpl extends Composite implements DashboardView 
 	SimplePanel appWidget;
 
 	@UiField
+	SimplePanel breadcrumbPanel;
+
+	@UiField
 	Label emailLabel;
 
 	@UiField
@@ -45,6 +48,11 @@ public class DashboardViewMobileImpl extends Composite implements DashboardView 
 	@Override
 	public AcceptsOneWidget getAppWidget() {
 		return appWidget;
+	}
+
+	@Override
+	public AcceptsOneWidget getBreadcrumbPanel() {
+		return breadcrumbPanel;
 	}
 
 	@Override
