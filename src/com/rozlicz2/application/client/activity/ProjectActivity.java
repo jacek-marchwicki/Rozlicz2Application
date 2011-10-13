@@ -110,6 +110,8 @@ public class ProjectActivity extends AbstractActivity implements
 	public List<ExpenseConsumerEntityProxy> getEmptyExpenseConsumer(
 			ExpenseRequestContext expenseRequest) {
 		ArrayList<ExpenseConsumerEntityProxy> list = new ArrayList<ExpenseConsumerEntityProxy>();
+		if (project.getParticipants() == null)
+			return list;
 		for (ParticipantEntityProxy participant : project.getParticipants()) {
 			ExpenseConsumerEntityProxy consumer = expenseRequest
 					.create(ExpenseConsumerEntityProxy.class);
@@ -126,6 +128,8 @@ public class ProjectActivity extends AbstractActivity implements
 	public List<ExpensePaymentEntityProxy> getEmptyExpensePayment(
 			ExpenseRequestContext expenseRequest) {
 		ArrayList<ExpensePaymentEntityProxy> list = new ArrayList<ExpensePaymentEntityProxy>();
+		if (project.getParticipants() == null)
+			return list;
 		for (ParticipantEntityProxy participant : project.getParticipants()) {
 			ExpensePaymentEntityProxy payment = expenseRequest
 					.create(ExpensePaymentEntityProxy.class);
