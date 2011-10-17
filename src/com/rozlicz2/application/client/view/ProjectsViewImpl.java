@@ -47,6 +47,7 @@ public class ProjectsViewImpl extends Composite implements ProjectsView {
 			if (value != null) {
 				String name = value.getName();
 				Double sum = value.getSum();
+				// TODO sum is NULL
 				SafeHtml sumString = LocalizedMessages.messages.price(sum);
 				sb.append(template.productCellTemplate(name, sumString));
 			}

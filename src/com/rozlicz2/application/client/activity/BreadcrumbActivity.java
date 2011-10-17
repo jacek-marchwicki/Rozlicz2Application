@@ -7,7 +7,9 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.ResettableEventBus;
 import com.rozlicz2.application.client.event.ProjectChangedEvent;
+import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.ProjectPlace;
+import com.rozlicz2.application.client.place.ProjectsPlace;
 import com.rozlicz2.application.client.view.BreadcrumbView;
 
 public class BreadcrumbActivity extends AbstractActivity {
@@ -45,19 +47,27 @@ public class BreadcrumbActivity extends AbstractActivity {
 
 					@Override
 					public void onProjectChanged(ProjectChangedEvent event) {
-						view.setName("xyz:" + event.getProject().getName());
+						view.changeLastBreadcrumbItemName(event.getProject()
+								.getName());
 					}
 				});
-		// TODO Auto-generated method stub
+
 		if (place instanceof ProjectPlace) {
-			view.setName("Current project"
-					+ ((ProjectPlace) place).getProjectId());
-			view.setPreviousLabel("Projects list");
+			view.addBreadcrumbItem("Projects");
+			view.addBreadcrumbItem("Project");
+		} else if (place instanceof ProjectsPlace) {
+			view.addBreadcrumbItem("Projects");
+		} else if (place instanceof ExpensePlace) {
+			view.addBreadcrumbItem("Projects");
+			view.addBreadcrumbItem("Project");
+			// TODO change Project into it's name
+			view.addBreadcrumbItem("Expense");
+			// TODO Handler for expenseChanged
 		} else {
-			view.setName("Not yet defined");
+			view.addBreadcrumbItem("Please define me in breadcrumbActivity.java!");
+
 		}
 		panel.setWidget(view);
 
 	}
-
 }
