@@ -9,6 +9,10 @@ import com.google.gwt.resources.client.TextResource;
 
 public interface ApplicationResources extends ClientBundle {
 	interface ApplicationCss extends CssResource {
+		String breadcrumbClass();
+
+		String brItemClass();
+
 		String clearClass();
 
 		String editableWidgetLabelError();
@@ -36,6 +40,8 @@ public interface ApplicationResources extends ClientBundle {
 		String fullScreenClass();
 
 		String grayBackgroundClass();
+
+		String homeClass();
 
 		String labelClass();
 

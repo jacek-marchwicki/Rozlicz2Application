@@ -234,3 +234,26 @@ h1,h2,h3 {
 	background: #F5F5F5;
 	padding: 10px;
 }
+
+		.brItemClass {
+			float: left;
+			background: url("images/left_arrow.gif") no-repeat;
+			padding-left: 20px;
+			background-position: center left;	
+			margin-left: 10px;
+		}
+				
+		.homeClass {
+			float: left;
+			background: url("images/home.gif") no-repeat;
+			background-position: center left;	
+			padding-left: 25px;
+		}
+		
+		.breadcrumbClass {
+			border-bottom: 1px dotted lightGray;
+			padding-bottom: 2px;
+			height: 1.2em;
+			padding-bottom: 2px;	
+			
+		}	
