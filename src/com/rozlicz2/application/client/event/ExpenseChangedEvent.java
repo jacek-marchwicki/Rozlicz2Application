@@ -5,13 +5,12 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
 
 public class ExpenseChangedEvent extends GwtEvent<ExpenseChangedEvent.Handler> {
+
 	public interface Handler extends EventHandler {
-
-		void onChange(ExpenseChangedEvent expenseChangedEvent);
-
+		void onExpenseChange(ExpenseChangedEvent expenseChangedEvent);
 	}
 
-	public static final Type<Handler> TYPE = new Type<ExpenseChangedEvent.Handler>();
+	public final static Type<Handler> TYPE = new Type<ExpenseChangedEvent.Handler>();
 	private final ExpenseProxy readOnlyExpense;
 
 	public ExpenseChangedEvent(ExpenseProxy readOnlyExpense) {
@@ -20,7 +19,7 @@ public class ExpenseChangedEvent extends GwtEvent<ExpenseChangedEvent.Handler> {
 
 	@Override
 	protected void dispatch(Handler handler) {
-		handler.onChange(this);
+		handler.onExpenseChange(this);
 	}
 
 	@Override

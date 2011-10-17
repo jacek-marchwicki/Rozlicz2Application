@@ -144,7 +144,7 @@ public class ExpenseActivity extends AbstractActivity implements
 				new ExpenseChangedEvent.Handler() {
 
 					@Override
-					public void onChange(ExpenseChangedEvent expenseChangedEvent) {
+					public void onExpenseChange(ExpenseChangedEvent expenseChangedEvent) {
 						ExpenseProxy readOnlyExpense = expenseChangedEvent
 								.getReadOnlyExpense();
 						if (!(place.getExpenseId().equals(readOnlyExpense
