@@ -18,13 +18,16 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.rozlicz2.application.client.event.ExpenseChangedEvent;
+import com.rozlicz2.application.client.event.ProjectChangedEvent;
 import com.rozlicz2.application.client.place.AddParticipantPlace;
 import com.rozlicz2.application.client.place.ExpensePlace;
 import com.rozlicz2.application.client.place.NotFoundPlace;
 import com.rozlicz2.application.client.view.ExpenseView;
 import com.rozlicz2.application.shared.proxy.ExpenseProxy;
+import com.rozlicz2.application.shared.proxy.ProjectProxy;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory;
 import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ExpenseRequestContext;
+import com.rozlicz2.application.shared.service.ListwidgetRequestFactory.ProjectRequestContext;
 
 public class ExpenseActivity extends AbstractActivity implements
 		ExpenseView.Presenter {
@@ -65,8 +68,10 @@ public class ExpenseActivity extends AbstractActivity implements
 	}
 
 	private void getExpenseById(final EventBus eventBus, String expenseId) {
-		rf.getExpenseRequest().uFind(expenseId).with("payments", "consumers")
-				.fire(new Receiver<ExpenseProxy>() {
+		ExpenseRequestContext expenseRequest = rf.getExpenseRequest();
+
+		expenseRequest.uFind(expenseId).with("payments", "consumers")
+				.to(new Receiver<ExpenseProxy>() {
 
 					@Override
 					public void onSuccess(ExpenseProxy response) {
@@ -77,9 +82,31 @@ public class ExpenseActivity extends AbstractActivity implements
 						ExpenseChangedEvent event = new ExpenseChangedEvent(
 								response);
 						eventBus.fireEvent(event);
+
+						getProjectById(eventBus, response.getProjectId());
 					}
 
 				});
+		expenseRequest.fire();
+	}
+
+	private void getProjectById(final EventBus eventBus, String projectId) {
+		ProjectRequestContext projectRequest = rf.getProjectRequest();
+
+		projectRequest.uFind(projectId).with("participants")
+				.to(new Receiver<ProjectProxy>() {
+
+					@Override
+					public void onSuccess(ProjectProxy response) {
+						if (response == null) {
+							placeController.goTo(new NotFoundPlace());
+						}
+						ProjectChangedEvent projectChangedEvent = new ProjectChangedEvent(
+								response);
+						eventBus.fireEvent(projectChangedEvent);
+					}
+				});
+		projectRequest.fire();
 	}
 
 	private void notFoundPlace() {
@@ -109,6 +136,8 @@ public class ExpenseActivity extends AbstractActivity implements
 			saveContext = null;
 			requestContext.fire();
 			expenseChanged(expense);
+			ExpenseChangedEvent event = new ExpenseChangedEvent(expense);
+			eventBus.fireEvent(event);
 		}
 	}
 
@@ -144,7 +173,8 @@ public class ExpenseActivity extends AbstractActivity implements
 				new ExpenseChangedEvent.Handler() {
 
 					@Override
-					public void onExpenseChange(ExpenseChangedEvent expenseChangedEvent) {
+					public void onExpenseChange(
+							ExpenseChangedEvent expenseChangedEvent) {
 						ExpenseProxy readOnlyExpense = expenseChangedEvent
 								.getReadOnlyExpense();
 						if (!(place.getExpenseId().equals(readOnlyExpense

@@ -4,6 +4,8 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
 import com.rozlicz2.application.client.view.AddParticipantView;
 import com.rozlicz2.application.client.view.AddParticipantViewImpl;
+import com.rozlicz2.application.client.view.BreadcrumbView;
+import com.rozlicz2.application.client.view.BreadcrumbViewImpl;
 import com.rozlicz2.application.client.view.DashboardView;
 import com.rozlicz2.application.client.view.DashboardViewImpl;
 import com.rozlicz2.application.client.view.ErrorView;
@@ -29,6 +31,8 @@ public class AppViewsModule extends AbstractGinModule {
 		bind(ProjectsView.class).to(ProjectsViewImpl.class).in(Singleton.class);
 		bind(ErrorView.class).to(ErrorViewImpl.class).in(Singleton.class);
 		bind(DashboardView.class).to(DashboardViewImpl.class).in(
+				Singleton.class);
+		bind(BreadcrumbView.class).to(BreadcrumbViewImpl.class).in(
 				Singleton.class);
 	}
 }
