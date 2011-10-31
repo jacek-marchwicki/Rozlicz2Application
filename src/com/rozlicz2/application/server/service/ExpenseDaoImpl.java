@@ -169,8 +169,10 @@ public class ExpenseDaoImpl extends ObjectifyDao<Expense> implements ExpenseDao 
 	private double updateExpenseParticipants(Expense expense,
 			List<ParticipantEntity> participants) {
 		Map<String, ParticipantEntity> participantsMap = new HashMap<String, ParticipantEntity>();
-		for (ParticipantEntity participant : participants) {
-			participantsMap.put(participant.getId(), participant);
+		if (participants != null) {
+			for (ParticipantEntity participant : participants) {
+				participantsMap.put(participant.getId(), participant);
+			}
 		}
 		Map<String, Boolean> ids = new HashMap<String, Boolean>();
 		List<ExpenseConsumerEntity> oldConsumers = expense.getConsumers();
@@ -184,17 +186,19 @@ public class ExpenseDaoImpl extends ObjectifyDao<Expense> implements ExpenseDao 
 			newConsumers.add(oldConsumer);
 			ids.put(oldConsumer.getId(), new Boolean(true));
 		}
-		for (ParticipantEntity participant : participants) {
-			Boolean isInBase = ids.get(participant.getId());
-			if (isInBase != null)
-				continue;
-			ExpenseConsumerEntity consumer = new ExpenseConsumerEntity();
-			consumer.setId(participant.getId());
-			consumer.setName(participant.getName());
-			consumer.setProportional(true);
-			consumer.setConsumer(false);
-			consumer.setValue(0.0);
-			newConsumers.add(consumer);
+		if (participants != null) {
+			for (ParticipantEntity participant : participants) {
+				Boolean isInBase = ids.get(participant.getId());
+				if (isInBase != null)
+					continue;
+				ExpenseConsumerEntity consumer = new ExpenseConsumerEntity();
+				consumer.setId(participant.getId());
+				consumer.setName(participant.getName());
+				consumer.setProportional(true);
+				consumer.setConsumer(false);
+				consumer.setValue(0.0);
+				newConsumers.add(consumer);
+			}
 		}
 		expense.setConsumers(newConsumers);
 
@@ -210,15 +214,17 @@ public class ExpenseDaoImpl extends ObjectifyDao<Expense> implements ExpenseDao 
 			newPayments.add(oldPayment);
 			ids.put(oldPayment.getId(), new Boolean(true));
 		}
-		for (ParticipantEntity participant : participants) {
-			Boolean isInBase = ids.get(participant.getId());
-			if (isInBase != null)
-				continue;
-			ExpensePaymentEntity payment = new ExpensePaymentEntity();
-			payment.setId(participant.getId());
-			payment.setName(participant.getName());
-			payment.setValue(0.0);
-			newPayments.add(payment);
+		if (participants != null) {
+			for (ParticipantEntity participant : participants) {
+				Boolean isInBase = ids.get(participant.getId());
+				if (isInBase != null)
+					continue;
+				ExpensePaymentEntity payment = new ExpensePaymentEntity();
+				payment.setId(participant.getId());
+				payment.setName(participant.getName());
+				payment.setValue(0.0);
+				newPayments.add(payment);
+			}
 		}
 
 		expense.setPayments(newPayments);

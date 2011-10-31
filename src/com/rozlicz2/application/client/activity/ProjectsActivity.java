@@ -4,14 +4,12 @@ import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.ResettableEventBus;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.Request;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.rozlicz2.application.client.event.ProjectsListEvent;
 import com.rozlicz2.application.client.mvp.UncaughtExceptionEvent;
 import com.rozlicz2.application.client.place.ProjectPlace;
@@ -44,16 +42,8 @@ public class ProjectsActivity extends AbstractActivity implements
 		project.setId(IdGenerator.nextId());
 		project.setSum(0.0);
 		projectRequest.uSave(project).fire(new Receiver<Void>() {
-
-			@Override
-			public void onFailure(ServerFailure error) {
-				Window.alert("error: " + error);
-				super.onFailure(error);
-			}
-
 			@Override
 			public void onSuccess(Void response) {
-				Window.alert("saved");
 			}
 		});
 		ProjectPlace place = new ProjectPlace(project);

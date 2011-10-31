@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" output="test-classes" path="test"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (2)"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
@@ -15,7 +15,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3-sources.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/visural-common-0.4.3.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-3.0.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-apt.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-client-src.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/requestfactory-client.jar"/>
